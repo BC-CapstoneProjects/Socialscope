@@ -3,14 +3,20 @@ package main.java.handlers;
 import main.java.util.Credentials;
 import main.java.util.HttpUtils;
 import main.java.util.RateLimiter;
-import main.java.util.TwitterToken;
+import main.java.util.Token;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Base64;
 
 public class TwitterApiHandler implements IApiHandler {
 
@@ -20,11 +26,11 @@ public class TwitterApiHandler implements IApiHandler {
 	private static ArrayList <BigInteger> idList = new ArrayList<>();
 	private static JSONObject outJSON = new JSONObject();
 
-	private TwitterToken twitterToken;
+	private Token token;
 	private List<RateLimiter> limiters = new LinkedList<>();
 
 	public TwitterApiHandler() {
-		this.twitterToken = null;
+		this.token = null;
 		this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
 	}
 
@@ -48,13 +54,16 @@ public class TwitterApiHandler implements IApiHandler {
 
 		// process response
 		String accessToken;
+		long expiresIn;
 		try {
 			accessToken = responseJSON.getString("access_token");
+			expiresIn = -1;
 		} catch (JSONException e) {
 			accessToken = null;
+			expiresIn = 0;
 		}
 		// save token
-		this.twitterToken = new TwitterToken(accessToken);
+		this.token = new Token(accessToken, System.currentTimeMillis() + expiresIn);
 	}
 
 	@Override
@@ -69,7 +78,7 @@ public class TwitterApiHandler implements IApiHandler {
 		// build request properties
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("User-Agent", Credentials.getTwitterAppUserAgent());
-		requestProperties.put("Authorization", "bearer " + this.twitterToken.getTwitterToken());
+		requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
 		// build request parameters
 		Map<String, String> requestParameters = new HashMap<>();
@@ -103,7 +112,7 @@ public class TwitterApiHandler implements IApiHandler {
 
 			Map<String, String> requestProperties = new HashMap<>();
 			requestProperties.put("User-Agent", Credentials.getTwitterAppUserAgent());
-			requestProperties.put("Authorization", "bearer " + this.twitterToken.getTwitterToken());
+			requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
 			// build request parameters
 
@@ -122,14 +131,14 @@ public class TwitterApiHandler implements IApiHandler {
 
 				JSONObject postData = new JSONObject();
 				postData.put("platform", "twitter");
-				postData.put("like_count",  re.getJSONObject("public_metrics").getInt("like_count"));
-				postData.put("reply_count", re.getJSONObject("public_metrics").getInt("reply_count"));
-				postData.put("quote_count", re.getJSONObject("public_metrics").getInt("quote_count"));
-				postData.put("retweet_count", re.getJSONObject("public_metrics").getInt("retweet_count"));
+				postData.put("like_count",  String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
+				postData.put("reply_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
+				postData.put("quote_count", String.valueOf(re.getJSONObject("public_metrics").getInt("quote_count")));
+				postData.put("created_at", re.getString("created_at"));
 				postData.put("text", re.getString("text"));
-				postData.put("id", re.getBigInteger("id"));
+				postData.put("id", hashPostID(String.valueOf(re.getBigInteger("id"))));
 				postData.put("lang", re.getString("lang"));
-				postData.put("author_id", re.getBigInteger("author_id"));
+				postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
 				outPosts.put(postData);
 				// add post to object
 			} catch (JSONException e) {
@@ -142,12 +151,7 @@ public class TwitterApiHandler implements IApiHandler {
 	}
 
 	private String hashPostID(String id) {
-		// TODO post id hashing unimplemented for now
 		return id;
 	}
 
-	private String hashPoster(String poster) {
-		// TODO poster name hashing unimplemented for now
-		return poster;
-	}
 }

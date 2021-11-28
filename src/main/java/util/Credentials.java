@@ -10,7 +10,7 @@ public class Credentials {
 
 	private static final String TWITTER_APP_ID = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
 	private static final String TWITTER_APP_SECRET = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";  // PRIVATE: must not be shared
-	private static final String TWITTER_USER_AGENT = "SocialScope/0.1 by u/SocialScopeBot";
+	private static final String TWITTER_USER_AGENT = "TwitterBot/1.0";
 
 	public static String getRedditAppId() {
 		return REDDIT_APP_ID;
