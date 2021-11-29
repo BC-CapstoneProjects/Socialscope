@@ -124,6 +124,7 @@ public class TwitterApiHandler implements IApiHandler {
 					requestProperties, requestParameters);
 			try {
 				// ensure correct response format
+				System.out.println(responseJSON.toString());
 				assert(responseJSON.getString("kind").equals("Listing"));
 
 				JSONArray inPosts = responseJSON.getJSONArray("data");
