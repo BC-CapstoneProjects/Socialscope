@@ -2,3 +2,8 @@
 bin
 .project
 *.class
+.idea
+*.idea
+src/.idea
+out
+*.iml
