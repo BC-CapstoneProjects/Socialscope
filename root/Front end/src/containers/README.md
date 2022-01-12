@@ -1,1 +1,1 @@
-# SMIA
+Containers: This folder contains all the Stateful Components. They are the components which have a direct subscription to the state of the app, likely a store. These components have access to the values in the state and can trigger changes to the state

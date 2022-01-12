@@ -70,6 +70,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 
+Assets: This folder contains all the media assets, such as images, videos, json files, svgs, company logo etc..
 
+Components: This folder contains all the Presentational/Stateless Components.
+They refer to small independent parts of the app pertaining to a specific functionality and UI [ not necessarily ] that can be re-used throughout the app. For example, Button , Header and Footer, layout (wrappers, navigation), form components.
 
+Containers: This folder contains all the Stateful Components. They are the components which have a direct subscription to the state of the app, likely a store. These components have access to the values in the state and can trigger changes to the state
 
+Services - JavaScript modules.
+
+Api: This folder contains all the context files since we are working with API. 
