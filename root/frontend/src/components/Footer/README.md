@@ -1,1 +1,0 @@
-This folder gets the footer.js file

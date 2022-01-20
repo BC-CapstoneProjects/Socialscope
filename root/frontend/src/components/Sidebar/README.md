@@ -1,1 +1,0 @@
-This folder gets the sidebar.js file
