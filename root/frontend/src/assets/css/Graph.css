@@ -1,0 +1,57 @@
+
+  .App2{
+    background-color:lightgray;
+  
+    height: 95vh;
+  padding-top:15px;
+   padding-bottom: 15px;
+   position: absolute;
+  margin-left: 20vh;
+  margin-right: 20vh;
+  }
+
+.graphing-text{
+    padding-top: 4vh;
+    padding-left: 2vh;
+  }
+  .graphing-button{
+    margin-top: -6vh;
+    padding-left: 15vh;
+  }
+  .groupedby-text{
+    padding-top: 6vh;
+    padding-left: 2vh;
+  }
+  .groupedby-button{
+    margin-top: -6vh;
+    padding-left: 17vh;
+  }
+  
+  .over-text{
+    margin-top: -15vh;
+    padding-left: 38vh;
+  }
+  .over-button{
+    margin-top: -6vh;
+    padding-left: 45vh;
+  }
+  .btn-xl {
+    
+    width:20vh;
+   
+    height:6vh;
+    border-radius: 7px;
+    background-color: rgba(177, 175, 175, 0.568);
+    border-style: none;
+  
+  }
+  .grahpposition{
+    background-color: rgba(246, 246, 250, 0.397);
+   margin-left: 25vh;
+  
+  height:60vh;
+  margin-top: 3vh;
+  text-align:center;
+  padding-top: 25vh;
+  width:70vh;
+  }
