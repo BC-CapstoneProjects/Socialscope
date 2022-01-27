@@ -4,51 +4,25 @@ import { Link } from 'react-router-dom';
 
 import ContentContainer from '../components/ContentContainer'
 
-/* const ContentContainer = styled.div`
-  background: ${props => props.theme.colors.primary};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 4rem 6rem;
-  margin: 25px auto;
-  max-width: 75%;
-
-  @media screen and (max-width: 1000px) {
-    max-width: 750px;
-  }
-
-  @media screen and (max-width: 750px) {
-    padding: 3rem 4rem;
-  }
-
-  @media screen and (max-width: 450px) {
-    padding: 2rem;
-  }
-`;
- */
 const IntroContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: stretch;
   width: 100%;
   min-width: 250px;
-  padding: 1rem;
 
   @media screen and (max-width: 750px) {
     flex-direction: column;
-  }
-
-  @media screen and (max-width: 450px) {
-    padding: 0;
+    align-items: center;
   }
 `;
 
 const TitleSection = styled.div`
   display: flex;
   height: 100%;
-  min-width: 300px;
   flex-direction: column;
+  margin: 0 1rem 1.5rem 1rem;
   margin-bottom: 1.5rem;
 
   @media screen and (max-width: 750px) {
@@ -81,10 +55,6 @@ const SecondaryTitle = styled.div`
     margin-bottom: 1rem;
   }
 `;
-
-const TitleSpacer = styled.div `
-  flex: 1 1;
-`
 
 const StartButtonContainer = styled.div`
   margin-left: 1rem;
@@ -119,32 +89,23 @@ const StartButton = styled.button`
 `
 
 const ImageSection = styled.div`
+  display: flex;
   flex: 1;
-  max-height: 500px;
+  justify-content: center;
   max-width: 500px;
-  margin: 0 3rem 1.5rem 6rem;
   min-width: 250px;
-  min-height: 250px;
-
-  @media screen and (max-width: 1250px) {
-    margin: 0 3rem 1.5rem 3rem;
-  }
-
-  @media screen and (max-width: 750px) {
-    margin: 0 1rem 2rem;
-    min-width: 200px;
-    min-height: 200px;
-  }
+  height: 100%;
+  margin: 2rem;
 
 `;
 
 const DescriptionSection = styled.div`
-  margin: 0.5rem;
+  margin: 0.5rem 0;
   font-size: 1.5rem;
 `;
 
 const MiscSection = styled.div`
-  margin: 1rem;
+  margin: 1rem 0;
   font-size: 1rem;
 `;
 
@@ -159,7 +120,6 @@ const LandingPage = () => {
           <SecondaryTitle>
             Subheading tagline that is a bit longer
           </SecondaryTitle>
-          <TitleSpacer />
           <StartButtonContainer>
             <Link to="/search">
               <StartButton>
