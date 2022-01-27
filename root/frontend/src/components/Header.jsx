@@ -1,17 +1,16 @@
 import React from "react";
 import {Container, Nav, Navbar} from "react-bootstrap";
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import {  Route, Routes, Link } from "react-router-dom";
 import Preview from "../containers/preview";
 import Graphpage from "../containers/Graphpage";
 import Downloadpage from "../containers/Downloadpage"; 
-
+import ContentContainer from '../components/ContentContainer'
 function Header() 
 {
     return(
-        <div>
-        <div className="nav">
-        
-            <div className="App-header">
+        <ContentContainer>
+            <div >
+              <div id="header-d">
                 <Navbar >
                     <Container>
             
@@ -49,7 +48,7 @@ function Header()
               
             </div>
       
-        </div>
+            </ContentContainer>
     )
 }
 

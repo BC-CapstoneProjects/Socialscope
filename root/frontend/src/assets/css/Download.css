@@ -1,31 +1,39 @@
 .App{
-  background-color:rgb(180, 180, 179);
-
-  height: 85vh;
-padding-top:15px;
- padding-bottom: 15px;
- position: relative;
-margin-left: 20vh;
-margin-right: 20vh;
-
+ 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: -19vh -2vh auto;
+  max-width: 100% auto;
+  padding: 30% 12%;
 }
 .App2{
   background-color:rgb(180, 180, 179);
-
-  height: 95vh;
-padding-top:15px;
- padding-bottom: 15px;
- position: relative;
-margin-left: 20vh;
-margin-right: 20vh;
-padding-left: 13vh;;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 35% 20% ;
+  margin: -10% 4% auto;
+  max-width: 100% ;
+  text-align: center;
 }
-.nav{
-  background-color:rgb(180, 180, 179);
-margin-left: 20vh;
-
-height:80px;
-display: inline-block;
+#header-d{
+  background-color:lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: -16vh -12vh auto;
+  max-width: 100% auto;
+  padding: 5% 12%;
+}
+#header-g{
+  background-color:lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: -16vh -12vh auto;
+  max-width: 100% auto;
+  padding: 5% 12%;
 }
 .nav2{
   background-color:rgb(180, 180, 179);
@@ -34,68 +42,101 @@ display: inline-block;
   margin-right: 20vh;
 
 }
-
+.graph-position{
+ 
+  display: flex;
+  flex-direction: column;
+ 
+  padding: 0.1% 9%;
+  margin: 1.5% -6% auto;
+  max-width: 50%;
+}
 .download-position {
-  padding-top:14px;
-  position: absolute;
-  left: 53vh;
-  top:-1vh;
-  text-decoration: none;
-  color: black;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.1% 12%;
+  margin: 2% 1% auto;
+  max-width: 50%;
+}
+.preview-position{
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 2% -23% auto;
+  max-width: 50%;
+  padding: 0.1% 9%;
+ 
+ color: black;
 }
 .App-header {
   background-color: rgba(246, 246, 250, 0.397);
-  margin-left: 38vh;
-  height:10vh;
-  width:70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 3vh;
+  max-width: 100vh;
   
 }
 
 .grahpposition{
   background-color: rgba(246, 246, 250, 0.397);
- margin-left: 25vh;
-
-height:60vh;
-margin-top: 3vh;
-text-align:center;
-padding-top: 25vh;
-width:70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40% 60% auto;
+  margin: -6% 20% auto;
+  max-width: 110%;
+  
 }
 
 .App-Footer{
   background-color: rgba(246, 246, 250, 0.397);
-  margin-left: 25vh;
-  width:70vh;
-   height: 20vh;
-  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 4% 4% auto;
+  padding: 14% 40% ;
+  max-width: 100%;
 
   
 
 }
+
 .graphing-text{
-  padding-top: 4vh;
-  padding-left: 2vh;
+  margin-top: -5vh;
+  margin-left: -34vh;
+  margin-bottom: -1vh;
 }
 .graphing-button{
-  margin-top: -6vh;
-  padding-left: 15vh;
+  margin-top: -7vh;
+  margin-left: -20vh;
+margin-bottom: 2vh; 
+ 
 }
 .groupedby-text{
-  padding-top: 6vh;
-  padding-left: 2vh;
+  margin-top: 1vh;
+ margin-left: -34vh;
+margin-bottom: 12vh;
 }
 .groupedby-button{
-  margin-top: -6vh;
-  padding-left: 17vh;
+  margin-top: -20vh;
+  margin-left: -17vh;
+ margin-bottom: 2vh;
 }
 
 .over-text{
-  margin-top: -15vh;
-  padding-left: 38vh;
+  margin-top: -18vh;
+  margin-left: 16vh;
+padding-bottom: 19vh;
+  
 }
 .over-button{
-  margin-top: -6vh;
-  padding-left: 45vh;
+  margin-top: -27vh;
+  margin-left: 25vh;
+  margin-bottom: 0.6vh;
 }
 .btn-xl {
   
@@ -109,15 +150,15 @@ width:70vh;
 }
 .optiondiv{
   background-color:rgb(180, 180, 179);
-  margin-left: 25vh;
- height:35vh;
- margin-top: 3vh;
  border-radius: 7px;
- outline: #0d0e0d solid 1px;
+ outline: #0d0e0d solid 5px;
 text-align: left;
-padding-top:2%;
-padding-left:20px;
-width:70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: -14vh -5vh auto;
+  max-width: 100% auto;
+  padding: 18% 12%;
 }
 .formatdiv{
   width:15vh;
@@ -126,7 +167,7 @@ width:70vh;
   height:5vh;
   border-radius: 7px 0px 0px 7px;
   background-color: rgba(177, 175, 175, 0.568);
-  outline: #0d0e0d solid 1px;
+  outline: #0d0e0d solid 2px;
   
 }
 .csvbutton{
@@ -139,7 +180,7 @@ width:70vh;
 }
 .csvbutton2{
   margin-top: -5vh;
-  outline: #0d0e0d solid 1px;
+  outline: #0d0e0d solid 2px;
   height:5vh;
   width:15vh;
   margin-left: 15.30vh;
@@ -171,10 +212,10 @@ width:70vh;
   outline: #0d0e0d solid 1px;
 }
 .download{
+  background-color: rgba(246, 246, 250, 0.397);
   height:6vh;
   width:25vh;
-  margin-top: 10vh;
- margin-left: 22vh;
+ margin: 8% 34% auto;
  background-color: rgba(246, 246, 250, 0.397);
  text-align: center;
  border-radius: 7px 7px 7px 7px;

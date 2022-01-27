@@ -71,7 +71,6 @@ function ViewWithNavbar() {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Navbar />
-     
         <Outlet />
       </ThemeProvider>
     </React.Fragment>

@@ -50,7 +50,7 @@ const SearchPage = () => {
                             </br>
                             <Row>
                                 <div className='pd-launch-button'>
-                                <div className='me-5 preview-position'>
+                                <div className='me-5 '>
                                        <Link to="/Header" className="btn btn-primary">Launch Search</Link>
                                  </div>
 
