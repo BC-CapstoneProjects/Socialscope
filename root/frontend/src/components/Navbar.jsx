@@ -114,8 +114,8 @@ const NavLinks = () => {
     <React.Fragment>
       <NavLink><Link to="/">Home</Link></NavLink>
       <NavLink><Link to="/search">Search</Link></NavLink>
-      <NavLink>History</NavLink>
-      <NavLink>FAQ</NavLink>
+      <NavLink><Link to="/history">History</Link></NavLink>
+      <NavLink><Link to="/faq">FAQ</Link></NavLink>
     </React.Fragment>
   );
 }

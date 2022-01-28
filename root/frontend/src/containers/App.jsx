@@ -6,6 +6,8 @@ import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 import Navbar from '../components/Navbar';
 import LandingPage from './LandingPage';
 import SearchPage from './SearchPage';
+import HistoryPage from './HistoryPage';
+import FaqPage from './FaqPage';
 
 const theme = {
   colors: {
@@ -53,14 +55,21 @@ function App() {
       <Routes>
         <Route path="/" element={<ViewWithNavbar />}>
           <Route path="/" element={<LandingPage />}/>
-          <Route path="/search" element={<SearchPage />}/>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/results">
+            <Route path="/results/preview" />
+            <Route path="/results/graph" />
+            <Route path="/results/download" />
+          </Route>
+          <Route path="/history" element={<HistoryPage />}/>
+          <Route path="/faq" element={<FaqPage />}/>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
 
-function ViewWithNavbar() {
+const ViewWithNavbar = () => {
   return (
     <React.Fragment>
       <GlobalStyle />

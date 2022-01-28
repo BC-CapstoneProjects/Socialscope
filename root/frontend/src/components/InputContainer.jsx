@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useLayoutEffect, useState, useRef } from 'react'
 import useWindowDimensions from '../api/useWindowDimensions';
 
-const borderWidth = "2px";
+const borderWidth = "1px";
 const inputPadding = "5px";
 
 const OuterContainer = styled.div`
