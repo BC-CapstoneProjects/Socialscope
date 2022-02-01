@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useLayoutEffect, useState, useRef } from 'react'
-import useWindowDimensions from '../api/useWindowDimensions';
+import useWindowDimensions from '../../api/useWindowDimensions';
 
 const borderWidth = "1px";
 const inputPadding = "5px";

@@ -3,7 +3,7 @@ import React from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar';
 import LandingPage from './LandingPage';
 import SearchPage from './SearchPage';
 import HistoryPage from './HistoryPage';

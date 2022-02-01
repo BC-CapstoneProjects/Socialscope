@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom';
+
+import NavLinks from './NavLinks'
+import PopoutMenu from './PopoutMenu'
 
 const NavbarContainer = styled.div`
   background: ${props => props.theme.colors.primary};
@@ -59,12 +61,6 @@ const LinksContainer = styled.div`
   }
 `;
 
-const NavLink = styled.p`
-  font-size: 1.5rem;
-  margin: 0.5rem 1rem;
-  flex: 1;
-`
-
 const PopoutButton = styled.button`
   width:25px;
   height:25px;
@@ -75,50 +71,6 @@ const PopoutButton = styled.button`
     display: flex;
   }
 `;
-
-const PopoutMenuContainer = styled.div`
-  position: relative;
-`;
-
-const PopoutMenu = styled.div`
-  display: none;
-  justify-content: flex-end;
-  align-items: flex-end;
-  flex-direction: column;
-    
-  text-align: end;
-  background: ${props => props.theme.colors.secondary};
-  padding: 2rem;
-  position: absolute;
-  top: 30px;
-  right: 0;
-  margin-top: 0.5rem;
-  min-width: 210px;
-  border-radius: 5px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: ${props => props.theme.colors.primary};
-  box-shadow: 3px 3px 2px grey;
-
-  @media screen and (max-width: 750px) {
-  display: flex;
-  }
-`;
-
-const PopoutMenuLinks = styled.div`
-  
-`;
-
-const NavLinks = () => {
-  return (
-    <React.Fragment>
-      <NavLink><Link to="/">Home</Link></NavLink>
-      <NavLink><Link to="/search">Search</Link></NavLink>
-      <NavLink><Link to="/history">History</Link></NavLink>
-      <NavLink><Link to="/faq">FAQ</Link></NavLink>
-    </React.Fragment>
-  );
-}
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -139,14 +91,9 @@ const Navbar = () => {
           <PopoutButton onClick={() => setToggleMenu(true)}/>
         }
         { toggleMenu && ( 
-          <PopoutMenuContainer>
-            <PopoutMenu>
-              <PopoutMenuLinks>
-              <NavLinks />
-              </PopoutMenuLinks>
-            </PopoutMenu>
-          </PopoutMenuContainer>
-          )
+          <PopoutMenu>
+            <NavLinks/>
+          </PopoutMenu> )
         }
       </NavbarItems>
     </NavbarContainer>
