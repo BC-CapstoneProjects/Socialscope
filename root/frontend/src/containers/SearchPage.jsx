@@ -1,13 +1,21 @@
 import React from 'react';
+import styled from 'styled-components'
 
 import ContentContainer from '../components/ContentContainer'
-import InputField from '../components/InputField';
-import InputContainer from '../components/InputContainer';
+import InputField from '../components/Input/InputField';
+import InputContainer from '../components/Input/InputContainer';
+
+const SectionTitle = styled.div`
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  text-decoration: underline;
+`;
 
 const SearchPage = () => {
   return (
     <ContentContainer>
-      <h1>Search Page Content</h1>
+      <SectionTitle>Search</SectionTitle>
       <InputContainer label="label">
         <InputField name="rad" type='radio' value='test1' label='radiolabel1'/>
         <InputField name="rad" type='radio' value='test2' label='radiolabel2'/>

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import ContentContainer from '../components/ContentContainer'
+import ContentContainer from '../components/ContentContainer';
+import InputButton from '../components/Input/InputButton';
 
 const IntroContainer = styled.div`
   display: flex;
@@ -56,14 +57,11 @@ const SecondaryTitle = styled.div`
   }
 `;
 
-const StartButtonContainer = styled.div`
+const StartButton = styled(InputButton)`
+
   margin-left: 1rem;
   margin-top: 14rem;
   margin-bottom: 1rem;
-  width: 150px;
-  height: 55px;
-  border: none;
-  outline: none;
 
   @media screen and (max-width: 1650px) {
     margin-top: 10rem;
@@ -74,18 +72,6 @@ const StartButtonContainer = styled.div`
   @media screen and (max-width: 750px) {
     margin-left: 0;
   }
-`
-
-const StartButton = styled.button`
-  font-size: 1.5rem;
-  font-weight: bold;
-  width: 100%;
-  height: 100%;
-  background: ${props => props.theme.colors.secondary};
-  border: none;
-  border-radius: 10px;
-  outline: none;
-  cursor: pointer;
 `
 
 const ImageSection = styled.div`
@@ -110,6 +96,13 @@ const MiscSection = styled.div`
 `;
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const startRedirect = (e) => {
+    e.preventDefault();
+    navigate('/search');
+  }
+
   return (
     <ContentContainer>
       <IntroContainer> 
@@ -120,13 +113,9 @@ const LandingPage = () => {
           <SecondaryTitle>
             Subheading tagline that is a bit longer
           </SecondaryTitle>
-          <StartButtonContainer>
-            <Link to="/search">
-              <StartButton>
-                Start Here
-              </StartButton>
-            </Link>
-          </StartButtonContainer>
+            <StartButton onClick={startRedirect}>
+              Start Here
+            </StartButton>
         </TitleSection>
         <ImageSection>
           <img src="https://source.unsplash.com/random/800x800/?img=1" />
