@@ -30,9 +30,8 @@ const GlobalStyle = createGlobalStyle`
     height:100%;
     width:100%;
     background: ${theme.colors.background};
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    font-family: 'Roboto', 'sans-serif';
+    font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -47,6 +46,29 @@ const GlobalStyle = createGlobalStyle`
     height: auto;
   }
 
+  h1, h2, h3 {
+
+    font-weight: normal;
+    margin: 1rem 0; 
+
+    @media screen and (max-width: 450px) {
+      margin: 0.5rem 0;
+    }
+
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
 `;
 
 function App() {
@@ -57,7 +79,7 @@ function App() {
           <Route path="/" element={<LandingPage />}/>
           <Route path="/search" element={<SearchPage />} />
           <Route path="/results">
-            <Route path="/results/preview" />
+            <Route path="/results/preview" element={<div>preview</div>}/>
             <Route path="/results/graph" />
             <Route path="/results/download" />
           </Route>
