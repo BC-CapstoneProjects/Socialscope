@@ -3,26 +3,19 @@ import styled from 'styled-components'
 
 import NavLinks from './NavLinks'
 import PopoutMenu from './PopoutMenu'
+import PopoutButton from './PopoutButton'
 
 const NavbarContainer = styled.div`
   background: ${props => props.theme.colors.primary};
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 6rem;
+  padding: 2rem;
   margin: 25px auto;
   max-width: 75%;
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1017px) {
     max-width: 750px;
-  }
-
-  @media screen and (max-width: 750px) {
-    padding: 2rem 4rem;
-  }
-
-  @media screen and (max-width: 450px) {
-    padding: 2rem;
   }
 `;
 
@@ -43,32 +36,25 @@ const LogoText = styled.span`
   font-weight: 150%;
   border: none;
   border-radius: 20px;
-  padding:5px 5px 10px 5px;
+  padding: 15px 5px 15px 5px;
 `;
 
 const NavSpacer = styled.div`
   display: flex;
   flex: 1 0;
+
+  @media screen and (max-width: 1017px) {
+    flex: 3;
+  }
 `
 
 const LinksContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex: 1;
+  flex: 1.5;
 
   @media screen and (max-width: 750px) {
     display: none;
-  }
-`;
-
-const PopoutButton = styled.button`
-  width:25px;
-  height:25px;
-  display: none;
-  background: white;
-
-  @media screen and (max-width: 750px) {
-    display: flex;
   }
 `;
 
