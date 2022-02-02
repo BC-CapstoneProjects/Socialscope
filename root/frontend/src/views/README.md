@@ -1,1 +1,0 @@
-this folder can get the dasboard, icons, maps, table
