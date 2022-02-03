@@ -1,5 +1,5 @@
-import React from "react";
 
+import React from "react";
 import ContentContainer from '../components/ContentContainer'
 
 const FaqPage = () => {
@@ -8,6 +8,7 @@ const FaqPage = () => {
       <div>faq page</div>
     </ContentContainer>
   );
+
 }
 
 export default FaqPage;
