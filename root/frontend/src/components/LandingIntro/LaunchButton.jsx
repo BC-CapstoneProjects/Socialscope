@@ -31,7 +31,7 @@ const LaunchButton = () => {
   return (
     <ButtonContainer>
       <ButtonUpperSpacer />
-        <InputButton onClick={startRedirect}>
+        <InputButton type='primary' onClick={startRedirect}>
           Start Here
         </InputButton>
       <ButtonLowerSpacer />

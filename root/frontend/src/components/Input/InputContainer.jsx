@@ -8,7 +8,7 @@ const inputPadding = "5px";
 
 const OuterContainer = styled.div`
   padding: none;
-  margin: 0.5rem 0;
+  margin: 0.5rem 0.5rem;
   display: flex;
   flex-direction: ${props => props.displayVertical ? 'column' : 'row'};
   align-items: stretch;
@@ -19,13 +19,14 @@ const InnerContainer = styled.div`
   background-color: ${props => props.theme.colors.secondary};
   border: ${borderWidth} solid ${props => props.theme.colors.outline};
   border-radius: ${props => props.displayVertical ? '0px 0px 10px 10px' : '0px 10px 10px 0px'};
-  display: flex;
   flex: 1;
+  display: flex;
   flex-direction: ${props => props.displayVertical ? 'column' : 'row'};
   align-items: center;
   gap: 1rem;
   padding: ${inputPadding};
-  width: ${props => props.width ? props.width : 'auto'};
+  width: 100%;
+  max-width: ${props => props.width ? props.width : 'auto'};
 `;
 
 const InputLabel = styled.div`

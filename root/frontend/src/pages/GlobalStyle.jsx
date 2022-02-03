@@ -74,6 +74,24 @@ input[type=text]::placeholder {
   font-size: 0.9rem;
 }
 
+input[type=date] {
+  font-family: 'Roboto', 'sans-serif';
+  font-style: italic;
+}
+
+input:autofill {
+  background-color: ${GlobalTheme.colors.secondary};
+  border: none;
+  outline: none;
+}
+
+/* attempt to override autofill highlight; not functioning curently*/
+input[type=text]:-internal-autofill-selected {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
 `;
 
 export {GlobalStyle, GlobalTheme};
