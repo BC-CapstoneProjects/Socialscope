@@ -24,7 +24,7 @@ function App() {
           <Route path="/results" element={<ResultsView />}>
             <Route path="/results/preview" element={<PreviewPage />}/>
             <Route path="/results/graph" element={<GraphPage />}/>
-            <Route path="/results/download" element={<DownloadPage />}/>
+            <Route path="/results/download" element={<DownloadPage/>}/>
           </Route>
           <Route path="/history" element={<HistoryPage />}/>
           <Route path="/faq" element={<FaqPage />}/>

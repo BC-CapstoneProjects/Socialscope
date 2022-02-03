@@ -88,10 +88,10 @@ const ProgressBar = styled.div`
 
 const SearchPage = () => {
 
-  const navigate = useNavigate();
-
+  let navigate = useNavigate();
   const searchRedirect = (e) => {
     e.preventDefault();
+    console.log('search executed');
     navigate('../results/preview');
   }
 

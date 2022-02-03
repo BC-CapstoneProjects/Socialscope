@@ -1,8 +1,14 @@
 import React from 'react';
 import styled from 'styled-components'
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 import ContentContainer from './ContentContainer';
+
+const StyledLink = styled(NavLink)`
+  &.active {
+    text-decoration: underline;
+  }
+`
 
 const ResultsNavbar = styled.div`
   display: flex;
@@ -20,12 +26,13 @@ const ResultsNavbar = styled.div`
 `;
 
 const ResultsView = () => {
+
   return (
     <ContentContainer>
       <ResultsNavbar>
-        <h3><Link to="/results/preview">Preview</Link></h3>
-        <h3><Link to="/results/graph">Graph</Link></h3>
-        <h3><Link to="/results/download">Download</Link></h3>
+        <h3><StyledLink to='./preview'>Preview</StyledLink></h3>
+        <h3><StyledLink to='./graph'>Graph</StyledLink></h3>
+        <h3><StyledLink to='./download'>Download</StyledLink></h3>
       </ResultsNavbar>
       <Outlet />
     </ContentContainer>

@@ -46,7 +46,7 @@ const InputLabel = styled.div`
 
 const InputContainer = (props) => {
   
-  const [displayVertical, setDisplayVertical] = useState(0);
+  const [displayVertical, setDisplayVertical] = useState(false);
   const [breakpointWidth, setBreakpointWidth] = useState(0);
   const outerRef = useRef(null);
 
