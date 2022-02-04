@@ -69,30 +69,15 @@ const ProgressBar = styled.div`
 
 const SearchPage = (props) => {
 
-  // const [keyword, setKeyword] = useState("");
-  // const [max, setMax] = useState("");
-  // const [isCheckedTwitter, setIsCheckedTwitter] = useState(false);
-  // const [isCheckedReddit, setIsCheckedReddit] = useState(false);
-  // const [isCheckedYoutube, setIsCheckedYoutube] = useState(false);
-  // const [startDate, setStartDate] = useState(undefined);
-  // const [endDate, setEndDate] = useState(undefined);
-  // const [result, setResult] = useState(undefined);
+  const [keyword, setKeyword] = useState("");
+  const [max, setMax] = useState("");
+  const [twitterCheck, setTwitterCheck] = useState(false);
+  const [redditCheck, setRedditCheck] = useState(false);
+  const [youtubeCheck, setYoutubeCheck] = useState(false);
+  const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
+  const [endDate, setEndDate] = useState("");
 
   const {
-    twitterCheck,
-    redditCheck,
-    youtubeCheck,
-    setTwitterCheck,
-    setRedditCheck,
-    setYoutubeCheck,
-    keyword,
-    setKeyword,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    max,
-    setMax,
     result,
     setResult
   } = props;
@@ -100,15 +85,13 @@ const SearchPage = (props) => {
   const navigate = useNavigate();
 
   function searchRedirect(e){
-    // e.preventDefault();
+    e.preventDefault();
     fetch(`http://localhost:8080/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
         .then(
             (result) => {
               setResult(result);
-              // const count = Object.keys(result).length;
-              // console.log(count);
-              alert(JSON.stringify(result));
+              console.log(result);
             },
             (error) => {
               alert(error);
@@ -216,5 +199,4 @@ const SearchPage = (props) => {
 
   );
 }
-
 export default SearchPage;
