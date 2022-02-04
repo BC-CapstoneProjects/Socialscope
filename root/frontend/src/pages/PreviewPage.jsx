@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components'
+import JSONPretty from 'react-json-pretty';
+const PreviewPage = (props) => {
 
-const PreviewPage = () => {
   return(
-    <div>Preview page content placeholder</div>
+    <div>
+      <JSONPretty id="json-pretty" data={props.result}></JSONPretty>
+    </div>
   )
 }
 
