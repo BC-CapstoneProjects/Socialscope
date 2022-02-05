@@ -5,6 +5,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
 
 const StyledLink = styled(NavLink)`
+  font-size: 1.5rem;
+
   &.active {
     text-decoration: underline;
   }
@@ -30,9 +32,9 @@ const ResultsView = () => {
   return (
     <ContentContainer>
       <ResultsNavbar>
-        <h3><StyledLink to='./preview'>Preview</StyledLink></h3>
-        <h3><StyledLink to='./graph'>Graph</StyledLink></h3>
-        <h3><StyledLink to='./download'>Download</StyledLink></h3>
+        <StyledLink to='./preview'>Preview</StyledLink>
+        <StyledLink to='./graph'>Graph</StyledLink>
+        <StyledLink to='./download'>Download</StyledLink>
       </ResultsNavbar>
       <Outlet />
     </ContentContainer>
