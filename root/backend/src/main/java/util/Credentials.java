@@ -40,7 +40,9 @@ public class Credentials {
             this.redditAppSecret = jo.getString("redditAppSecret");
             this.redditUserAgent = jo.getString("redditUserAgent");
             this.twitterAppId = jo.getString("twitterAppId");
+            System.out.println(this.twitterAppId);
             this.twitterAppSecret = jo.getString("twitterAppSecret");
+            System.out.println(this.twitterAppSecret);
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
             this.youtubeApiKey = jo.getString("youtubeApiKey");
