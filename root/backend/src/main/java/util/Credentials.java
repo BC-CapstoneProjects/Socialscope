@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "../../../../private/credentials.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -31,6 +31,8 @@ public class Credentials {
     private void readCredentialsFromFile(String fp) {
         BufferedReader reader;
         try {
+        	String currPath = new java.io.File(".").getCanonicalPath();
+        	System.out.println(currPath);
             reader = new BufferedReader(new FileReader(fp));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
