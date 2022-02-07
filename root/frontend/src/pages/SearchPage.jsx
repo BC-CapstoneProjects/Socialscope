@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
@@ -67,14 +67,36 @@ const ProgressBar = styled.div`
   background-color: ${props => props.theme.colors.secondary};
 `
 
+const SearchPage = (props) => {
 
+  const [keyword, setKeyword] = useState("");
+  const [max, setMax] = useState("");
+  const [twitterCheck, setTwitterCheck] = useState(false);
+  const [redditCheck, setRedditCheck] = useState(false);
+  const [youtubeCheck, setYoutubeCheck] = useState(false);
+  const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
+  const [endDate, setEndDate] = useState("");
 
-const SearchPage = () => {
+  const {
+    result,
+    setResult
+  } = props;
 
   const navigate = useNavigate();
 
-  const searchRedirect = (e) => {
+  function searchRedirect(e){
     e.preventDefault();
+    fetch(`http://localhost:8080/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
+        .then(res => res.json())
+        .then(
+            (result) => {
+              setResult(result);
+              console.log(result);
+            },
+            (error) => {
+              alert(error);
+            }
+        )
     navigate('../results/preview');
   }
 
@@ -84,7 +106,12 @@ const SearchPage = () => {
       <SectionTitle>Search</SectionTitle>
 
       <SearchBar label='Query'>
-        <InputField name='query' type='text' placeholder='Key word or phrase'/>
+        <InputField
+            name='query'
+            type='text'
+            value={keyword}
+            setValue={setKeyword}
+            placeholder='Key word or phrase'/>
       </SearchBar>
 
       <FilterContainerOuter>
@@ -96,21 +123,54 @@ const SearchPage = () => {
         <FilterContainerInner>
 
           <InputContainer label='Platforms'>
-            <InputField name='twitter' type='checkbox' value='true' label='twitter'/>
-            <InputField name='reddit' type='checkbox' value='true' label='reddit'/>
-            <InputField name='facebook' type='checkbox' value='true' label='facebook'/>
+            <InputField
+                name='twitter'
+                type='checkbox'
+                value={twitterCheck}
+                setValue={setTwitterCheck}
+                label='twitter'/>
+            <InputField
+                name='reddit'
+                type='checkbox'
+                value={redditCheck}
+                setValue={setRedditCheck}
+                label='reddit'/>
+            <InputField
+                name='youtube'
+                type='checkbox'
+                value={youtubeCheck}
+                setValue={setYoutubeCheck}
+                label='youtube'/>
           </InputContainer>
 
           <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
-            <InputField name='startDate' type='date'/>
+            <InputField
+                name='startDate'
+                type='date'
+                value={startDate}
+                setValue={setStartDate}
+            />
           </InputContainer>
 
-          <InputContainer label='End Date' labelWidth='99px' contentWidth="163px">
-            <InputField name='endDate' type='date'/>
+          <InputContainer
+              label='End Date' labelWidth='99px' contentWidth="163px">
+            <InputField
+                name='endDate'
+                type='date'
+                value={endDate}
+                setValue={setEndDate}
+            />
           </InputContainer>
 
           <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
-            <InputField name="maxResults" type="text" key="loaded" defaultValue="20" width='153px'/>
+            <InputField
+                name="maxResults"
+                type="text"
+                key="loaded"
+                value={max}
+                setValue={setMax}
+                defaultValue="20"
+                width='153px'/>
           </InputContainer>
 
         </FilterContainerInner>
@@ -124,7 +184,9 @@ const SearchPage = () => {
       </FilterContainerOuter>
 
       <LaunchButtonContainer>
-        <LaunchButton onClick={searchRedirect} width='200px'>
+        <LaunchButton
+            onClick={searchRedirect}
+            width='200px'>
           Launch Search
         </LaunchButton>
       </LaunchButtonContainer>
@@ -137,5 +199,4 @@ const SearchPage = () => {
 
   );
 }
-
 export default SearchPage;

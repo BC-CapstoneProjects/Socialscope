@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components'
 
-const PreviewPage = () => {
+const PreviewPage = (props) => {
+
   return(
-    <div>Preview page content placeholder</div>
+    <div>
+      {JSON.stringify(props.result)}
+    </div>
   )
 }
 

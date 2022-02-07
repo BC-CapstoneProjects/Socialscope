@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Route, Routes, Outlet, BrowserRouter } from "react-router-dom"
 
@@ -15,14 +15,22 @@ import GraphPage from './GraphPage';
 import DownloadPage from './DownloadPage';
 
 function App() {
+  const [result, setResult] = useState(undefined);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ViewWrapper />}>
           <Route path="/" element={<LandingPage />}/>
-          <Route path="/search" element={<SearchPage />} />
+          <Route
+              path="/search"
+              element={
+              <SearchPage
+                  result={result}
+                  setResult={setResult}
+              />
+          } />
           <Route path="/results" element={<ResultsView />}>
-            <Route path="/results/preview" element={<PreviewPage />}/>
+            <Route path="/results/preview" element={<PreviewPage result={result}/>}/>
             <Route path="/results/graph" element={<GraphPage />}/>
             <Route path="/results/download" element={<DownloadPage />}/>
           </Route>
