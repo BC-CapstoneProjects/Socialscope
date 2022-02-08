@@ -3,16 +3,28 @@ import styled from 'styled-components'
 
 import PieChart from '../components/Graph/PieChart';
 
+import * as d3 from 'd3';
+
 const GraphPage = () => {
 
+  const generateData = (length) => {
+    if (length === undefined) {
+      length = 2 + Math.random() * 10;
+    }
+    let out = []
+    for (let i = 0; i < length; i++) {
+      out.push({index: i, value: (Math.random() * 100)});
+    }
+    return out;
+  }
 
-  const testData = {a: 1, b: 2, c:3, d:6};
-  const nullData = {a: 0, b: 0, c:0, d:0};
+  let [graphData, setGraphData] = useState(generateData());
 
-  let [graphData, setGraphData] = useState(nullData);
 
   useEffect(() => {
-    const interval = setInterval(() => setGraphData(testData), 10000);
+    const interval = setInterval(() => {
+      setGraphData(generateData());
+    }, 5000);
     return () => clearInterval(interval);
   }, [])
 

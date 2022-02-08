@@ -26,7 +26,6 @@ function interpolateRgbPair(c1, c2, frac) {
   for (let i = 0; i < 3; i++) {
     c3[i] = Math.round(c3[i] + frac*(c2[i] - c1[i]));
   } 
-  console.log(c3);
   return c3;
 }
 
@@ -39,7 +38,6 @@ const interpolateColors = (c1, c2, steps) => {
     colors.push(getHex(interpolateRgbPair(c1rgb, c2rgb, i/(steps+1))));
   }
   colors.push(c2);
-  console.log(colors); // DEBUG
   return colors;
 }
 

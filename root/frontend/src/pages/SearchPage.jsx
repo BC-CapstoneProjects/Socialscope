@@ -116,7 +116,7 @@ const SearchPage = () => {
             <InputContainer label='Platforms'>
               <InputField name='twitter' type='checkbox' value='true' label='twitter'/>
               <InputField name='reddit' type='checkbox' value='true' label='reddit'/>
-              <InputField name='facebook' type='checkbox' value='true' label='facebook'/>
+              <InputField name='youtube' type='checkbox' value='true' label='youtube'/>
             </InputContainer>
           </FilterRowFull>
 
