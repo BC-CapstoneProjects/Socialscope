@@ -13,7 +13,7 @@ const GraphPage = () => {
     }
     let out = []
     for (let i = 0; i < length; i++) {
-      out.push({index: i, value: (Math.random() * 100)});
+      out.push({index: i, value: (10 + Math.random() * 90)});
     }
     return out;
   }
@@ -31,7 +31,7 @@ const GraphPage = () => {
   return(
     <>
       <div>Graph page content placeholder</div>
-      <PieChart data={graphData} size={500} />
+      <PieChart data={graphData} width={500} height={500} />
     </>
   );
 }
