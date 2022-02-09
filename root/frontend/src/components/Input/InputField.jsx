@@ -31,6 +31,7 @@ const InputField = (props) => {
           value={props.value} 
           placeholder={props.placeholder} 
           width={props.width}
+          autoComplete={'off'}
         />
         { (props.label) && (
           <Label htmlFor={props.id}>
