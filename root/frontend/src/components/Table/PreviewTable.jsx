@@ -22,7 +22,6 @@ const PreviewTable = (props) => {
 
   function getPostData(posts) {
     // Get array of processed, row-specific data from posts array
-    // TODO: implement
     if (posts === undefined) return undefined;
     return posts.map(e => {
       let re = {}
@@ -68,7 +67,7 @@ const PreviewTable = (props) => {
     setRowData(r);
   }
 
-  function renderRows() {
+  function renderRows(len) {
     let renderedRows = [];
     if (rowData === undefined) return (<div>no data</div>)
     for(let i=0; i<rowData.length; i++) {
@@ -93,6 +92,10 @@ const PreviewTable = (props) => {
     sortRowsByField(props.sortDefault, true);
   }, [props]);
 
+  useEffect(() => {
+    setRowData(getPostData(props.posts));
+  }, [props.posts])
+
   function renderTable() {
     
     return (
@@ -104,7 +107,7 @@ const PreviewTable = (props) => {
           />
         </TableHeadContainer>
         <TableBodyContainer>
-          {renderRows()}
+          {renderRows((rowData !== undefined) ? rowData.length : 0)}
         </TableBodyContainer>
       </TableContainer>
     )

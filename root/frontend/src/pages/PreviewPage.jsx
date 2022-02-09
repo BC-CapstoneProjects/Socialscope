@@ -1,19 +1,19 @@
-import React from 'react';
-import styled from 'styled-components'
+import React, {useState, useEffect}from 'react';
+import { useLocation } from 'react-router-dom';
 import PreviewTable from '../components/Table/PreviewTable';
 
-const displayFieldNames = {
-  platform: 'Platform',
-  positive_votes: 'Likes',
-  comment_count: 'Comments'
-}
+const PreviewPage = (props) => {
 
+  const displayFieldNames = {
+    platform: 'Platform',
+    positive_votes: 'Likes',
+    comment_count: 'Comments'
+  }
 
-const PreviewPage = () => {
   return(
     <>
       <PreviewTable 
-        posts={undefined}
+        posts={(props.result != undefined ? props.result.posts : undefined)}
         displayFields={displayFieldNames}
       />
     </>
