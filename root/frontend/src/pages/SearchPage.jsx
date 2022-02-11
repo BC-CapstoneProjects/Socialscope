@@ -26,6 +26,7 @@ const SearchBar = styled(InputContainer)`
 `
 
 const FilterContainerOuter = styled.div`
+  min-width: 200px;
   max-width: 750px;
   margin: 0 auto;
 `
@@ -34,32 +35,48 @@ const FilterContainerInner = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  max-width: 592px;
+`
+
+const FilterRowFull = styled.div`
+  flex: 1 0 100%;
+`
+
+const FilterRowHalf = styled.div`
+  flex: 1 0 50%;
 `
 
 const ResetButtonContainer = styled.div`
   display:flex;
   justify-content:flex-end;
+  min-width: 200px;
 `
 
 const LaunchButtonContainer = styled.div`
+  margin-top: 2rem;
   display:flex;
   justify-content:center;
-`
-
-const LaunchButton = styled(InputButton)`
-  margin-top: 2rem;
+  min-width: 200px;
 `
 
 
 const ProgressBarContainer = styled.div`
+  margin: 4rem 0 1rem 0;
   display: flex;
   justify-content: center;
+  align-items: center;
+`
+
+const ProgressBarMarginSpacer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  min-width: 100px;
 `
 
 const ProgressBar = styled.div`
+  margin: 0 1rem 0 1rem;
+  flex: 4;
   display: block;
-  margin: 4rem 1rem 1rem 1rem;
   height: 1rem;
   width: 100%;
   max-width: 500px;
@@ -91,13 +108,14 @@ const SearchPage = (props) => {
         .then(
             (result) => {
               setResult(result);
+              sessionStorage.setItem('result', result);
               console.log(result);
             },
             (error) => {
               alert(error);
             }
         )
-    navigate('../results/preview');
+        navigate('../results/preview', {result: result});
   }
 
   return (
@@ -122,14 +140,15 @@ const SearchPage = (props) => {
 
         <FilterContainerInner>
 
-          <InputContainer label='Platforms'>
-            <InputField
+          <FilterRowFull>
+            <InputContainer label='Platforms'>
+              <InputField
                 name='twitter'
                 type='checkbox'
                 value={twitterCheck}
                 setValue={setTwitterCheck}
                 label='twitter'/>
-            <InputField
+              <InputField
                 name='reddit'
                 type='checkbox'
                 value={redditCheck}
@@ -141,28 +160,33 @@ const SearchPage = (props) => {
                 value={youtubeCheck}
                 setValue={setYoutubeCheck}
                 label='youtube'/>
-          </InputContainer>
+            </InputContainer>
+          </FilterRowFull>
 
-          <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
+          <FilterRowHalf>
+            <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
             <InputField
                 name='startDate'
                 type='date'
                 value={startDate}
                 setValue={setStartDate}
             />
-          </InputContainer>
+            </InputContainer>
+          </FilterRowHalf>
 
-          <InputContainer
-              label='End Date' labelWidth='99px' contentWidth="163px">
+          <FilterRowHalf>
+            <InputContainer label='End Date' labelWidth='99px' contentWidth="163px">
             <InputField
                 name='endDate'
                 type='date'
                 value={endDate}
                 setValue={setEndDate}
             />
-          </InputContainer>
+            </InputContainer>
+          </FilterRowHalf>
 
-          <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
+          <FilterRowHalf>
+            <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
             <InputField
                 name="maxResults"
                 type="text"
@@ -171,12 +195,13 @@ const SearchPage = (props) => {
                 setValue={setMax}
                 defaultValue="20"
                 width='153px'/>
-          </InputContainer>
+            </InputContainer>
+          </FilterRowHalf>
 
         </FilterContainerInner>
         
         <ResetButtonContainer>
-          <InputButton onClick={() => {console.log('reset triggered')}}>
+          <InputButton type='secondary' onClick={() => {console.log('reset triggered')}}>
             Reset Filters
           </InputButton>
         </ResetButtonContainer>
@@ -184,15 +209,19 @@ const SearchPage = (props) => {
       </FilterContainerOuter>
 
       <LaunchButtonContainer>
-        <LaunchButton
-            onClick={searchRedirect}
-            width='200px'>
+        <InputButton  type='primary' onClick={searchRedirect}>
           Launch Search
-        </LaunchButton>
+        </InputButton>
       </LaunchButtonContainer>
 
       <ProgressBarContainer>
+        <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
         <ProgressBar>progress bar placeholder</ProgressBar>
+        <ProgressBarMarginSpacer>
+          <InputButton type='tertiary' onClick={() => {console.log('cancel triggered')}}>
+            Cancel
+          </InputButton>
+        </ProgressBarMarginSpacer>
       </ProgressBarContainer>
 
     </ContentContainer>

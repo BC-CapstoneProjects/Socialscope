@@ -1,20 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const NavLink = styled.p`
+const StyledLink = styled(NavLink)`
   font-size: 1.5rem;
   margin: 0.5rem 1rem;
   flex: 1;
+
+  &.active {
+    text-decoration: underline;
+  }
+
 `
 
 const NavLinks = () => {
   return (
     <React.Fragment>
-      <NavLink><Link to="/">Home</Link></NavLink>
-      <NavLink><Link to="/search">Search</Link></NavLink>
-      <NavLink><Link to="/history">History</Link></NavLink>
-      <NavLink><Link to="/faq">FAQ</Link></NavLink>
+      <StyledLink to="/">Home</StyledLink>
+      <StyledLink to="/search">Search</StyledLink>
+      <StyledLink to="/history">History</StyledLink>
+      <StyledLink to="/faq">FAQ</StyledLink>
     </React.Fragment>
   );
 }

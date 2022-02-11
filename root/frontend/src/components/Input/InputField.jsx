@@ -36,6 +36,7 @@ const InputField = (props) => {
           onChange={handleText}
           placeholder={props.placeholder}
           width={props.width}
+          autoComplete={'off'}
         />
         { (props.label) && (
           <Label htmlFor={props.id}>
