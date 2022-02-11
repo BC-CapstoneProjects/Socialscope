@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react';
 import * as d3 from 'd3';
-import interpolateColors from './interpolateColors';
+import interpolateColors from '../util/interpolateColors';
 
 const PieSvg = (props) => {
    
@@ -113,6 +113,23 @@ const PieSvg = (props) => {
       .on('end', () => {enableMouseEvents(path, label)});
   }
 
+  function exitData(group, label, afterFn) {
+    // exit old data
+    const path = group.selectAll('g.slice').select('path.arc');
+    disableMouseEvents(path, label);
+    path
+      .transition()
+      .duration(500)
+      .attrTween('d', (d) => {
+        var i = d3.interpolate(d, {startAngle: 2*Math.PI, endAngle: 2*Math.PI});
+        return function(t) {
+          return arcGen(i(t));
+        }
+      })
+      .on('end', afterFn);
+
+  }
+
   useEffect(() => {
     // hook called every time data is updated
 
@@ -125,20 +142,11 @@ const PieSvg = (props) => {
       // no exit animation if there is no previous chart data
       enterData(group, label, data);
     }
+    else if (props.data === null || props.data === undefined) {
+      exitData(group, label, () => {console.log('data exit');})
+    }
     else {
-      // exit old data
-      const path = group.selectAll('g.slice').select('path.arc');
-      disableMouseEvents(path, label);
-      path
-        .transition()
-        .duration(500)
-        .attrTween('d', (d) => {
-          var i = d3.interpolate(d, {startAngle: 2*Math.PI, endAngle: 2*Math.PI});
-          return function(t) {
-            return arcGen(i(t));
-          }
-        })
-        .on('end', () => {enterData(group, label, data)});
+      exitData(group, label, () => {enterData(group, label, data)} )
     }
   }, [props.data]); 
 
