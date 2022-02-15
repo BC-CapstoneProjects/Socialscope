@@ -31,6 +31,7 @@ const InputField = (props) => {
     <EntryContainer>
         <Input className={props.className}
           name={props.name} //query id={props.value}
+          aria-label={props.name}
           type={props.type} //text, checkbox
           value={props.value}
           onChange={handleText}
