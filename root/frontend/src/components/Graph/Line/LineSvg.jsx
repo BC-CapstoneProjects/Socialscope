@@ -9,6 +9,7 @@ const LineSvg = (props) => {
   const gref = useRef(null);
   const [prevData, setPrevData] = useState([]);
   const data = props.data;
+  //  const lref = props.lref;
 
 
   const getBufferedDomain = (field, buffer=0) => {
@@ -36,12 +37,12 @@ const LineSvg = (props) => {
     .domain(
       getBufferedDomain('x')
     )
-    .range([0, props.structure.width]);
+    .range([props.structure.padding, props.structure.width - props.structure.padding]);
 
 
   const yScale = d3.scaleLinear()
     .domain(getBufferedDomain('y', 2))
-    .range([props.structure.height, 0]);
+    .range([props.structure.height - props.structure.padding, props.structure.padding]);
 
   const xTicks = 5, yTicks = 5;
 
@@ -54,7 +55,7 @@ const LineSvg = (props) => {
   const yAxis = d3.axisLeft(yScale)
     .ticks(yTicks)
     .tickValues(getTicks(yScale, yTicks))
-    .tickSize(-props.structure.width)
+    .tickSize(props.structure.padding-props.structure.width)
     .tickPadding(5);
 
   const lineGen = d3.line()
@@ -80,9 +81,10 @@ const LineSvg = (props) => {
       .remove();
 
     const gX = group
-      .append('g')
+      .append('g');
+    gX
       .attr('class', 'x-axis')
-      .attr('transform', `translate(0, ${props.structure.height})`)
+      .attr('transform', `translate(0, ${props.structure.height - props.structure.padding})`)
       .call(xAxis)
     gX.select('.domain').remove();
     gX.selectAll('line')
@@ -94,7 +96,8 @@ const LineSvg = (props) => {
       .attr('font-size', '0.75rem');
 
     const gY = group
-      .append('g')
+      .append('g');
+    gY
       .attr('class', 'y-axis')
       .call(yAxis);
     gY.select('.domain').remove();
@@ -121,6 +124,7 @@ const LineSvg = (props) => {
       .attr('fill', 'none')
       .attr('stroke', (d) => colorGen(d))
       .attr('stroke-width', 2)
+      .attr('shape-rendering', 'optimizeQuality')
       .attr('d', (d) => lineGen(d.items))
       .attr('pointer-events', 'all')
 
@@ -138,22 +142,25 @@ const LineSvg = (props) => {
       }
     });
 
+//    const legend = d3.select(lref.current);
+
     const focus = group.append('g')
+    focus
       .attr('class','mouse-group')
       .attr('pointer-events', 'none')
       .style('visibility', 'hidden');
-
     focus.append('circle')
       .attr('r', 5);
-
     focus.append('text')
       .attr('x', 9)
       .attr('dy', '.35em');
 
     const overlay = group.append('rect')
+    
+    overlay
       .attr('class', 'overlay')
-      .attr('width', props.structure.width)
-      .attr('height', props.structure.height)
+      .attr('width', props.structure.width + props.structure.padding)
+      .attr('height', props.structure.height + props.structure.padding)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
       .style('visibility', 'hidden');
@@ -186,6 +193,11 @@ const LineSvg = (props) => {
           .attr('transform', `translate(${xScale(d.x)},${yScale(d.y)})`)
           .style('visibility', 'visible')
         focus.select('text').text(`(${d.x},${d.y})`)
+//        legend
+//          .style('left', `${xScale(d.x) + 39}px`)
+//          .style('top', `${yScale(d.y) + 25}px`)
+//          .style('visibility', 'visible')
+//          .text(`(${d.x},${d.y})`)
       }
     }
 
@@ -195,7 +207,7 @@ const LineSvg = (props) => {
 
   return (
     <svg width={props.structure.width + 2*props.structure.margin} height={props.structure.height + 2*props.structure.margin}>
-      <g ref={gref} transform={`translate(${props.structure.margin},${props.structure.margin})`}/>
+      <g ref={gref} transform={`translate(${props.structure.margin + props.structure.padding},${props.structure.margin + props.structure.padding})`}/>
     </svg>
   );
 }

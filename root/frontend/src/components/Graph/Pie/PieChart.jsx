@@ -30,7 +30,6 @@ const PieContainer = styled.div`
 
 const PieChart = (props) => {
 
-  // initialize constants
   const lref = useRef(null);
 
   return (

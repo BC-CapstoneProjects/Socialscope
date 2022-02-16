@@ -14,6 +14,7 @@ const HeadColumn = styled.div`
   display: flex;
   align-items: center;
   padding: 0.1rem;
+  margin-bottom: 2px;
   text-align: center;
 `;
 
@@ -35,8 +36,9 @@ const SortButton = styled.button`
   outline: none;
   cursor: pointer;
 
-  padding: 1px;
-  width: 21px;
+  margin: 1px;
+  height: 20px;
+  width: 20px;
 `;
 
 const PreviewHead = (props) => {

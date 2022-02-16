@@ -24,13 +24,14 @@ const Label = styled.label`
 const InputField = (props) => {
   function handleText(e)
   {
-      props.type === "checkbox" ? props.setValue(!props.value) : props.setValue(e.target.value)
+    props.type === "checkbox" ? props.setValue(!props.value) : props.setValue(e.target.value)
   }
 
   return (
     <EntryContainer>
         <Input className={props.className}
           name={props.name} //query id={props.value}
+          aria-label={props.name}
           type={props.type} //text, checkbox
           value={props.value}
           onChange={handleText}

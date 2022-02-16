@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import GraphingMenu from '../components/GraphingMenu';
 import PieChart from '../components/Graph/Pie/PieChart';
 import LineChart from '../components/Graph/Line/LineChart';
 
@@ -28,13 +29,14 @@ const GraphPage = () => {
       setGraphData(generateData());
     }, 5000);
     return () => clearInterval(interval);
-  }, [])
+  }, []);
 
   return(
     <>
       <div>Graph page content placeholder</div>
       <PieChart data={graphData} width={500} height={500} />
-      <LineChart data={lineTestData} structure={{width: 450, height: 450, margin: 25}} />
+      <LineChart data={lineTestData} structure={{width: 450, height: 450, margin: 50, padding: 10}} />   
+      <GraphingMenu /> 
     </>
   );
 }
