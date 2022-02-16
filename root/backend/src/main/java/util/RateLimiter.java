@@ -7,6 +7,38 @@ public class RateLimiter {
     private long currentPeriodStartTime;
     private int currentPeriodBudgetSpent;
 
+    public int getPeriodRequestBudget() {
+        return periodRequestBudget;
+    }
+
+    public void setPeriodRequestBudget(int periodRequestBudget) {
+        this.periodRequestBudget = periodRequestBudget;
+    }
+
+    public long getPeriodDuration() {
+        return periodDuration;
+    }
+
+    public void setPeriodDuration(long periodDuration) {
+        this.periodDuration = periodDuration;
+    }
+
+    public long getCurrentPeriodStartTime() {
+        return currentPeriodStartTime;
+    }
+
+    public void setCurrentPeriodStartTime(long currentPeriodStartTime) {
+        this.currentPeriodStartTime = currentPeriodStartTime;
+    }
+
+    public int getCurrentPeriodBudgetSpent() {
+        return currentPeriodBudgetSpent;
+    }
+
+    public void setCurrentPeriodBudgetSpent(int currentPeriodBudgetSpent) {
+        this.currentPeriodBudgetSpent = currentPeriodBudgetSpent;
+    }
+
     public RateLimiter(int budget, long duration) {
         this.periodRequestBudget = budget;
         this.periodDuration = duration;
@@ -21,6 +53,9 @@ public class RateLimiter {
     public boolean hasBudget(int amount) {
         return (this.getBudgetRemaining() >= amount);
     }
+    public boolean notEnough(int amount) {
+        return (this.getBudgetRemaining() < amount);
+    }
 
     public boolean isCurrentPeriodOver() {
         return ((System.currentTimeMillis() - this.currentPeriodStartTime) > this.periodDuration);
@@ -32,7 +67,4 @@ public class RateLimiter {
             this.currentPeriodBudgetSpent = 0;
         }
     }
-
 }
-
-

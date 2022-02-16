@@ -1,12 +1,5 @@
 package handlers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,9 +55,22 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("key", credentials.get("api_key"));
         requestParameters.put("type", "video");
         requestParameters.put("q", q);
-        requestParameters.put("maxResults", maxResults);
-        requestParameters.put("publishedAfter", start);
-        requestParameters.put("publishedBefore", end);
+
+        if(!maxResults.equals(""))
+        {
+            requestParameters.put("maxResults", maxResults);
+        }
+        if(!start.equals(""))
+        {
+            start += "T00:00:00.000Z";
+            requestParameters.put("publishedAfter", start);
+        }
+        if(!end.equals(""))
+        {
+            end += "T00:00:00.000Z";
+            requestParameters.put("publishedBefore", end);
+        }
+
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
@@ -79,7 +85,6 @@ public class YoutubeApiHandler implements IApiHandler {
 
         // build request properties
         Map<String, String> requestProperties = new HashMap<>();
-
 
         // build request parameters
         Map<String, String> requestParameters = new HashMap<>();
@@ -152,6 +157,4 @@ public class YoutubeApiHandler implements IApiHandler {
         // TODO poster name hashing unimplemented for now
         return poster;
     }
-
-
 }
