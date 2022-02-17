@@ -27,10 +27,31 @@ const GraphingMenu = () => {
   const [groupValue, setGroupValue] = useState(0);
 
   const menuInputWidth = {label: '100px', content: '150px'}
-  const menuOptionTree = {'Graph':{'Sentiment':{'Over':{'All':{'Group': {'Platform': ''}}}}, 'Likes':{'Over':{'All':{'Group': {'Platform': ''}}}}, 'Comments':{'Over':{'All':{'Group': {'Platform': ''}}, 'Sentiment':{'Group': {'All': ''}}}}}};
+  const menuOptionTree = {'Graph':
+    {'Sentiment': {'Over':
+      {'All':{'Group': {
+        'Platform': ''}}, 
+      'Time':{'Group':{
+        'Platform': '', 'None': ''}}
+    }}, 
+    'Likes':{'Over':{
+      'All':{'Group': {
+        'Platform': ''}}, 
+      'Time':{'Group':{
+        'Platform': '', 
+        'None': ''}}
+    }}, 
+    'Comments':{'Over':{
+      'All':{'Group': {
+        'Platform': ''}}, 
+      'Sentiment':{'Group': {
+        'None': ''}}
+    }}
+  }};
 
   const updateGraphValue = (val) => {
     setGraphValue(val);
+    console.log(graphValue);
     if (menuOptionTree['Graph'][graphValue]) 
       setOverValue(Object.keys(menuOptionTree['Graph'][graphValue]['Over'])[0]);
     if (menuOptionTree['Graph'][graphValue] && menuOptionTree['Graph'][graphValue]['Over'][overValue])

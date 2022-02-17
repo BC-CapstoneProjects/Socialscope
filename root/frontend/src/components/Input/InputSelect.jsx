@@ -1,5 +1,5 @@
 import { autoType } from 'd3'
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import styled from 'styled-components'
 
 import useOutsideClickAlert from '../../hooks/useOutsideClickAlert'
@@ -26,7 +26,7 @@ const SelectContainer = styled.div`
 const Selected = styled.div`
   cursor: pointer;
   width: 100%;
-  
+
   &:hover {
     background-color: ${props => props.theme.colors.primary};
   }
@@ -64,7 +64,7 @@ const InputSelect = (props) => {
   const sRef = useRef(null);
   useOutsideClickAlert(sRef, () => {setSelectionListHidden(true)})
 
-  function toggleItemList() {
+  const toggleItemList = () => {
     setSelectionListHidden(!selectionListHidden);
   }
 
@@ -85,10 +85,15 @@ const InputSelect = (props) => {
     return renderedSelectItems;
   }
 
+  useEffect(() => {
+    if (!props.options[selectionIndex]) 
+      setSelectionIndex(0);
+  }, [props.options])
+
   return (
     <SelectContainer ref={sRef} width={props.width}>
-      <Selected onClick={() => toggleItemList()}>
-        {props.options[selectionIndex].text}
+      <Selected onClick={toggleItemList}>
+        {props.options[selectionIndex] ? props.options[selectionIndex].text : props.options[0].text}
       </Selected>
       <SelectItemListContainer hidden={selectionListHidden}>
         <SelectItemList />  
