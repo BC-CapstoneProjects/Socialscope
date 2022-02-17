@@ -18,9 +18,13 @@ const GlobalStyle = createGlobalStyle`
   scroll-behavior: smooth; 
 }
 
+html {
+  margin-right: calc(0px - calc(100vw - 100%));  // prevent scroll bar position offset
+}
+
 body {
   height:100%;
-  width:100%;
+  width: 100%;
   background: ${GlobalTheme.colors.background};
   font-family: 'Roboto', 'sans-serif';
   font-style: normal;

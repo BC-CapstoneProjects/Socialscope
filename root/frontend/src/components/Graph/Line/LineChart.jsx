@@ -1,19 +1,20 @@
 import React, {useRef} from 'react';
 import styled from 'styled-components';
 
-import PieSvg from './PieSvg';
+import LineSvg from './LineSvg';
 
-const PieContainer = styled.div` 
+const ChartContainer = styled.div`
   position: relative;
-  margin: auto;
+  margin: ${props => props.margin + 'px'};
   width: ${props => props.width + 'px'};
   height:${props => props.height + 'px'};
 
-  &>.pie-legend {
-    opacity: 0;
+  & .chart-legend {
     position: absolute;
-    width: 70px;
     display: flex;
+    visibility: hidden;
+    width: max-content;
+    height: max-content;
     justify-content: center;
     pointer-events: none;
     background-color: ${props => props.theme.colors.secondary};
@@ -25,22 +26,20 @@ const PieContainer = styled.div`
     box-shadow: 3px 3px 2px grey;
     font-style: italic;
   }
-
 `
 
-const PieChart = (props) => {
+const LineChart = (props) => {
 
-  // initialize constants
   const lref = useRef(null);
 
   return (
-    <PieContainer width={props.width} height={props.height}>
-      <div ref={lref} className='pie-legend'>test</div>
-      <div className='pie-image'>
-        <PieSvg data={props.data} lref={lref} size={Math.min(props.width, props.height)} />
+    <ChartContainer width={props.structure.width + 2* props.structure.margin} height={props.structure.height + 2*props.structure.margin}>
+      <div className='chart-legend' ref={lref}/>
+      <div className='chart-image'>
+        <LineSvg data={props.data} lref={lref} structure={props.structure}/>
       </div>
-    </PieContainer>
+    </ChartContainer>
   );
 }
 
-export default PieChart;
+export default LineChart;

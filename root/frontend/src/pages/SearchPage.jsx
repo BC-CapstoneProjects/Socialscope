@@ -122,7 +122,7 @@ const SearchPage = (props) => {
     <ContentContainer>
       
       <SectionTitle>Search</SectionTitle>
-
+      
       <SearchBar label='Query'>
         <InputField
             name='query'

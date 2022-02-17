@@ -17,6 +17,8 @@ const TableCell = styled.div`
   flex: 1; 
   padding: 0.1rem;
   text-align: center;
+  min-width: 0;
+  word-wrap: break-word;
 `;
 
 const ToggleButton = styled.button`
@@ -35,6 +37,7 @@ const DescriptionContainer = styled(TableCell)`
   display: ${props => props.minimized ? 'none' : 'flex'};
   flex-direction: column;
   justify-content: center;
+  align-items: stretch;
   gap: 0.5rem;
 `;
 

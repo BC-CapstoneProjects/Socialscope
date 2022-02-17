@@ -6,6 +6,11 @@ import PreviewRow from './PreviewRow';
 
 const TableContainer = styled.div`
   border: 2px solid ${props => props.theme.colors.outline};
+
+  & svg, & svg * {
+    pointer-events: none;
+  }
+
 `;
 
 const TableHeadContainer = styled.div`

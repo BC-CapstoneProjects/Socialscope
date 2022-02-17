@@ -13,7 +13,7 @@ const PreviewPage = (props) => {
   return(
     <>
       <PreviewTable 
-        posts={(props.result != undefined ? props.result.posts : undefined)}
+        posts={(props.result !== undefined ? props.result.posts : undefined)}
         displayFields={displayFieldNames}
       />
     </>
