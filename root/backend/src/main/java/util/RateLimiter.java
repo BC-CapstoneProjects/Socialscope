@@ -15,11 +15,17 @@ public class RateLimiter {
     }
 
     public int getBudgetRemaining() {
+    	System.out.println(this.currentPeriodBudgetSpent);
         return (this.periodRequestBudget - this.currentPeriodBudgetSpent);
+    }
+    
+    public void spendBudget(int amount) {
+    	resetPeriodIfElapsed();
+    	this.currentPeriodBudgetSpent += amount;
     }
 
     public boolean hasBudget(int amount) {
-        return (this.getBudgetRemaining() >= amount);
+        return (this.getBudgetRemaining() >= amount || this.isCurrentPeriodOver());
     }
 
     public boolean isCurrentPeriodOver() {
