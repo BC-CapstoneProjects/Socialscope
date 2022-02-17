@@ -14,6 +14,7 @@ import util.RateLimiter;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -89,18 +90,8 @@ public class BackendApplication {
 									JSONObject postData = new JSONObject();
 									JSONObject outJSON = new JSONObject();
 									postData.put("platform", "twitter");
-									postData.put("created_at", -1);
-									postData.put("post_id", -1);
-									postData.put("lang", -1);
-									postData.put("title", -1);
-									postData.put("text", "Please wait " + (15 - ((trackTime / 1000F) / 60F)) + " minutes to continue");
-									postData.put("author_id", -1);
-									postData.put("positive_votes", -1);
-									postData.put("sentiment_score", -1);
-									postData.put("sentiment_confidence", -1);
-									postData.put("has_embedded_media", -1);
-									postData.put("comment_count", -1);
-									postData.put("top_comments", -1);
+									postData.put("title", "No Available");
+									postData.put("text", "Please wait " + TimeUnit.MILLISECONDS.toMinutes((long) (15 - ((trackTime / 1000F) / 60F))) + " minutes to continue");
 									outPosts.put(postData);
 									outJSON.put("posts", outPosts);
 									posts = outJSON.getJSONArray("posts");
