@@ -38,4 +38,4 @@ bin
 *.class
 private
 aggregateResults.json
-resources/static
+root/backend/src/main/resources/static/
