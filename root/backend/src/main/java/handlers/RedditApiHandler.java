@@ -49,7 +49,7 @@ public class RedditApiHandler implements IApiHandler {
     		this.limiters.forEach((limiter) -> {limiter.spendBudget(1);});
     	}
     	if (requestPassed)
-    		System.out.println("Reddit access token retrieved");
+    		System.out.println("Reddit access token request passed");
     	else
     		System.out.println("Reddit access token request failed");
     }
@@ -73,11 +73,12 @@ public class RedditApiHandler implements IApiHandler {
                 requestProperties, requestParameters);
 
         // process response
+        System.out.println(responseJSON.toString());
         String accessToken;
         long expiresIn;
         try {
             accessToken = responseJSON.getString("access_token");
-            expiresIn = responseJSON.getLong("expires_in");
+            expiresIn = responseJSON.getLong("expires_in") * 1000;
         } catch (JSONException e) {
             accessToken = null;
             expiresIn = 0;
@@ -85,7 +86,6 @@ public class RedditApiHandler implements IApiHandler {
 
         // save token
         this.token = new Token(accessToken, System.currentTimeMillis() + expiresIn);
-        
         // return whether request resulted in a valid token
         return this.hasValidToken();
     }

@@ -15,7 +15,6 @@ public class RateLimiter {
     }
 
     public int getBudgetRemaining() {
-    	System.out.println(this.currentPeriodBudgetSpent);
         return (this.periodRequestBudget - this.currentPeriodBudgetSpent);
     }
     

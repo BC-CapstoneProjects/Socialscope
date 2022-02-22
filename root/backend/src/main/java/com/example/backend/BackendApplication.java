@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 @SpringBootApplication
 public class BackendApplication {
 
@@ -27,13 +26,13 @@ public class BackendApplication {
 	public static void main(String args[]) {
 
 		SpringApplication.run(BackendApplication.class, args);
-		Scanner console = new Scanner(System.in);
-		System.out.println("Choose Twitter: ");
-		boolean twitterCheck = console.nextBoolean();
-		System.out.println("Choose YouTube ");
-		boolean youtubeCheck = console.nextBoolean();
-		System.out.println("Choose Reddit: ");
-		boolean redditCheck = console.nextBoolean();
+//		Scanner console = new Scanner(System.in);
+//		System.out.println("Choose Twitter: ");
+//		boolean twitterCheck = console.nextBoolean();
+//		System.out.println("Choose YouTube ");
+//		boolean youtubeCheck = console.nextBoolean();
+//		System.out.println("Choose Reddit: ");
+//		boolean redditCheck = console.nextBoolean();
 
 //		Credentials cred = new Credentials();
 //		apiHandlers = initializeApiHandlers(cred, twitterCheck, youtubeCheck, redditCheck);
@@ -46,7 +45,7 @@ public class BackendApplication {
 	}
 
 	public static List<IApiHandler> initializeApiHandlers(Credentials cred, boolean twitterCheck, boolean youtubeCheck, boolean redditCheck) {
-		List<IApiHandler> handlers = new ArrayList<>();
+		List<IApiHandler> handlers = new ArrayList<IApiHandler>();
 		if(twitterCheck == true)
 		{
 			handlers.add(new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
