@@ -4,8 +4,8 @@ public class RateLimiter {
 
     private int periodRequestBudget;
     private long periodDuration;
-    public long currentPeriodStartTime;
-    public int currentPeriodBudgetSpent;
+    private long currentPeriodStartTime;
+    private int currentPeriodBudgetSpent;
 
     public RateLimiter(int budget, long duration) {
         this.periodRequestBudget = budget;

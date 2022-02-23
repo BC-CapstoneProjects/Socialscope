@@ -1,11 +1,13 @@
 package handlers;
 
+
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 //Imports the Google Cloud client library
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +27,9 @@ public class TwitterApiHandler implements IApiHandler {
     private static final JSONObject outJSON = new JSONObject();
 
     private Token token;
-    private List<RateLimiter> limiters = new LinkedList<>();
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+    private List<RateLimiter> limiters = new LinkedList<>();
+
     public TwitterApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
         credentials.put("app_id", id);
@@ -68,7 +71,6 @@ public class TwitterApiHandler implements IApiHandler {
     public boolean hasValidToken() {
         return true;
     }
-    
 
     @Override
     public JSONObject makeQuery(String q, String maxResults, String start, String end) throws Exception {
@@ -154,11 +156,9 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("text", re.getString("text"));
                     postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
                     postData.put("positive_votes", String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
-                    
                     String text=re.getString("text");
                     String title=re.getString("title");
                     sentimentanalysis.sentiment( postData,  text, title);
-                    
                     postData.put("has_embedded_media", re.has("attachments"));
                     postData.put("comment_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
                     postData.put("top_comments", new JSONArray());
@@ -176,7 +176,4 @@ public class TwitterApiHandler implements IApiHandler {
         return id;
     }
 }
-
-
-
 

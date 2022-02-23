@@ -45,7 +45,7 @@ public class YoutubeApiHandler implements IApiHandler {
         this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
 	
     }
-    private boolean hasRequestBudget(int amount) {
+   private boolean hasRequestBudget(int amount) {
     	boolean hasBudget = true;
     	for (RateLimiter limiter : this.limiters) {
     		if (!limiter.hasBudget(amount))
@@ -212,6 +212,4 @@ public class YoutubeApiHandler implements IApiHandler {
         // TODO poster name hashing unimplemented for now
         return poster;
     }
-
-
 }

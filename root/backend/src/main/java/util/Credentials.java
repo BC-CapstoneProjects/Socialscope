@@ -2,7 +2,6 @@ package util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,6 +21,8 @@ public class Credentials {
 
     private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
+
+
     private String redditAppId;
     private String redditAppSecret;  // private
     private String redditUserAgent;
@@ -32,13 +33,10 @@ public class Credentials {
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
     private String myCredentials;  // private
-  
-    public Credentials()  {
+    public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
-        
     }
-    
-    
+
     public LanguageServiceSettings readGoogleCredentials() throws IOException {
     	LanguageServiceSettings languageServiceSettings =
             LanguageServiceSettings.newBuilder()
@@ -47,7 +45,6 @@ public class Credentials {
         return languageServiceSettings;
         }
 
-  
     private void readCredentialsFromFile(String fp) {
         BufferedReader reader;
         try {
@@ -68,8 +65,6 @@ public class Credentials {
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
             this.youtubeApiKey = jo.getString("youtubeApiKey");
-            this.myCredentials = jo.getString("myCredentials");
-            //readGoogleCredentials(this.myCredentials);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -141,9 +136,6 @@ public class Credentials {
     public String getYoutubeApiKey() {
         return youtubeApiKey ;
     }
-    
-   
-
 }
 
 

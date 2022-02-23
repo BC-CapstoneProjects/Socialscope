@@ -7,7 +7,6 @@ import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
@@ -28,8 +27,9 @@ public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token token;
-    private List<RateLimiter> limiters = new LinkedList<>();
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+    private List<RateLimiter> limiters = new LinkedList<>();
+
     public RedditApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
         credentials.put("app_id", id);
@@ -38,11 +38,32 @@ public class RedditApiHandler implements IApiHandler {
         this.token = null;
         this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
     }
+    
+    private boolean hasRequestBudget(int amount) {
+    	boolean hasBudget = true;
+    	for (RateLimiter limiter : this.limiters) {
+    		if (!limiter.hasBudget(amount))
+    			hasBudget = false;
+    	}
+    	return hasBudget;
+    }
 
     @Override
     public void requestToken() {
-
-        String requestUri = "https://ssl.reddit.com/api/v1/access_token";
+    	boolean requestPassed = false;
+    	
+    	// request a token if sufficient budget and token needed
+    	if (hasRequestBudget(1) && (this.token == null || !this.hasValidToken())) {
+    		requestPassed = makeTokenRequest();
+    	}
+    	if (requestPassed)
+    		System.out.println("Reddit access token retrieved");
+    	else
+    		System.out.println("Reddit access token request failed");
+    }
+    
+    private boolean makeTokenRequest() {
+    	String requestUri = "https://ssl.reddit.com/api/v1/access_token";
 
         // build request properties
         Map<String, String> requestProperties = new HashMap<>();
@@ -72,18 +93,34 @@ public class RedditApiHandler implements IApiHandler {
 
         // save token
         this.token = new Token(accessToken, System.currentTimeMillis() + expiresIn);
+        
+        // return whether request resulted in a valid token
+        return this.hasValidToken();
     }
 
     @Override
     public boolean hasValidToken() {
         return !(this.token.isExpired());
     }
-    
 
     @Override
     public JSONObject makeQuery(String q, String maxResults, String start, String end) throws Exception {
-
-        String requestUri = "https://oauth.reddit.com/search";
+    	JSONObject out = null;
+    	if (hasRequestBudget(1) && (this.hasValidToken())) {
+    		out = makeQueryRequest(q, maxResults, start, end);
+    	}
+    	if (out != null) {
+    		System.out.println("Reddit query successful");
+    		return out;	
+    	}
+    	else {
+    		System.out.println("Reddit access token request failed");
+    		return null;
+    	}
+    }
+    
+    private JSONObject makeQueryRequest(String q, String maxResults, String start, String end) throws Exception {
+    	String requestUri = "https://oauth.reddit.com/search";
 
         // build request properties
         Map<String, String> requestProperties = new HashMap<>();
@@ -102,6 +139,7 @@ public class RedditApiHandler implements IApiHandler {
 
         return formatQueryJSON(responseJSON);
     }
+    
 
     private JSONObject formatQueryJSON(JSONObject responseData) throws Exception {
 
@@ -127,11 +165,9 @@ public class RedditApiHandler implements IApiHandler {
                 postData.put("text", currentPost.getString("selftext"));
                 postData.put("poster_id", hashPoster(currentPost.getString("author_fullname")));
                 postData.put("positive_votes", currentPost.getInt("ups"));
-                
                 String text= currentPost.getString("selftext");
                 String title= currentPost.getString("title");
                 sentimentanalysis.sentiment( postData,  text, title);
-                
                 postData.put("has_embedded_media", currentPost.get("secure_media") != JSONObject.NULL
                         || !currentPost.getString("url").substring(0, 22).equals("https://www.reddit.com"));
                 postData.put("comment_count", currentPost.getInt("num_comments"));
@@ -159,4 +195,3 @@ public class RedditApiHandler implements IApiHandler {
     }
 
 }
-
