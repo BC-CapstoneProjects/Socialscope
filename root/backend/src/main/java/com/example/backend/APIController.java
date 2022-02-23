@@ -16,8 +16,6 @@ public class APIController {
     @CrossOrigin
     @GetMapping("/api/")
     public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
-        start = start + "T00:00:00.000Z";
-        end = end + "T00:00:00.000Z";
         Credentials cred = new Credentials();
         List<IApiHandler> inputAPI = BackendApplication.initializeApiHandlers(cred, twitterChoose, youtubeChoose, redditChoose);
         System.out.println("Executing search...");
@@ -25,5 +23,4 @@ public class APIController {
         System.out.println(results.toString());
         return results.toMap();
     }
-
 }
