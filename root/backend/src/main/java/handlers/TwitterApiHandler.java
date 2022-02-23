@@ -1,6 +1,7 @@
 package handlers;
 
 
+
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 //Imports the Google Cloud client library
 import com.google.cloud.language.v1.Document;
@@ -9,12 +10,15 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
+
 import util.SentimentAnalysis;
+
 import util.Token;
 
 import java.nio.charset.StandardCharsets;
@@ -27,7 +31,9 @@ public class TwitterApiHandler implements IApiHandler {
     private static final JSONObject outJSON = new JSONObject();
 
     private Token token;
+
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+
     private List<RateLimiter> limiters = new LinkedList<>();
 
     public TwitterApiHandler(String id, String secret, String user) {
@@ -73,7 +79,11 @@ public class TwitterApiHandler implements IApiHandler {
     }
 
     @Override
+
     public JSONObject makeQuery(String q, String maxResults, String start, String end) throws Exception {
+
+    public JSONObject makeQuery(String q, String maxResults, String start, String end) {
+
         ArrayList <String> idList = new ArrayList<>();
         String requestUri = "https://api.twitter.com/2/tweets/search/recent";
 
@@ -115,7 +125,11 @@ public class TwitterApiHandler implements IApiHandler {
             return TweetDetails(new ArrayList<>());
         }
     }
+
     public JSONObject TweetDetails(ArrayList<String> idList) throws Exception {
+
+    public JSONObject TweetDetails(ArrayList<String> idList) {
+
         System.out.println(idList);
         JSONArray outPosts = new JSONArray();
         if(idList.isEmpty())
@@ -147,7 +161,10 @@ public class TwitterApiHandler implements IApiHandler {
                     JSONArray inPosts = responseJSON.getJSONArray("data");
                     JSONObject re = inPosts.getJSONObject(0);
                     JSONObject postData = new JSONObject();
+
                     Sentiment sentiment =null;
+
+
                     postData.put("platform", "twitter");
                     postData.put("created_at", re.getString("created_at"));
                     postData.put("post_id", hashPostID(String.valueOf(re.getBigInteger("id"))));
@@ -156,9 +173,14 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("text", re.getString("text"));
                     postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
                     postData.put("positive_votes", String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
+
                     String text=re.getString("text");
                     String title=re.getString("title");
                     sentimentanalysis.sentiment( postData,  text, title);
+
+                    postData.put("sentiment_score", "Neutral");
+                    postData.put("sentiment_confidence", 0.0);
+
                     postData.put("has_embedded_media", re.has("attachments"));
                     postData.put("comment_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
                     postData.put("top_comments", new JSONArray());

@@ -2,7 +2,10 @@ package util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+
 import java.io.FileInputStream;
+
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,6 +13,7 @@ import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -23,6 +27,11 @@ public class Credentials {
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
 
 
+public class Credentials {
+
+    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+
+
     private String redditAppId;
     private String redditAppSecret;  // private
     private String redditUserAgent;
@@ -32,10 +41,15 @@ public class Credentials {
     private String twitterUserAgent;
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
+
     private String myCredentials;  // private
+
+
+
     public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
     }
+
 
     public LanguageServiceSettings readGoogleCredentials() throws IOException {
     	LanguageServiceSettings languageServiceSettings =

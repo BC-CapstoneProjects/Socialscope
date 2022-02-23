@@ -1,11 +1,13 @@
 package handlers;
 
+
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 //Imports the Google Cloud client library
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
+
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -20,14 +22,18 @@ import org.json.JSONObject;
 
 import util.HttpUtils;
 import util.RateLimiter;
+
 import util.SentimentAnalysis;
+
 import util.Token;
 
 public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token token;
+
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+
     private List<RateLimiter> limiters = new LinkedList<>();
 
     public RedditApiHandler(String id, String secret, String user) {
@@ -104,7 +110,11 @@ public class RedditApiHandler implements IApiHandler {
     }
 
     @Override
+
     public JSONObject makeQuery(String q, String maxResults, String start, String end) throws Exception {
+
+    public JSONObject makeQuery(String q, String maxResults, String start, String end) {
+
     	JSONObject out = null;
     	if (hasRequestBudget(1) && (this.hasValidToken())) {
     		out = makeQueryRequest(q, maxResults, start, end);
@@ -118,8 +128,11 @@ public class RedditApiHandler implements IApiHandler {
     		return null;
     	}
     }
-    
+
     private JSONObject makeQueryRequest(String q, String maxResults, String start, String end) throws Exception {
+
+    private JSONObject makeQueryRequest(String q, String maxResults, String start, String end) {
+
     	String requestUri = "https://oauth.reddit.com/search";
 
         // build request properties
@@ -141,7 +154,11 @@ public class RedditApiHandler implements IApiHandler {
     }
     
 
+
     private JSONObject formatQueryJSON(JSONObject responseData) throws Exception {
+
+    private JSONObject formatQueryJSON(JSONObject responseData) {
+
 
         JSONObject outJSON = new JSONObject();
         try {
@@ -156,7 +173,9 @@ public class RedditApiHandler implements IApiHandler {
                 JSONObject currentPost = inPosts.getJSONObject(i).getJSONObject("data");
                 if (currentPost.getBoolean("over_18")) continue;  // skip posts flagged for mature content
                 JSONObject postData = new JSONObject();
+
                 Sentiment sentiment =null;  
+
                 postData.put("platform", "reddit");
                 postData.put("created_at", currentPost.getInt("created_utc"));
                 postData.put("post_id", hashPostID(currentPost.getString("name")));
@@ -165,9 +184,14 @@ public class RedditApiHandler implements IApiHandler {
                 postData.put("text", currentPost.getString("selftext"));
                 postData.put("poster_id", hashPoster(currentPost.getString("author_fullname")));
                 postData.put("positive_votes", currentPost.getInt("ups"));
+
                 String text= currentPost.getString("selftext");
                 String title= currentPost.getString("title");
                 sentimentanalysis.sentiment( postData,  text, title);
+
+                postData.put("sentiment_score", "Neutral");
+                postData.put("sentiment_confidence", 0.0);
+
                 postData.put("has_embedded_media", currentPost.get("secure_media") != JSONObject.NULL
                         || !currentPost.getString("url").substring(0, 22).equals("https://www.reddit.com"));
                 postData.put("comment_count", currentPost.getInt("num_comments"));

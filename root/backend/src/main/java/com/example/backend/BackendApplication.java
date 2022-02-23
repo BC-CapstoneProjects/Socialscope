@@ -80,7 +80,11 @@ public class BackendApplication {
 	}
 
 
+
 	public static JSONObject executeSearch(String queryText, List<IApiHandler> apis, String maxResults, String start, String end) throws Exception {
+
+	public static JSONObject executeSearch(String queryText, List<IApiHandler> apis, String maxResults, String start, String end) {
+
 		JSONObject aggregateResults = new JSONObject();
 		try {
 			JSONArray aggregatePosts = new JSONArray();

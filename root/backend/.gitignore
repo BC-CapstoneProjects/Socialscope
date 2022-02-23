@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+ gihanesentimentup
+.settings
+bin
+.project
+*.class
+private
+aggregateResults.json
+ main

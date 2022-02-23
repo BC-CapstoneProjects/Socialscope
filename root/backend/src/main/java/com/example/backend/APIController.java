@@ -15,7 +15,11 @@ import java.util.Map;
 public class APIController {
     @CrossOrigin
     @GetMapping("/")
+
     public Map<String, Object> index(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) throws Exception {
+
+    public Map<String, Object> index(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
+
         start = start + "T00:00:00.000Z";
         end = end + "T00:00:00.000Z";
         Credentials cred = new Credentials();
