@@ -14,10 +14,8 @@ import java.util.Map;
 @RestController
 public class APIController {
     @CrossOrigin
-    @GetMapping("/")
-    public Map<String, Object> index(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
-        start = start + "T00:00:00.000Z";
-        end = end + "T00:00:00.000Z";
+    @GetMapping("/api/")
+    public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
         Credentials cred = new Credentials();
         List<IApiHandler> inputAPI = BackendApplication.initializeApiHandlers(cred, twitterChoose, youtubeChoose, redditChoose);
         System.out.println("Executing search...");

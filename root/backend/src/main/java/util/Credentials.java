@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +35,11 @@ public class Credentials {
         try {
         	String currPath = new java.io.File(".").getCanonicalPath();
         	System.out.println(currPath);
-            reader = new BufferedReader(new FileReader(fp));
+        	InputStream in = getClass().getResourceAsStream("/" + fp);  
+        	if (in != null)
+        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
+        	else
+        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();

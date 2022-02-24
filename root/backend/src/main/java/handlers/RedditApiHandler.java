@@ -40,15 +40,16 @@ public class RedditApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken() {
+    public void requestToken(String numberOfResults) {
     	boolean requestPassed = false;
     	
     	// request a token if sufficient budget and token needed
     	if (hasRequestBudget(1) && (this.token == null || !this.hasValidToken())) {
     		requestPassed = makeTokenRequest();
+    		this.limiters.forEach((limiter) -> {limiter.spendBudget(1);});
     	}
     	if (requestPassed)
-    		System.out.println("Reddit access token retrieved");
+    		System.out.println("Reddit access token request passed");
     	else
     		System.out.println("Reddit access token request failed");
     }
@@ -72,11 +73,12 @@ public class RedditApiHandler implements IApiHandler {
                 requestProperties, requestParameters);
 
         // process response
+        System.out.println(responseJSON.toString());
         String accessToken;
         long expiresIn;
         try {
             accessToken = responseJSON.getString("access_token");
-            expiresIn = responseJSON.getLong("expires_in");
+            expiresIn = responseJSON.getLong("expires_in") * 1000;
         } catch (JSONException e) {
             accessToken = null;
             expiresIn = 0;
@@ -84,7 +86,6 @@ public class RedditApiHandler implements IApiHandler {
 
         // save token
         this.token = new Token(accessToken, System.currentTimeMillis() + expiresIn);
-        
         // return whether request resulted in a valid token
         return this.hasValidToken();
     }
@@ -99,6 +100,7 @@ public class RedditApiHandler implements IApiHandler {
     	JSONObject out = null;
     	if (hasRequestBudget(1) && (this.hasValidToken())) {
     		out = makeQueryRequest(q, maxResults, start, end);
+    		this.limiters.forEach((limiter) -> {limiter.spendBudget(1);});
     	}
     	if (out != null) {
     		System.out.println("Reddit query successful");
