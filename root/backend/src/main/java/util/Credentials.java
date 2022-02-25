@@ -10,18 +10,14 @@ import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.LanguageServiceSettings;
 
 public class Credentials {
 
     private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
-
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -32,7 +28,7 @@ public class Credentials {
     private String twitterUserAgent;
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
-    private String myCredentials;  // private
+       // private
     public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
     }

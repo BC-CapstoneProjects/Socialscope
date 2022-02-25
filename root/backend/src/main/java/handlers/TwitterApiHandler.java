@@ -1,33 +1,21 @@
 package handlers;
 
-
-import com.google.cloud.language.v1.AnalyzeSentimentResponse;
-//Imports the Google Cloud client library
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.Document.Type;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
-import util.SentimentAnalysis;
 import util.Token;
-
+import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TwitterApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
-    //    private static ArrayList <String> idList = new ArrayList<>();
     private static final JSONObject outJSON = new JSONObject();
-
-    private Token token;
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+    private Token token;
     private List<RateLimiter> limiters = new LinkedList<>();
 
     public TwitterApiHandler(String id, String secret, String user) {
@@ -36,25 +24,55 @@ public class TwitterApiHandler implements IApiHandler {
         credentials.put("app_secret", secret);
         credentials.put("user_agent", user);
         this.token = null;
-        this.limiters.add(new RateLimiter(450, 9000));  // 60 requests per minute; currently unimplemented
+        this.limiters.add(new RateLimiter(450, 900000));
+    }
+    private boolean hasRequestBudget(int amount) {
+        boolean hasBudget = true;
+        for (RateLimiter limiter : this.limiters) {
+            if (!limiter.hasBudget(amount))
+                hasBudget = false;
+        }
+        return hasBudget;
     }
 
     @Override
-    public void requestToken() {
-        String requestUri = "https://api.twitter.com/oauth2/token";
-        Map<String, String> requestProperties = new HashMap<>();
+    public void requestToken(String numberOfResults) {
+        boolean requestPassed = false;
+        if(numberOfResults.equals(""))
+        {
+            numberOfResults = "10";
+        }
+        int temp = 1 + Integer.parseInt(numberOfResults);
+        // request a token if sufficient budget and token needed
+        if (hasRequestBudget(temp) && (this.token == null || !this.hasValidToken())) {
+            requestPassed = makeTokenRequest();
+            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
+        }
+        if (requestPassed)
+            System.out.println("Twitter access token request passed");
+        else
+            System.out.println("Twitter access token request failed");
+    }
 
+    private boolean makeTokenRequest() {
+        String requestUri = "https://api.twitter.com/oauth2/token";
+
+        // build request properties
+        Map<String, String> requestProperties = new HashMap<>();
         requestProperties.put("User-Agent", credentials.get("user_agent"));
         String auth = credentials.get("app_id") + ":" + credentials.get("app_secret");
         requestProperties.put("Authorization",
                 "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8)));
 
+        // build request parameters
         Map<String, String> requestParameters = new HashMap<>();
         requestParameters.put("grant_type", "client_credentials");
 
+        // execute request
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "POST",
                 requestProperties, requestParameters);
 
+        // process response
         String accessToken;
         long expiresIn;
         try {
@@ -64,7 +82,12 @@ public class TwitterApiHandler implements IApiHandler {
             accessToken = null;
             expiresIn = 0;
         }
+
+        // save token
         this.token = new Token(accessToken, System.currentTimeMillis() + expiresIn);
+
+        // return whether request resulted in a valid token
+        return this.hasValidToken();
     }
 
     @Override
@@ -73,26 +96,56 @@ public class TwitterApiHandler implements IApiHandler {
     }
 
     @Override
-    public JSONObject makeQuery(String q, String maxResults, String start, String end) throws Exception {
+    public JSONObject makeQuery(String q, String maxResults, String start, String end){
+        JSONObject out = null;
+        if(maxResults.equals(""))
+        {
+            maxResults = "10";
+        }
+        if (hasRequestBudget(1 + Integer.parseInt(maxResults)) && (this.hasValidToken())) {
+            out = makeQueryRequest(q, maxResults, start, end);
+        }
+        if (out != null) {
+            System.out.println("Twitter query successful");
+            return out;
+        }
+        else {
+            System.out.println("Twitter access token request failed");
+            return null;
+        }
+    }
+
+    private JSONObject makeQueryRequest(String q, String maxResults, String start, String end) {
         ArrayList <String> idList = new ArrayList<>();
         String requestUri = "https://api.twitter.com/2/tweets/search/recent";
-
         Map<String, String> requestProperties = new HashMap<>();
+
         requestProperties.put("User-Agent", credentials.get("user_agent"));
         requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
         Map<String, String> requestParameters = new HashMap<>();
         requestParameters.put("query", q);
         requestParameters.put("expansions","referenced_tweets.id");
+
+        if(maxResults.equals(""))
+        {
+            maxResults = "10";
+        }
         requestParameters.put("max_results", maxResults);
-        requestParameters.put("start_time", start);
-        requestParameters.put("end_time", end);
+        if(!start.equals(""))
+        {
+            start += "T00:00:00.000Z";
+            requestParameters.put("start_time", start);
+        }
+        if(!end.equals(""))
+        {
+            end += "T00:00:00.000Z";
+            requestParameters.put("end_time", end);
+        }
 
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
-        
-        System.out.println(responseJSON.toString());
-        
+        System.out.println("First: " + responseJSON.toString());
         if(responseJSON.has("data"))
         {
             JSONArray data = responseJSON.getJSONArray("data");
@@ -115,15 +168,12 @@ public class TwitterApiHandler implements IApiHandler {
             return TweetDetails(new ArrayList<>());
         }
     }
-    public JSONObject TweetDetails(ArrayList<String> idList) throws Exception {
+    public JSONObject TweetDetails(ArrayList<String> idList) {
         System.out.println(idList);
         JSONArray outPosts = new JSONArray();
         if(idList.isEmpty())
         {
-            JSONObject postData = new JSONObject();
-            postData.put("platform", "twitter");
-            postData.put("Search Error", "There are no search results about the input");
-            outPosts.put(postData);
+            outPosts.put((Object) null);
         }
         else
         {
@@ -147,7 +197,6 @@ public class TwitterApiHandler implements IApiHandler {
                     JSONArray inPosts = responseJSON.getJSONArray("data");
                     JSONObject re = inPosts.getJSONObject(0);
                     JSONObject postData = new JSONObject();
-                    Sentiment sentiment =null;
                     postData.put("platform", "twitter");
                     postData.put("created_at", re.getString("created_at"));
                     postData.put("post_id", hashPostID(String.valueOf(re.getBigInteger("id"))));
@@ -165,7 +214,10 @@ public class TwitterApiHandler implements IApiHandler {
                     outPosts.put(postData);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                } catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         }
         outJSON.put("posts", outPosts);
@@ -176,4 +228,8 @@ public class TwitterApiHandler implements IApiHandler {
         return id;
     }
 }
+
+
+
+
 

@@ -1,5 +1,4 @@
 package com.example.backend;
-
 import handlers.IApiHandler;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
