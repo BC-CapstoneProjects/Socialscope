@@ -10,11 +10,11 @@ import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import util.Credentials;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 
 @SpringBootApplication
 public class BackendApplication {
@@ -26,26 +26,10 @@ public class BackendApplication {
 	public static void main(String args[]) {
 
 		SpringApplication.run(BackendApplication.class, args);
-		Scanner console = new Scanner(System.in);
-		System.out.println("Choose Twitter: ");
-		boolean twitterCheck = console.nextBoolean();
-		System.out.println("Choose YouTube ");
-		boolean youtubeCheck = console.nextBoolean();
-		System.out.println("Choose Reddit: ");
-		boolean redditCheck = console.nextBoolean();
-
-//		Credentials cred = new Credentials();
-//		apiHandlers = initializeApiHandlers(cred, twitterCheck, youtubeCheck, redditCheck);
-//		String query = getUserQuery();
-//		System.out.println("Executing search...");
-//		JSONObject results = executeSearch(query, apiHandlers);
-//		System.out.println("Writing results to file...");
-//		writeJsonFile(results);
-//		System.out.println("Done!");
 	}
 
 	public static List<IApiHandler> initializeApiHandlers(Credentials cred, boolean twitterCheck, boolean youtubeCheck, boolean redditCheck) {
-		List<IApiHandler> handlers = new ArrayList<>();
+		List<IApiHandler> handlers = new ArrayList<IApiHandler>();
 		if(twitterCheck == true)
 		{
 			handlers.add(new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
@@ -79,7 +63,7 @@ public class BackendApplication {
 	}
 
 
-	public static JSONObject executeSearch(String queryText, List<IApiHandler> apis, String maxResults, String start, String end) throws Exception {
+	public static JSONObject executeSearch(String queryText, List<IApiHandler> apis, String maxResults, String start, String end) {
 		JSONObject aggregateResults = new JSONObject();
 		try {
 			JSONArray aggregatePosts = new JSONArray();
@@ -88,7 +72,7 @@ public class BackendApplication {
 				int counter = 0;
 				JSONArray posts = null;
 				while (posts == null && counter < MAX_REQUEST_RETRIES) {
-					handler.requestToken();
+					handler.requestToken(maxResults);
 					if (handler.hasValidToken()) posts = handler.makeQuery(queryText, maxResults, start, end).getJSONArray("posts");
 					counter++;
 				}
@@ -116,6 +100,4 @@ public class BackendApplication {
 			e.printStackTrace();
 		}
 	}
-
-
 }
