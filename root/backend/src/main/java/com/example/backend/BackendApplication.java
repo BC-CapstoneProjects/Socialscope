@@ -19,31 +19,11 @@ import java.util.Scanner;
 @SpringBootApplication
 public class BackendApplication {
 
-	private static final int MAX_REQUEST_RETRIES = 3;
-
-	private static List<IApiHandler> apiHandlers; ;
-
 	public static void main(String args[]) {
 
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
-	public static List<IApiHandler> initializeApiHandlers(Credentials cred, boolean twitterCheck, boolean youtubeCheck, boolean redditCheck) {
-		List<IApiHandler> handlers = new ArrayList<IApiHandler>();
-		if(twitterCheck == true)
-		{
-			handlers.add(new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
-		}
-		if(youtubeCheck == true)
-		{
-			handlers.add(new YoutubeApiHandler(cred.getYoutubeApiKey(), cred.getYoutubeAppUserAgent()));
-		}
-		if(redditCheck == true)
-		{
-			handlers.add(new RedditApiHandler(cred.getRedditAppId(), cred.getRedditAppSecret(), cred.getRedditAppUserAgent()));
-		}
-		return handlers;
-	}
 
 	private static String getUserQuery() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -62,33 +42,6 @@ public class BackendApplication {
 		return userInput.strip();
 	}
 
-
-	public static JSONObject executeSearch(String queryText, List<IApiHandler> apis, String maxResults, String start, String end) {
-		JSONObject aggregateResults = new JSONObject();
-		try {
-			JSONArray aggregatePosts = new JSONArray();
-			// get posts
-			for (IApiHandler handler : apis) {
-				int counter = 0;
-				JSONArray posts = null;
-				while (posts == null && counter < MAX_REQUEST_RETRIES) {
-					handler.requestToken(maxResults);
-					if (handler.hasValidToken()) posts = handler.makeQuery(queryText, maxResults, start, end).getJSONArray("posts");
-					counter++;
-				}
-				if (posts == null) continue;  // move on to the next api if unable to retrieve posts even after multiple requests
-				for (int i = 0; i < posts.length(); i++) aggregatePosts.put(posts.get(i));
-			}
-			aggregateResults.put("posts", aggregatePosts);
-			// add metadata
-			JSONObject metaInfo = new JSONObject();
-			metaInfo.put("query", queryText);
-			aggregateResults.put("meta", metaInfo);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return aggregateResults;
-	}
 
 	private static void writeJsonFile(JSONObject json) {
 		try {

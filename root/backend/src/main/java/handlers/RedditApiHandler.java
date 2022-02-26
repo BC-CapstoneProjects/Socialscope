@@ -50,8 +50,10 @@ public class RedditApiHandler implements IApiHandler {
     	}
     	if (requestPassed)
     		System.out.println("Reddit access token request passed");
-    	else
+    	else if (this.token == null || !this.hasValidToken())
     		System.out.println("Reddit access token request failed");
+    	else 
+    		System.out.println("Reddit token still valid, skipping token request");
     }
     
     private boolean makeTokenRequest() {
