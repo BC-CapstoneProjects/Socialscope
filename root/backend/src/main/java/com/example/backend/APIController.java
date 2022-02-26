@@ -1,26 +1,49 @@
 package com.example.backend;
 
 import handlers.IApiHandler;
+import handlers.RedditApiHandler;
+import handlers.TwitterApiHandler;
+import handlers.YoutubeApiHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import util.Credentials;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class APIController {
+	
+	@Autowired
+	private APIHandlerManager manager;
+	
     @CrossOrigin
     @GetMapping("/api/")
     public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
-        Credentials cred = new Credentials();
-        List<IApiHandler> inputAPI = BackendApplication.initializeApiHandlers(cred, twitterChoose, youtubeChoose, redditChoose);
         System.out.println("Executing search...");
-        JSONObject results = BackendApplication.executeSearch(keyword, inputAPI, maxResults, start, end);
+        List<String> namesOfHandlersInQuery = buildHandlerNames(twitterChoose, redditChoose, youtubeChoose);
+        JSONObject results = manager.executeSearch(namesOfHandlersInQuery, keyword, maxResults, start, end);
         System.out.println(results.toString());
         return results.toMap();
     }
+    
+    private static List<String> buildHandlerNames(boolean twitterIncluded, boolean redditIncluded, boolean youtubeIncluded) {
+    	List<String> handlerNames = new ArrayList<String>();
+    	if (twitterIncluded)
+    		handlerNames.add("twitter");
+    	if (redditIncluded)
+    		handlerNames.add("reddit");
+    	if (youtubeIncluded)
+    		handlerNames.add("youtube");
+    	return handlerNames;
+    }
+    
 }
