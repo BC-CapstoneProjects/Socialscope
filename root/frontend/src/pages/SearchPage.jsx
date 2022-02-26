@@ -103,7 +103,7 @@ const SearchPage = (props) => {
 
   function searchRedirect(e){
     e.preventDefault();
-    fetch(`http://localhost:8080/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
+    fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
         .then(
             (result) => {

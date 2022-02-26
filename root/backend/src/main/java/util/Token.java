@@ -1,5 +1,4 @@
 package util;
-package util;
 
 public class Token {
 
