@@ -35,7 +35,7 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
 
         String accessToken = credentials.get("api_key");
 

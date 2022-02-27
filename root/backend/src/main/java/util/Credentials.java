@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "private\\credentials.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private

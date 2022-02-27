@@ -1,6 +1,5 @@
 package com.example.backend;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class APIHandlerManager {
 					int counter = 0;
 					JSONArray posts = null;
 					while (posts == null && counter < MAX_REQUEST_RETRIES) {
-						handler.getValue().requestToken(maxResults);
+						handler.getValue().requestToken();
 						if (handler.getValue().hasValidToken()) posts = handler.getValue().makeQuery(queryText, maxResults, start, end).getJSONArray("posts");
 						counter++;
 					}
