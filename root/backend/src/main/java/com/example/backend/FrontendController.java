@@ -22,7 +22,7 @@ public class FrontendController implements ErrorController {
 		return new ModelAndView("forward:/");
 	}
 
-	
+	@Override
 	public String getErrorPath() {
 		return ERROR_PATH;
 	}
