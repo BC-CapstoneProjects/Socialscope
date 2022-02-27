@@ -1,6 +1,4 @@
-
 package handlers;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -209,6 +207,8 @@ public class TwitterApiHandler implements IApiHandler {
                     String text=re.getString("text");
                     String title=re.getString("title");
                     sentimentanalysis.sentiment( postData,  text, title);
+                    postData.put("sentiment_score", "Neutral");
+                    postData.put("sentiment_confidence", 0.0);
                     postData.put("has_embedded_media", re.has("attachments"));
                     postData.put("comment_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
                     postData.put("top_comments", new JSONArray());
@@ -219,6 +219,7 @@ public class TwitterApiHandler implements IApiHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+                }
             }
         }
         outJSON.put("posts", outPosts);
@@ -229,8 +230,3 @@ public class TwitterApiHandler implements IApiHandler {
         return id;
     }
 }
-
-
-
-
-

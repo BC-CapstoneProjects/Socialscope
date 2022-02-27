@@ -1,4 +1,3 @@
-
 package handlers;
 
 import java.nio.charset.StandardCharsets;
@@ -14,6 +13,12 @@ import util.HttpUtils;
 import util.RateLimiter;
 import util.Token;
 import util.SentimentAnalysis;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import util.HttpUtils;
+import util.RateLimiter;
+import util.Token;
 public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
@@ -162,13 +167,14 @@ public class RedditApiHandler implements IApiHandler {
                 String text= currentPost.getString("selftext");
                 String title= currentPost.getString("title");
                 sentimentanalysis.sentiment( postData,  text, title);
+                postData.put("sentiment_score", "Neutral");
+                postData.put("sentiment_confidence", 0.0);
                 postData.put("has_embedded_media", currentPost.get("secure_media") != JSONObject.NULL
                         || !currentPost.getString("url").substring(0, 22).equals("https://www.reddit.com"));
                 postData.put("comment_count", currentPost.getInt("num_comments"));
                 postData.put("top_comments", new JSONArray());
                 outPosts.put(postData);
             }
-
             // add post to object
             outJSON.put("posts", outPosts);
         } catch (JSONException e) {
@@ -178,6 +184,7 @@ public class RedditApiHandler implements IApiHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        }
         return outJSON;
     }
 
@@ -192,4 +199,3 @@ public class RedditApiHandler implements IApiHandler {
     }
 
 }
-
