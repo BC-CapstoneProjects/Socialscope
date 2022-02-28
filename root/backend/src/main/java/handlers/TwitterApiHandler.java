@@ -187,7 +187,7 @@ public class TwitterApiHandler implements IApiHandler {
                 JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                         requestProperties, requestParameters);
                 try {
-                    assert (responseJSON.getString("kind").equals("Listing"));
+//                    assert (responseJSON.getString("kind").equals("Listing"));
 
                     JSONArray inPosts = responseJSON.getJSONArray("data");
                     JSONObject re = inPosts.getJSONObject(0);

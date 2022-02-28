@@ -28,7 +28,7 @@ public class APIHandlerManager {
 		System.out.println("Handlers initialized");
 	}
 	
-	private Map<String, IApiHandler> initializeApiHandlers(Credentials cred) {
+	public Map<String, IApiHandler> initializeApiHandlers(Credentials cred) {
 		Map<String, IApiHandler> handlerMap = new HashMap<String, IApiHandler>();
 		handlerMap.put("twitter", new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
 		handlerMap.put("youtube", new YoutubeApiHandler(cred.getYoutubeApiKey(), cred.getYoutubeAppUserAgent()));
@@ -47,7 +47,8 @@ public class APIHandlerManager {
 					JSONArray posts = null;
 					while (posts == null && counter < MAX_REQUEST_RETRIES) {
 						handler.getValue().requestToken();
-						if (handler.getValue().hasValidToken()) posts = handler.getValue().makeQuery(queryText, maxResults, start, end).getJSONArray("posts");
+						if (handler.getValue().hasValidToken())
+							posts = handler.getValue().makeQuery(queryText, maxResults, start, end).getJSONArray("posts");
 						counter++;
 					}
 					if (posts == null) continue;  // move on to the next api if unable to retrieve posts even after multiple requests
@@ -64,5 +65,4 @@ public class APIHandlerManager {
 		}
 		return aggregateResults;
 	}
-
 }
