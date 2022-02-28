@@ -86,7 +86,7 @@ const InputSelect = (props) => {
   }
 
   useEffect(() => {
-    if (!props.options[selectionIndex]) 
+    if (!(props.number <= props.lastSelected)) 
       setSelectionIndex(0);
   }, [props.options])
 
