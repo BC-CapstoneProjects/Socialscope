@@ -40,6 +40,7 @@ public class Credentials {
         		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
         	else
         		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
+//                reader = new BufferedReader(new FileReader(fp));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();

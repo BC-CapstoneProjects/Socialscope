@@ -1,13 +1,7 @@
 package util;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RateLimiterTest {
     RateLimiter testRateLimit = new RateLimiter(20, 900000);
