@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "C:\\Users\\huynh\\Downloads\\Document\\credentials.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "private\\credentials.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -39,8 +39,7 @@ public class Credentials {
         	if (in != null)
         		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
         	else
-//        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
-            reader = new BufferedReader(new FileReader(fp)); // read while not in jar
+        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();
