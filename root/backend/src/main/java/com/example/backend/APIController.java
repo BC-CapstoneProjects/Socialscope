@@ -35,8 +35,8 @@ public class APIController {
         return results.toMap();
     }
     
-    private static List<String> buildHandlerNames(boolean twitterIncluded, boolean redditIncluded, boolean youtubeIncluded) {
-    	List<String> handlerNames = new ArrayList<String>();
+    public static List<String> buildHandlerNames(boolean twitterIncluded, boolean redditIncluded, boolean youtubeIncluded) {
+    	List<String> handlerNames = new ArrayList<>();
     	if (twitterIncluded)
     		handlerNames.add("twitter");
     	if (redditIncluded)
@@ -45,5 +45,4 @@ public class APIController {
     		handlerNames.add("youtube");
     	return handlerNames;
     }
-    
 }
