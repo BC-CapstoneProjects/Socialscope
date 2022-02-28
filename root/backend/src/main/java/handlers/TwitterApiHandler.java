@@ -176,7 +176,7 @@ public class TwitterApiHandler implements IApiHandler {
                 String requestUri = "https://api.twitter.com/2/tweets";
 
                 Map<String, String> requestProperties = new HashMap<>();
-                requestProperties.put("User-Agent", credentials.get("user-agent"));
+                requestProperties.put("User-Agent", credentials.get("user_agent"));
                 requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
                 Map<String, String> requestParameters = new HashMap<>();

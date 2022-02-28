@@ -98,6 +98,8 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     private JSONObject formatQueryJSON(JSONObject responseData) {
+    	
+    	System.out.println(responseData.toString());
 
         JSONObject outJSON = new JSONObject();
         try {
