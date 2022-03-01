@@ -87,6 +87,9 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("publishedAfter", start);
         requestParameters.put("publishedBefore", end);
 	requestParameters.put("relevanceLanguage", "en");  // soft restriction to english responses for now
+<<<<<<< HEAD
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
+=======
 >>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",

@@ -44,6 +44,7 @@ class APIHandlerManagerTest extends APIHandlerManager{
         assert(text.equals("facebook"));
     }
     
+<<<<<<< HEAD
     @Test
     void testReddit()
     {
@@ -76,6 +77,8 @@ class APIHandlerManagerTest extends APIHandlerManager{
         assert(text.equals("facebook"));
     }
 
+=======
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
     @Test
     void testExecuteTwitter() {
         APIHandlerManager();
@@ -90,6 +93,11 @@ class APIHandlerManagerTest extends APIHandlerManager{
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+   // SETTING SOME PARAMETERS AS EMPTY STRINGS / ERROR JSON RESPONSE RETURNED
+/*
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
 =======
    // SETTING SOME PARAMETERS AS EMPTY STRINGS / ERROR JSON RESPONSE RETURNED
 /*
@@ -108,7 +116,13 @@ class APIHandlerManagerTest extends APIHandlerManager{
         });
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+*/
+
+}
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
 =======
 */
 
