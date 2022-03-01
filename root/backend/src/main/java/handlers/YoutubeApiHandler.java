@@ -34,6 +34,10 @@ public class YoutubeApiHandler implements IApiHandler {
         this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
     }
 
+    public List<RateLimiter> getLimiters() {
+        return limiters;
+    }
+
     @Override
     public void requestToken() {
 
@@ -62,9 +66,21 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("key", credentials.get("api_key"));
         requestParameters.put("type", "video");
         requestParameters.put("q", q);
-        requestParameters.put("maxResults", maxResults);
-        requestParameters.put("publishedAfter", start);
-        requestParameters.put("publishedBefore", end);
+        if(maxResults.equals(""))
+        {
+            maxResults = "10";
+        }
+        requestParameters.put("max_results", maxResults);
+        if(!start.equals(""))
+        {
+            start += "T00:00:00.000Z";
+            requestParameters.put("publishedAfter", start);
+        }
+        if(!end.equals(""))
+        {
+            end += "T00:00:00.000Z";
+            requestParameters.put("publishedBefore", end);
+        }
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);

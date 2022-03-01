@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import util.Credentials;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +45,38 @@ class APIHandlerManagerTest extends APIHandlerManager{
     }
 
     @Test
+    void testReddit()
+    {
+        Credentials cred = new Credentials();
+        this.handlers = initializeApiHandlers(cred);
+        List<String> namesOfHandlersInQuery = new ArrayList<>();
+        namesOfHandlersInQuery.add("reddit");
+        JSONObject actual = executeSearch(namesOfHandlersInQuery, "facebook", "10", "", "");
+        JSONObject meta = actual.getJSONObject("meta");
+        String text = meta.getString("query");
+        JSONArray posts = actual.getJSONArray("posts");
+        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
+        assert(posts.length() == 10);
+        assert(text.equals("facebook"));
+    }
+
+    @Test
+    void testReddit1()
+    {
+        Credentials cred = new Credentials();
+        this.handlers = initializeApiHandlers(cred);
+        List<String> namesOfHandlersInQuery = new ArrayList<>();
+        namesOfHandlersInQuery.add("reddit");
+        JSONObject actual = executeSearch(namesOfHandlersInQuery, "facebook", "10", "", "");
+        JSONObject meta = actual.getJSONObject("meta");
+        String text = meta.getString("query");
+        JSONArray posts = actual.getJSONArray("posts");
+        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
+        assert(posts.length() == 10);
+        assert(text.equals("facebook"));
+    }
+
+    @Test
     void testExecuteTwitter() {
         APIHandlerManager();
         List<String> namesOfHandlersInQuery = new ArrayList<>();
@@ -53,20 +84,22 @@ class APIHandlerManagerTest extends APIHandlerManager{
         JSONObject actual = executeSearch(namesOfHandlersInQuery, "apple", "10", "", "");
         JSONObject meta = actual.getJSONObject("meta");
         String text = meta.getString("query");
+        JSONArray posts = actual.getJSONArray("posts");
+        assert(posts.length() > Integer.parseInt("10") / 2);
         assert(text.equals("apple"));
     }
 
-//    @Test
-//    void testExecuteYoutube()  //YouTube API crashing for some reasons
-//    {
-//        Assertions.assertThrows(AssertionError.class, () ->
-//        {
-//            APIHandlerManager();
-//            List<String> namesOfHandlersInQuery = new ArrayList<>();
-//            namesOfHandlersInQuery.add("youtube");
-//            JSONObject actual = executeSearch(namesOfHandlersInQuery, "egg", "10", "", "");
-//            JSONObject meta = actual.getJSONObject("meta");
-//            String text = meta.getString("query");
-//        });
-//    }
+    @Test
+    void testExecuteYoutube()  //YouTube API crashing for some reasons
+    {
+        Assertions.assertThrows(AssertionError.class, () ->
+        {
+            APIHandlerManager();
+            List<String> namesOfHandlersInQuery = new ArrayList<>();
+            namesOfHandlersInQuery.add("youtube");
+            JSONObject actual = executeSearch(namesOfHandlersInQuery, "egg", "10", "", "");
+            JSONObject meta = actual.getJSONObject("meta");
+            String text = meta.getString("query");
+        });
+    }
 }
