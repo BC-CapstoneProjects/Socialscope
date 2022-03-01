@@ -1,20 +1,11 @@
 package com.example.backend;
 
-import handlers.IApiHandler;
-import handlers.RedditApiHandler;
-import handlers.TwitterApiHandler;
-import handlers.YoutubeApiHandler;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import util.Credentials;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -23,7 +14,6 @@ public class BackendApplication {
 
 		SpringApplication.run(BackendApplication.class, args);
 	}
-
 
 	private static String getUserQuery() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

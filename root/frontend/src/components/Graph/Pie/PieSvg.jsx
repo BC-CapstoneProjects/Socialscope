@@ -6,15 +6,18 @@ const PieSvg = (props) => {
    
   // initialize constants
   const lref = props.lref;
-  const slices = Object.keys(props.data).length;
+  const labels = props.data.map(el => el.name);
+  const total = props.data.map(el => el.value).reduce((p, c) => p + c);
+  const slices = props.data.length;
   const gref = useRef(null);
   const radius = props.size / 2;
+  const anglePadding = (slices > 1) ? 0.1 / slices : 0
 
   // d3 generators
   const pieGen = d3.pie()
     .value(d => d.value)
     .sort(null)
-    .padAngle(0.1 / slices)
+    .padAngle(anglePadding)
 
   const arcGen = d3.arc()
     .innerRadius(radius / 2)
@@ -28,7 +31,9 @@ const PieSvg = (props) => {
       .on('mouseover', (d, i) => {
 
         // update arc
-        const p = Math.round((d.srcElement.__data__.endAngle - d.srcElement.__data__.startAngle) / (2 * Math.PI) * 10000) / 100;
+//         const p = Math.round((d.srcElement.__data__.endAngle - d.srcElement.__data__.startAngle) / (2 * Math.PI) * 10000) / 100;
+        const p = Math.round(d.srcElement.__data__.value / total * 10000) / 100
+        const l = labels[(d.srcElement.__data__.index)];
         d3.selectAll('path.arc')
           .filter(e => e.index !== d.srcElement.__data__.index)
         const currentArc = d3.selectAll('path.arc')
@@ -43,8 +48,9 @@ const PieSvg = (props) => {
         label
           .style('left', `${radius + lpos[0] - 35}px`)
           .style('top', `${radius + lpos[1] - 12}px`)
+          .style('text-align', 'center')
           .attr('text-anchor', 'middle')
-          .html(`<p>${p}%</p>`);
+          .html(`<p>${l} ${p}%</p>`);
         label.transition()
           .duration(10)
           .style('opacity', 1);
@@ -133,9 +139,9 @@ const PieSvg = (props) => {
   useEffect(() => {
     // hook called every time data is updated
 
-    const data = pieGen(props.data)
-    const group = d3.select(gref.current)
-    const label = d3.select(lref.current)
+    const data = pieGen(props.data);
+    const group = d3.select(gref.current);
+    const label = d3.select(lref.current);
 
 
     if (group.selectChildren().empty()) {
