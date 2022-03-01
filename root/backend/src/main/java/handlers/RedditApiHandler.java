@@ -40,7 +40,7 @@ public class RedditApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
     	boolean requestPassed = false;
     	
     	// request a token if sufficient budget and token needed

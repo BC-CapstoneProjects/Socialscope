@@ -36,17 +36,12 @@ public class TwitterApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
         boolean requestPassed = false;
-        if(numberOfResults.equals(""))
-        {
-            numberOfResults = "10";
-        }
-        int temp = 1 + Integer.parseInt(numberOfResults);
         // request a token if sufficient budget and token needed
-        if (hasRequestBudget(temp) && (this.token == null || !this.hasValidToken())) {
+        if (hasRequestBudget(1) && (this.token == null || !this.hasValidToken())) {
             requestPassed = makeTokenRequest();
-            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
+            this.limiters.forEach((limiter) -> {limiter.spendBudget(1);});
         }
         if (requestPassed)
             System.out.println("Twitter access token request passed");
@@ -181,7 +176,7 @@ public class TwitterApiHandler implements IApiHandler {
                 String requestUri = "https://api.twitter.com/2/tweets";
 
                 Map<String, String> requestProperties = new HashMap<>();
-                requestProperties.put("User-Agent", credentials.get("user-agent"));
+                requestProperties.put("User-Agent", credentials.get("user_agent"));
                 requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
                 Map<String, String> requestParameters = new HashMap<>();
@@ -192,7 +187,7 @@ public class TwitterApiHandler implements IApiHandler {
                 JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                         requestProperties, requestParameters);
                 try {
-                    assert (responseJSON.getString("kind").equals("Listing"));
+//                    assert (responseJSON.getString("kind").equals("Listing"));
 
                     JSONArray inPosts = responseJSON.getJSONArray("data");
                     JSONObject re = inPosts.getJSONObject(0);

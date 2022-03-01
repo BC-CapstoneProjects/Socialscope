@@ -35,7 +35,7 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
 
         String accessToken = credentials.get("api_key");
 
@@ -65,6 +65,7 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("maxResults", maxResults);
         requestParameters.put("publishedAfter", start);
         requestParameters.put("publishedBefore", end);
+	requestParameters.put("relevanceLanguage", "en");  // soft restriction to english responses for now
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
@@ -97,6 +98,8 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     private JSONObject formatQueryJSON(JSONObject responseData) {
+    	
+    	System.out.println(responseData.toString());
 
         JSONObject outJSON = new JSONObject();
         try {

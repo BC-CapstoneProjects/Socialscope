@@ -30,7 +30,7 @@ function App() {
           } />
           <Route path="/results" element={<ResultsView />}>
             <Route path="/results/preview" element={<PreviewPage result={result}/>}/>
-            <Route path="/results/graph" element={<GraphPage />}/>
+            <Route path="/results/graph" element={<GraphPage />} result={result}/>
             <Route path="/results/download" element={<DownloadPage/>}/>
           </Route>
           <Route path="/history" element={<HistoryPage />}/>
