@@ -16,8 +16,8 @@ import com.google.cloud.language.v1.LanguageServiceSettings;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
-    private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "/Users/titie/Desktop/private/credentials.json";
+    private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="/Users/titie/Desktop/private/socialsentanalysis.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
