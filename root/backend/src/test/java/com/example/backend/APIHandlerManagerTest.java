@@ -43,7 +43,7 @@ class APIHandlerManagerTest extends APIHandlerManager{
         assert(posts.length() == 10);
         assert(text.equals("facebook"));
     }
-
+    
     @Test
     void testReddit()
     {
@@ -89,6 +89,11 @@ class APIHandlerManagerTest extends APIHandlerManager{
         assert(text.equals("apple"));
     }
 
+<<<<<<< HEAD
+=======
+   // SETTING SOME PARAMETERS AS EMPTY STRINGS / ERROR JSON RESPONSE RETURNED
+/*
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
     @Test
     void testExecuteYoutube()  //YouTube API crashing for some reasons
     {
@@ -102,4 +107,10 @@ class APIHandlerManagerTest extends APIHandlerManager{
             String text = meta.getString("query");
         });
     }
+<<<<<<< HEAD
 }
+=======
+*/
+
+}
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79

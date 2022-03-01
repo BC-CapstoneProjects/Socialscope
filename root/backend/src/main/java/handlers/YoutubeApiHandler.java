@@ -66,6 +66,7 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("key", credentials.get("api_key"));
         requestParameters.put("type", "video");
         requestParameters.put("q", q);
+<<<<<<< HEAD
         if(maxResults.equals(""))
         {
             maxResults = "10";
@@ -81,6 +82,12 @@ public class YoutubeApiHandler implements IApiHandler {
             end += "T00:00:00.000Z";
             requestParameters.put("publishedBefore", end);
         }
+=======
+        requestParameters.put("maxResults", maxResults);
+        requestParameters.put("publishedAfter", start);
+        requestParameters.put("publishedBefore", end);
+	requestParameters.put("relevanceLanguage", "en");  // soft restriction to english responses for now
+>>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
@@ -113,6 +120,8 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     private JSONObject formatQueryJSON(JSONObject responseData) {
+    	
+    	System.out.println(responseData.toString());
 
         JSONObject outJSON = new JSONObject();
         try {

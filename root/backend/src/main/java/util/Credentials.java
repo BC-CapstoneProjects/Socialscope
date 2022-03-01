@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private\\credentials.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -49,9 +49,8 @@ public class Credentials {
             this.redditAppSecret = jo.getString("redditAppSecret");
             this.redditUserAgent = jo.getString("redditUserAgent");
             this.twitterAppId = jo.getString("twitterAppId");
-            System.out.println(this.twitterAppId);
+            System.out.println(this.redditUserAgent);
             this.twitterAppSecret = jo.getString("twitterAppSecret");
-            System.out.println(this.twitterAppSecret);
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
             this.youtubeApiKey = jo.getString("youtubeApiKey");
