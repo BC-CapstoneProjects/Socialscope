@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class APIHandlerManagerTest extends APIHandlerManager{
+class APIHandlerManagerTest extends APIHandlerManager {
 
     Map<String, IApiHandler> handlers;
+
     void APIHandlerManager() {
         Credentials cred = new Credentials();
         this.handlers = initializeApiHandlers(cred);
@@ -22,15 +23,17 @@ class APIHandlerManagerTest extends APIHandlerManager{
     @Test
     void testInitialize() {
         APIHandlerManager();
-        assert(this.handlers.size() == 3);
+        assert (this.handlers.size() == 3);
     }
+
     @Test
     void testInitialize1() {
         Assertions.assertThrows(AssertionError.class, () -> {
             APIHandlerManager();
-            assert(this.handlers.size() == 2);
+            assert (this.handlers.size() == 2);
         });
     }
+
     @Test
     void testExecuteReddit() {
         APIHandlerManager();
@@ -40,14 +43,12 @@ class APIHandlerManagerTest extends APIHandlerManager{
         JSONObject meta = actual.getJSONObject("meta");
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
-        assert(posts.length() == 10);
-        assert(text.equals("facebook"));
+        assert (posts.length() == 10);
+        assert (text.equals("facebook"));
     }
-    
-<<<<<<< HEAD
+
     @Test
-    void testReddit()
-    {
+    void testReddit() {
         Credentials cred = new Credentials();
         this.handlers = initializeApiHandlers(cred);
         List<String> namesOfHandlersInQuery = new ArrayList<>();
@@ -57,13 +58,12 @@ class APIHandlerManagerTest extends APIHandlerManager{
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
         System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
-        assert(posts.length() == 10);
-        assert(text.equals("facebook"));
+        assert (posts.length() == 10);
+        assert (text.equals("facebook"));
     }
 
     @Test
-    void testReddit1()
-    {
+    void testReddit1() {
         Credentials cred = new Credentials();
         this.handlers = initializeApiHandlers(cred);
         List<String> namesOfHandlersInQuery = new ArrayList<>();
@@ -73,12 +73,10 @@ class APIHandlerManagerTest extends APIHandlerManager{
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
         System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
-        assert(posts.length() == 10);
-        assert(text.equals("facebook"));
+        assert (posts.length() == 10);
+        assert (text.equals("facebook"));
     }
 
-=======
->>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
     @Test
     void testExecuteTwitter() {
         APIHandlerManager();
@@ -88,20 +86,10 @@ class APIHandlerManagerTest extends APIHandlerManager{
         JSONObject meta = actual.getJSONObject("meta");
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
-        assert(posts.length() > Integer.parseInt("10") / 2);
-        assert(text.equals("apple"));
+        assert (posts.length() > Integer.parseInt("10") / 2);
+        assert (text.equals("apple"));
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-   // SETTING SOME PARAMETERS AS EMPTY STRINGS / ERROR JSON RESPONSE RETURNED
-/*
->>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
-=======
-   // SETTING SOME PARAMETERS AS EMPTY STRINGS / ERROR JSON RESPONSE RETURNED
-/*
->>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
     @Test
     void testExecuteYoutube()  //YouTube API crashing for some reasons
     {
@@ -115,16 +103,4 @@ class APIHandlerManagerTest extends APIHandlerManager{
             String text = meta.getString("query");
         });
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 }
-=======
-*/
-
-}
->>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
-=======
-*/
-
-}
->>>>>>> 3162303f7397c8dde0150b237c4316dacd5bfd79
