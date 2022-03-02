@@ -82,8 +82,6 @@ public class YoutubeApiHandler implements IApiHandler {
             requestParameters.put("publishedBefore", end);
         }
         requestParameters.put("maxResults", maxResults);
-        requestParameters.put("publishedAfter", start);
-        requestParameters.put("publishedBefore", end);
 	    requestParameters.put("relevanceLanguage", "en");  // soft restriction to english responses for now
         // process response
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
@@ -129,9 +127,10 @@ public class YoutubeApiHandler implements IApiHandler {
             JSONArray inPosts = responseData.getJSONArray("items");
             // populate post data fields
             for (int i = 0; i < inPosts.length(); i++) {
-                assert (responseData.getJSONObject("id").getString("kind").equals("youtube#video"));
+                assert (inPosts.getJSONObject(i).getJSONObject("id").getString("kind").equals("youtube#video"));
                 String videoId = inPosts.getJSONObject(i).getJSONObject("id").getString("videoId");
                 JSONObject videoData = makeQueryVideo(videoId);
+	        
                 JSONArray currentPost = videoData.getJSONArray("items");
                 JSONObject postData = new JSONObject();
                 postData.put("platform", "Youtube");
@@ -154,13 +153,12 @@ public class YoutubeApiHandler implements IApiHandler {
                 }
                 outPosts.put(postData);
             }
-
             // add post to object
             outJSON.put("posts", outPosts);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             System.out.println("error parsing youtube results");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return outJSON;
     }

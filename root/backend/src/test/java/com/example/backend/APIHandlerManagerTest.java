@@ -90,17 +90,16 @@ class APIHandlerManagerTest extends APIHandlerManager {
         assert (text.equals("apple"));
     }
 
+
     @Test
     void testExecuteYoutube()  //YouTube API crashing for some reasons
     {
-        Assertions.assertThrows(AssertionError.class, () ->
-        {
-            APIHandlerManager();
-            List<String> namesOfHandlersInQuery = new ArrayList<>();
-            namesOfHandlersInQuery.add("youtube");
-            JSONObject actual = executeSearch(namesOfHandlersInQuery, "egg", "10", "", "");
-            JSONObject meta = actual.getJSONObject("meta");
-            String text = meta.getString("query");
-        });
+        APIHandlerManager();
+        List<String> namesOfHandlersInQuery = new ArrayList<>();
+        namesOfHandlersInQuery.add("youtube");
+        JSONObject actual = executeSearch(namesOfHandlersInQuery, "egg", "10", "", "");
+        JSONObject meta = actual.getJSONObject("meta");
+        String text = meta.getString("query");
     }
+ 
 }
