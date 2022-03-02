@@ -102,8 +102,6 @@ const LineSvg = (props) => {
       .attr('opacity', 0.75)
       .attr('font-size', '0.75rem');
     if (props.dtype === 'date') {
-      console.log(gXtext);
-      gXtext.each((d, i) => console.log(gXtext.nodes()[i]));
       gXtext.each((d, i) => gXtext.filter((dd, ii) => i === ii).text(formatDate(new Date(parseInt(d) * 1000))));
     }
 

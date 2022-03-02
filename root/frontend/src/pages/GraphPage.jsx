@@ -52,7 +52,7 @@ const GraphPage = (props) => {
 
   const getTotalLikesPerPlatform = (posts) => {
     let likeMap = [
-      {name: 'twitter', index: 0, value: 9}, 
+      {name: 'twitter', index: 0, value: 0}, 
       {name: 'reddit', index: 1, value: 0}, 
       {name: 'youtube', index: 2, value: 0}
     ];
@@ -112,8 +112,6 @@ const GraphPage = (props) => {
   }
 
   useEffect(() => {
-    console.log("HERE");
-    console.log(props.result);
     if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group ==='Platform') {
       setGraphData({
         type: 'pie',
