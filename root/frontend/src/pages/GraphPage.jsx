@@ -7,6 +7,7 @@ import LineChart from '../components/Graph/Line/LineChart';
 const GraphPage = (props) => {
 
   let [menuSelections, setMenuSelections] = useState({'graph': '', 'over': '', 'group': ''});
+  let [graphData, setGraphData] = useState(null);
 
   // const generateData = (length) => {
   //   if (length === undefined) {
@@ -42,6 +43,13 @@ const GraphPage = (props) => {
   //   return {type: 'pie', entries: dataMap.filter(el => el.value > 0)}
   // }
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setGraphData(generateData());
+  //   }, 5000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
   const getTotalLikesPerPlatform = (posts) => {
     let likeMap = [
       {name: 'twitter', index: 0, value: 9}, 
@@ -58,15 +66,27 @@ const GraphPage = (props) => {
   
   const getCommentsOverTimePerPlatform = (posts) => {
     let commentMap = [
-      {name: 'twitter', value: []},
-      {name: 'reddit', value: []},
-      {name: 'youtube', value: []}
+      {name: 'twitter', items: []},
+      {name: 'reddit', items: []},
+      {name: 'youtube', items: []}
     ];
     for (let i = 0; i < posts.length; i++) {
       let mapIndex = commentMap.findIndex((el) => el.name === posts[i]['platform']);
-      commentMap[mapIndex].value.push({x: posts[i]['created_at'], y: posts[i]['comment_count']});
+      commentMap[mapIndex].items.push({x: posts[i]['created_at'], y: posts[i]['comment_count']});
     }
-    return {type: 'line', entries: commentMap}
+    for (let i = 0; i < commentMap.length; i++) {
+      if (commentMap[i].items.length < 2) {
+        commentMap.splice(i, 1);
+        i--;  // account for removal offset
+      }
+      else {
+        commentMap[i].items.sort((a, b) => {
+          if (a.x > b.x) return 1;
+          else if (a.x <= b.x) return -1;
+        });
+      }
+    }
+    return commentMap;
   }
 
   const defaultGraphData = {
@@ -74,15 +94,11 @@ const GraphPage = (props) => {
     entries: getTotalLikesPerPlatform(resultsTest['posts'])  // props.result['posts']
   }
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setGraphData(generateData());
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
-
   const renderChart = (graphData) => {
-    if (graphData.type === 'pie')
+    if (graphData == null) {
+      return;
+    }
+    else if (graphData.type === 'pie')
       return <PieChart data={graphData.entries} width={500} height={500} />
     else if (graphData.type === 'line')
       return <LineChart data={graphData.entries} structure={{width: 450, height: 450, margin: 50, padding: 10}} />
@@ -100,10 +116,25 @@ const GraphPage = (props) => {
     setMenuSelections(sel);
   }
 
+  useEffect(() => {
+    if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group ==='Platform') {
+      setGraphData({
+        type: 'pie',
+        entries: getTotalLikesPerPlatform(resultsTest['posts'])
+      }); // props.result['posts']
+    }
+    else if (menuSelections.graph === 'Comments' && menuSelections.over === 'Time' && menuSelections.group ==='Platform') {
+      setGraphData({
+        type: 'line',
+        entries: getCommentsOverTimePerPlatform(resultsTest['posts'])
+      });
+    }
+  }, [menuSelections]);
+
   return(
     <>
       <div>Graph page content placeholder</div>
-      {renderChart(defaultGraphData)}
+      {renderChart(graphData)}
       {/* <PieChart data={graphData} width={500} height={500} />
       <LineChart data={lineTestData} structure={{width: 450, height: 450, margin: 50, padding: 10}} />    */}
       <GraphingMenu updateMenuSelections={updateMenuSelections}/> 

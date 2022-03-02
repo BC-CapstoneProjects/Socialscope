@@ -1,6 +1,9 @@
 import React, {useRef, useEffect} from 'react';
 import * as d3 from 'd3';
+
 import interpolateColors from '../util/interpolateColors';
+import usePrevious from '../../../hooks/usePrevious';
+
 
 const PieSvg = (props) => {
    
@@ -24,7 +27,7 @@ const PieSvg = (props) => {
     .outerRadius(radius);
 
   const colorGen = d3.scaleOrdinal(interpolateColors('#FF0000', '#0000FF', slices));
-  
+
   function enableMouseEvents(path, label) {
 
     path
@@ -136,6 +139,19 @@ const PieSvg = (props) => {
 
   }
 
+  const prevData = usePrevious(pieGen(props.data));
+
+  const graphDataIsEqual = (g1, g2) => {
+    if (g1.length !== g2.length)
+      return false;
+    let arcsEqual = true;
+    for(let i = 0; i < g1.length; i++) {
+      if(g1[i].startAngle !== g2[i].startAngle || g1[i].endAngle !== g2[i].endAngle) 
+        arcsEqual = false;
+    }
+    return arcsEqual;
+  } 
+
   useEffect(() => {
     // hook called every time data is updated
 
@@ -143,8 +159,11 @@ const PieSvg = (props) => {
     const group = d3.select(gref.current);
     const label = d3.select(lref.current);
 
-
-    if (group.selectChildren().empty()) {
+    if (prevData != null && graphDataIsEqual(data, prevData)) {
+      // no data transition, new props graph is identical to current one
+      return;
+    }
+    else if (group.selectChildren().empty()) {
       // no exit animation if there is no previous chart data
       enterData(group, label, data);
     }

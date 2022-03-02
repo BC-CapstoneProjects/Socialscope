@@ -13,14 +13,14 @@ const LineSvg = (props) => {
 
 
   const getBufferedDomain = (field, buffer=0) => {
-    let mi = d3.min(data[0].value, (d) => d[field]);
+    let mi = d3.min(data[0].items, (d) => d[field]);
     for(let i = 1; i < data.length; i++) {
-      let mtemp = d3.min(data[i].value, (d) => d[field]);
+      let mtemp = d3.min(data[i].items, (d) => d[field]);
       if (mi > mtemp) mi = mtemp;
     }
-    let ma = d3.max(data[0].value, (d) => d[field]);
+    let ma = d3.max(data[0].items, (d) => d[field]);
     for(let i = 1; i < data.length; i++) {
-      let mtemp = d3.max(data[i].value, (d) => d[field]);
+      let mtemp = d3.max(data[i].items, (d) => d[field]);
       if (ma < mtemp) ma = mtemp;
     }
     return [mi - buffer, ma + buffer];
@@ -125,7 +125,7 @@ const LineSvg = (props) => {
       .attr('stroke', (d) => colorGen(d))
       .attr('stroke-width', 2)
       .attr('shape-rendering', 'optimizeQuality')
-      .attr('d', (d) => lineGen(d.value))
+      .attr('d', (d) => lineGen(d.items))
       .attr('pointer-events', 'all')
 
     path.each((d, i, nodes) => {
@@ -184,9 +184,9 @@ const LineSvg = (props) => {
         // find closest data point to mouse on closest line
         const x0 = xScale.invert(mousepos[0]);
         const dind = data.findIndex(el => el.name === line.data()[0].name)
-        const i = xBisect(data[dind].value, x0, 1);
-        const d0 = data[dind].value[i-1];
-        const d1 = data[dind].value[i];
+        const i = xBisect(data[dind].items, x0, 1);
+        const d0 = data[dind].items[i-1];
+        const d1 = data[dind].items[i];
         const d = (d1 !== undefined && x0 - d0.x > d1.x - x0) ? d1 : d0;
         // move dot to that point
         focus
