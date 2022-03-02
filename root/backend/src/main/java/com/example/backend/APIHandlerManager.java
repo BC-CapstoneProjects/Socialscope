@@ -29,7 +29,7 @@ public class APIHandlerManager {
 	}
 	
 	public Map<String, IApiHandler> initializeApiHandlers(Credentials cred) {
-		Map<String, IApiHandler> handlerMap = new HashMap<String, IApiHandler>();
+		Map<String, IApiHandler> handlerMap = new HashMap<>();
 		handlerMap.put("twitter", new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
 		handlerMap.put("youtube", new YoutubeApiHandler(cred.getYoutubeApiKey(), cred.getYoutubeAppUserAgent()));
 		handlerMap.put("reddit", new RedditApiHandler(cred.getRedditAppId(), cred.getRedditAppSecret(), cred.getRedditAppUserAgent()));
