@@ -205,7 +205,7 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("title", "None");
                     postData.put("text", re.getString("text"));
                     postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
-                    postData.put("positive_votes", String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
+                    postData.put("positive_votes", re.getJSONObject("public_metrics").getInt("like_count"));
                     postData.put("sentiment_score", "Neutral");
                     postData.put("sentiment_confidence", 0.0);
                     postData.put("has_embedded_media", re.has("attachments"));
