@@ -145,7 +145,6 @@ const SearchPage = (props) => {
             res => {
               setResult(res);
               sessionStorage.setItem('result', res);
-              console.log(result);
               return res
             },
             error => {

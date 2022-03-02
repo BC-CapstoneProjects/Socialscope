@@ -89,11 +89,6 @@ const GraphPage = (props) => {
     return commentMap;
   }
 
-  const defaultGraphData = {
-    type: 'pie',
-    entries: getTotalLikesPerPlatform(resultsTest['posts'])  // props.result['posts']
-  }
-
   const renderChart = (graphData) => {
     if (graphData == null) {
       return;
@@ -101,7 +96,7 @@ const GraphPage = (props) => {
     else if (graphData.type === 'pie')
       return <PieChart data={graphData.entries} width={500} height={500} />
     else if (graphData.type === 'line')
-      return <LineChart data={graphData.entries} structure={{width: 450, height: 450, margin: 50, padding: 10}} />
+      return <LineChart data={graphData.entries} dtype={'date'} structure={{width: 450, height: 450, margin: 50, padding: 10}} />
 
   }
 
@@ -117,16 +112,18 @@ const GraphPage = (props) => {
   }
 
   useEffect(() => {
+    console.log("HERE");
+    console.log(props.result);
     if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group ==='Platform') {
       setGraphData({
         type: 'pie',
-        entries: getTotalLikesPerPlatform(resultsTest['posts'])
+        entries: getTotalLikesPerPlatform(props.result['posts'])
       }); // props.result['posts']
     }
     else if (menuSelections.graph === 'Comments' && menuSelections.over === 'Time' && menuSelections.group ==='Platform') {
       setGraphData({
         type: 'line',
-        entries: getCommentsOverTimePerPlatform(resultsTest['posts'])
+        entries: getCommentsOverTimePerPlatform(props.result['posts'])
       });
     }
   }, [menuSelections]);

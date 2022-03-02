@@ -64,6 +64,13 @@ const LineSvg = (props) => {
 
   const colorGen = d3.scaleOrdinal(interpolateColors('#FF0000', '#0000FF', data.length));
 
+  const formatDate = (date) => {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+    return month + '/' + day + '/' + year;
+  };
+
   useEffect(() => {
 
     if (JSON.stringify(props.data) === JSON.stringify(prevData)) return; // TODO: temporary to skip rerendering for demo pie chart transitions
@@ -91,9 +98,14 @@ const LineSvg = (props) => {
       .attr('stroke', '#000000')
       .attr('stroke-width', 1)
       .attr('opacity', 0.5);
-    gX.selectAll('text')
+    const gXtext = gX.selectAll('text')
       .attr('opacity', 0.75)
       .attr('font-size', '0.75rem');
+    if (props.dtype === 'date') {
+      console.log(gXtext);
+      gXtext.each((d, i) => console.log(gXtext.nodes()[i]));
+      gXtext.each((d, i) => gXtext.filter((dd, ii) => i === ii).text(formatDate(new Date(parseInt(d) * 1000))));
+    }
 
     const gY = group
       .append('g');
@@ -187,12 +199,12 @@ const LineSvg = (props) => {
         const i = xBisect(data[dind].items, x0, 1);
         const d0 = data[dind].items[i-1];
         const d1 = data[dind].items[i];
-        const d = (d1 !== undefined && x0 - d0.x > d1.x - x0) ? d1 : d0;
+        let d = (d1 !== undefined && x0 - d0.x > d1.x - x0) ? d1 : d0;
         // move dot to that point
         focus
           .attr('transform', `translate(${xScale(d.x)},${yScale(d.y)})`)
           .style('visibility', 'visible')
-        focus.select('text').text(`(${d.x},${d.y})`)
+        focus.select('text').text(`(${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
 //        legend
 //          .style('left', `${xScale(d.x) + 39}px`)
 //          .style('top', `${yScale(d.y) + 25}px`)
