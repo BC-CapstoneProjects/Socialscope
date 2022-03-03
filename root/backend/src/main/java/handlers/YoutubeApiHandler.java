@@ -32,6 +32,7 @@ public class YoutubeApiHandler implements IApiHandler {
         this.limiters.add(new RateLimiter(10000, 86400000));  // 60 requests per minute; currently unimplemented
 	
     }
+<<<<<<< HEAD
    private boolean hasRequestBudget(int amount) {
     	boolean hasBudget = true;
     	for (RateLimiter limiter : this.limiters) {
@@ -67,6 +68,15 @@ public class YoutubeApiHandler implements IApiHandler {
 
     
       private boolean makeTokenRequest() {
+=======
+
+    public List<RateLimiter> getLimiters() {
+        return limiters;
+    }
+
+    @Override
+    public void requestToken() {
+>>>>>>> 021bfdff1591118e7b5c144d03e4dbafbe7f8e34
 
         String accessToken = credentials.get("api_key");
 
@@ -118,11 +128,15 @@ public class YoutubeApiHandler implements IApiHandler {
         requestParameters.put("key", credentials.get("api_key"));
         requestParameters.put("type", "video");
         requestParameters.put("q", q);
+<<<<<<< HEAD
         
+=======
+>>>>>>> 021bfdff1591118e7b5c144d03e4dbafbe7f8e34
         if(maxResults.equals(""))
         {
             maxResults = "10";
         }
+<<<<<<< HEAD
         
         requestParameters.put("maxResults", maxResults);
        
@@ -141,6 +155,21 @@ public class YoutubeApiHandler implements IApiHandler {
        
        
    
+=======
+        requestParameters.put("max_results", maxResults);
+        if(!start.equals(""))
+        {
+            start += "T00:00:00.000Z";
+            requestParameters.put("publishedAfter", start);
+        }
+        if(!end.equals(""))
+        {
+            end += "T00:00:00.000Z";
+            requestParameters.put("publishedBefore", end);
+        }
+        requestParameters.put("maxResults", maxResults);
+	    requestParameters.put("relevanceLanguage", "en");  // soft restriction to english responses for now
+>>>>>>> 021bfdff1591118e7b5c144d03e4dbafbe7f8e34
         // process response
        
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
@@ -190,9 +219,14 @@ public class YoutubeApiHandler implements IApiHandler {
             JSONArray inPosts = responseData.getJSONArray("items");
             // populate post data fields
             for (int i = 0; i < inPosts.length(); i++) {
-                assert (responseData.getJSONObject("id").getString("kind").equals("youtube#video"));
+                assert (inPosts.getJSONObject(i).getJSONObject("id").getString("kind").equals("youtube#video"));
                 String videoId = inPosts.getJSONObject(i).getJSONObject("id").getString("videoId");
+<<<<<<< HEAD
                 JSONObject videoData = makeQueryVideo(videoId, maxResults);
+=======
+                JSONObject videoData = makeQueryVideo(videoId);
+	        
+>>>>>>> 021bfdff1591118e7b5c144d03e4dbafbe7f8e34
                 JSONArray currentPost = videoData.getJSONArray("items");
                 JSONObject postData = new JSONObject();
              
@@ -224,17 +258,21 @@ public class YoutubeApiHandler implements IApiHandler {
                 }
                 outPosts.put(postData);
             }
-
             // add post to object
             outJSON.put("posts", outPosts);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             System.out.println("error parsing youtube results");
+<<<<<<< HEAD
             //e.printStackTrace();
         } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+=======
+            e.printStackTrace();
+        }
+>>>>>>> 021bfdff1591118e7b5c144d03e4dbafbe7f8e34
         return outJSON;
     }
 

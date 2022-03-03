@@ -20,6 +20,10 @@ public class RedditApiHandler implements IApiHandler {
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
     private List<RateLimiter> limiters = new LinkedList<>();
 
+    public List<RateLimiter> getLimiters() {
+        return limiters;
+    }
+
     public RedditApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
         credentials.put("app_id", id);
