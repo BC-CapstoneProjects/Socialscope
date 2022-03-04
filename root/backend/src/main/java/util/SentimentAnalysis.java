@@ -131,6 +131,8 @@ public class SentimentAnalysis {
     }
     catch (Exception e) {
     	e.printStackTrace();
+    	obj.put("sentiment_score",  "Neutral");
+    	obj.put("sentiment_confidence", 0);
     }
 	
      }
