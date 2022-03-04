@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import util.SentimentAnalysis;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,18 +19,18 @@ public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token token;
-    private List<RateLimiter> limiters = new LinkedList<>();
-
+    private List<RateLimiter> limiters;
     public List<RateLimiter> getLimiters() {
         return limiters;
     }
 
     public RedditApiHandler(String id, String secret, String user) {
-        credentials = new HashMap<>();
-        credentials.put("app_id", id);
-        credentials.put("app_secret", secret);
-        credentials.put("user_agent", user);
+        this.credentials = new HashMap<>();
+        this.credentials.put("app_id", id);
+        this.credentials.put("app_secret", secret);
+        this.credentials.put("user_agent", user);
         this.token = null;
+        this.limiters = new LinkedList<>();
         this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
     }
     
@@ -79,7 +79,6 @@ public class RedditApiHandler implements IApiHandler {
                 requestProperties, requestParameters);
 
         // process response
-        System.out.println(responseJSON.toString());
         String accessToken;
         long expiresIn;
         try {
@@ -149,7 +148,6 @@ public class RedditApiHandler implements IApiHandler {
             assert(responseData.getString("kind").equals("Listing"));
             JSONArray outPosts = new JSONArray();
             JSONArray inPosts = responseData.getJSONObject("data").getJSONArray("children");
-
             // populate post data fields
             for (int i = 0; i < inPosts.length(); i++) {
                 JSONObject currentPost = inPosts.getJSONObject(i).getJSONObject("data");
@@ -163,8 +161,6 @@ public class RedditApiHandler implements IApiHandler {
                 postData.put("text", currentPost.getString("selftext"));
                 postData.put("poster_id", hashPoster(currentPost.getString("author_fullname")));
                 postData.put("positive_votes", currentPost.getInt("ups"));
-                postData.put("sentiment_score", "Neutral");
-                postData.put("sentiment_confidence", 0.0);
                 postData.put("has_embedded_media", currentPost.get("secure_media") != JSONObject.NULL
                         || !currentPost.getString("url").substring(0, 22).equals("https://www.reddit.com"));
                 postData.put("comment_count", currentPost.getInt("num_comments"));
@@ -177,7 +173,10 @@ public class RedditApiHandler implements IApiHandler {
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return outJSON;
     }
 
@@ -192,3 +191,4 @@ public class RedditApiHandler implements IApiHandler {
     }
 
 }
+

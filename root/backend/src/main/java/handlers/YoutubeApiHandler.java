@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +24,6 @@ public class YoutubeApiHandler implements IApiHandler {
     private Map<String, String> credentials;
     private Token youtubetoken;
     private List<RateLimiter> limiters = new LinkedList<>();
-
     public YoutubeApiHandler(String key, String user) {
         credentials = new HashMap<>();
         credentials.put("api_key", key);
@@ -115,8 +113,7 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     private JSONObject formatQueryJSON(JSONObject responseData) {
-    	
-    	System.out.println(responseData.toString());
+
 
         JSONObject outJSON = new JSONObject();
         try {
@@ -136,14 +133,16 @@ public class YoutubeApiHandler implements IApiHandler {
                 postData.put("platform", "Youtube");
                 postData.put("created_at", currentPost.getJSONObject(0).getJSONObject("snippet").getString("publishedAt"));
                 postData.put("post_id", hashPostID(currentPost.getJSONObject(0).getString("id")));
+                String text=currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description");
+                String title=currentPost.getJSONObject(0).getJSONObject("snippet").getString("title");
+                
+                
                 if (currentPost.getJSONObject(0).getJSONObject("snippet").has("defaultAudioLanguage"))
                     postData.put("lang", currentPost.getJSONObject(0).getJSONObject("snippet").getString("defaultAudioLanguage"));
                 else
                     postData.put("lang", "");
                 postData.put("title", currentPost.getJSONObject(0).getJSONObject("snippet").getString("title"));
-                postData.put("text", currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description"));
-                postData.put("sentiment_score", "Neutral");
-                postData.put("sentiment_confidence", 0.0);
+                postData.put("text", currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description")); 
                 if (currentPost.getJSONObject(0).getJSONObject("statistics").has("commentCount")) {
                     postData.put("comment_count", currentPost.getJSONObject(0).getJSONObject("statistics").getInt("commentCount"));
                     postData.put("positive_votes", currentPost.getJSONObject(0).getJSONObject("statistics").getInt("likeCount"));

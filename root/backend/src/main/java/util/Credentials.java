@@ -2,19 +2,23 @@ package util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.language.v1.LanguageServiceSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+    private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -25,11 +29,29 @@ public class Credentials {
     private String twitterUserAgent;
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
+    
+    private LanguageServiceSettings googleLanguageServiceSettings;
 
     public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
+        readGoogleCredentials(DEFAULT_CREDENTIALS_GOOGLEFILE);
     }
-
+    
+    public void readGoogleCredentials(String fp) {
+    	try {
+    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
+    		if (in == null) 
+    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
+    		
+    		this.googleLanguageServiceSettings =
+    			LanguageServiceSettings.newBuilder()
+                	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
+                	.build();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
     private void readCredentialsFromFile(String fp) {
         BufferedReader reader;
         try {
@@ -49,7 +71,6 @@ public class Credentials {
             this.redditAppSecret = jo.getString("redditAppSecret");
             this.redditUserAgent = jo.getString("redditUserAgent");
             this.twitterAppId = jo.getString("twitterAppId");
-            System.out.println(this.redditUserAgent);
             this.twitterAppSecret = jo.getString("twitterAppSecret");
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
@@ -124,6 +145,11 @@ public class Credentials {
     }
     public String getYoutubeApiKey() {
         return youtubeApiKey ;
+    }
+    
+    // google credentials
+    public LanguageServiceSettings getGoogleLanguageServiceSettings() {
+    	return googleLanguageServiceSettings;
     }
 }
 

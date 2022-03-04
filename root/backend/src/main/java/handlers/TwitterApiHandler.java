@@ -5,8 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
+import util.SentimentAnalysis;
 import util.Token;
-
+import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -17,7 +18,6 @@ public class TwitterApiHandler implements IApiHandler {
 
     private Token token;
     private List<RateLimiter> limiters = new LinkedList<>();
-
     public List<RateLimiter> getLimiters() {
         return limiters;
     }
@@ -146,7 +146,6 @@ public class TwitterApiHandler implements IApiHandler {
 
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
-        System.out.println("First: " + responseJSON.toString());
         if(responseJSON.has("data"))
         {
             JSONArray data = responseJSON.getJSONArray("data");
@@ -170,7 +169,6 @@ public class TwitterApiHandler implements IApiHandler {
         }
     }
     public JSONObject TweetDetails(ArrayList<String> idList) {
-        System.out.println(idList);
         JSONArray outPosts = new JSONArray();
         if(idList.isEmpty())
         {
@@ -192,6 +190,7 @@ public class TwitterApiHandler implements IApiHandler {
 
                 JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                         requestProperties, requestParameters);
+                
                 try {
 //                    assert (responseJSON.getString("kind").equals("Listing"));
 
@@ -205,11 +204,9 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("title", "None");
                     postData.put("text", re.getString("text"));
                     postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
-                    postData.put("positive_votes", String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
-                    postData.put("sentiment_score", "Neutral");
-                    postData.put("sentiment_confidence", 0.0);
+                    postData.put("positive_votes", re.getJSONObject("public_metrics").getInt("like_count"));
                     postData.put("has_embedded_media", re.has("attachments"));
-                    postData.put("comment_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
+                    postData.put("comment_count", re.getJSONObject("public_metrics").getInt("reply_count"));
                     postData.put("top_comments", new JSONArray());
                     outPosts.put(postData);
                 } catch (JSONException e) {
@@ -218,7 +215,6 @@ public class TwitterApiHandler implements IApiHandler {
             }
         }
         outJSON.put("posts", outPosts);
-        System.out.println(outJSON.toString());
         return outJSON;
     }
     private String hashPostID(String id) {

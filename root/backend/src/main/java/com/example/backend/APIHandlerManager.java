@@ -14,6 +14,7 @@ import handlers.RedditApiHandler;
 import handlers.TwitterApiHandler;
 import handlers.YoutubeApiHandler;
 import util.Credentials;
+import util.SentimentAnalysis;
 
 @Component
 public class APIHandlerManager {
@@ -21,10 +22,12 @@ public class APIHandlerManager {
 	private static final int MAX_REQUEST_RETRIES = 3;
 	
 	private Map<String, IApiHandler> handlers;
+	private SentimentAnalysis sentimentAnalysis;
 	
 	public APIHandlerManager() {
 		Credentials cred = new Credentials();
 		this.handlers = initializeApiHandlers(cred);
+		this.sentimentAnalysis = new SentimentAnalysis(cred);
 		System.out.println("Handlers initialized");
 	}
 	
@@ -37,6 +40,7 @@ public class APIHandlerManager {
 	}
 	
 	public JSONObject executeSearch(List<String> namesOfHandlersInQuery, String queryText, String maxResults, String start, String end) {
+		long searchStartTime = System.currentTimeMillis();
 		JSONObject aggregateResults = new JSONObject();
 		try {
 			JSONArray aggregatePosts = new JSONArray();
@@ -55,14 +59,25 @@ public class APIHandlerManager {
 					for (int i = 0; i < posts.length(); i++) aggregatePosts.put(posts.get(i));
 				}
 			}
-			aggregateResults.put("posts", aggregatePosts);
+			aggregateResults.put("posts", this.processPosts(aggregatePosts));
 			// add metadata
 			JSONObject metaInfo = new JSONObject();
 			metaInfo.put("query", queryText);
 			aggregateResults.put("meta", metaInfo);
+			System.out.println(String.format("EXECUTION TIME: %d", System.currentTimeMillis() - searchStartTime));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return aggregateResults;
+	}
+	
+	public JSONArray processPosts(JSONArray posts) {
+		for (int i = 0; i < posts.length(); i++) {
+			JSONObject post = posts.getJSONObject(i);
+			String postTitle = post.getString("title");
+			String postText = post.getString("text");
+			sentimentAnalysis.sentiment(post, postText, postTitle);
+		}
+		return posts;
 	}
 }
