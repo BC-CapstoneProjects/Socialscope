@@ -1,5 +1,3 @@
-
-
 package handlers;
 
 import java.nio.charset.StandardCharsets;
@@ -8,19 +6,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import util.SentimentAnalysis;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import util.HttpUtils;
 import util.RateLimiter;
 import util.Token;
-import util.SentimentAnalysis;
+
 public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token token;
-    SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
     private List<RateLimiter> limiters = new LinkedList<>();
+    SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+    public List<RateLimiter> getLimiters() {
+        return limiters;
+    }
 
     public RedditApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
@@ -41,7 +44,7 @@ public class RedditApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
     	boolean requestPassed = false;
     	
     	// request a token if sufficient budget and token needed
@@ -146,7 +149,6 @@ public class RedditApiHandler implements IApiHandler {
             assert(responseData.getString("kind").equals("Listing"));
             JSONArray outPosts = new JSONArray();
             JSONArray inPosts = responseData.getJSONObject("data").getJSONArray("children");
-
             // populate post data fields
             for (int i = 0; i < inPosts.length(); i++) {
                 JSONObject currentPost = inPosts.getJSONObject(i).getJSONObject("data");

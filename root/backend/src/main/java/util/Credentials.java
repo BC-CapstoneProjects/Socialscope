@@ -17,7 +17,8 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+    private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -39,7 +40,6 @@ public class Credentials {
                 .build();
         return languageServiceSettings;
         }
-
     private void readCredentialsFromFile(String fp) {
         BufferedReader reader;
         try {

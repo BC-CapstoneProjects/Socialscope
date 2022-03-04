@@ -1,4 +1,3 @@
-
 package handlers;
 
 import org.json.JSONArray;
@@ -6,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
+import util.SentimentAnalysis;
 import util.Token;
 import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
@@ -15,9 +15,13 @@ public class TwitterApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private static final JSONObject outJSON = new JSONObject();
-    SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+
     private Token token;
     private List<RateLimiter> limiters = new LinkedList<>();
+    SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
+    public List<RateLimiter> getLimiters() {
+        return limiters;
+    }
 
     public TwitterApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
@@ -37,17 +41,12 @@ public class TwitterApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken(String numberOfResults) {
+    public void requestToken() {
         boolean requestPassed = false;
-        if(numberOfResults.equals(""))
-        {
-            numberOfResults = "10";
-        }
-        int temp = 1 + Integer.parseInt(numberOfResults);
         // request a token if sufficient budget and token needed
-        if (hasRequestBudget(temp) && (this.token == null || !this.hasValidToken())) {
+        if (hasRequestBudget(1) && (this.token == null || !this.hasValidToken())) {
             requestPassed = makeTokenRequest();
-            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
+            this.limiters.forEach((limiter) -> {limiter.spendBudget(1);});
         }
         if (requestPassed)
             System.out.println("Twitter access token request passed");
@@ -98,13 +97,15 @@ public class TwitterApiHandler implements IApiHandler {
 
     @Override
     public JSONObject makeQuery(String q, String maxResults, String start, String end){
+        final int temp = Integer.parseInt(maxResults);
         JSONObject out = null;
         if(maxResults.equals(""))
         {
             maxResults = "10";
         }
-        if (hasRequestBudget(1 + Integer.parseInt(maxResults)) && (this.hasValidToken())) {
+        if (hasRequestBudget(Integer.parseInt(maxResults)) && (this.hasValidToken())) {
             out = makeQueryRequest(q, maxResults, start, end);
+            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
         }
         if (out != null) {
             System.out.println("Twitter query successful");
@@ -182,7 +183,7 @@ public class TwitterApiHandler implements IApiHandler {
                 String requestUri = "https://api.twitter.com/2/tweets";
 
                 Map<String, String> requestProperties = new HashMap<>();
-                requestProperties.put("User-Agent", credentials.get("user-agent"));
+                requestProperties.put("User-Agent", credentials.get("user_agent"));
                 requestProperties.put("Authorization", "bearer " + this.token.getToken());
 
                 Map<String, String> requestParameters = new HashMap<>();
@@ -193,7 +194,7 @@ public class TwitterApiHandler implements IApiHandler {
                 JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                         requestProperties, requestParameters);
                 try {
-                    assert (responseJSON.getString("kind").equals("Listing"));
+//                    assert (responseJSON.getString("kind").equals("Listing"));
 
                     JSONArray inPosts = responseJSON.getJSONArray("data");
                     JSONObject re = inPosts.getJSONObject(0);
@@ -208,17 +209,19 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("positive_votes", String.valueOf(re.getJSONObject("public_metrics").getInt("like_count")));
                     String text=re.getString("text");
                     String title=re.getString("title");
-                    sentimentanalysis.sentiment( postData,  text, title);
+                    try {
+						sentimentanalysis.sentiment( postData,  text, title);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                     postData.put("has_embedded_media", re.has("attachments"));
                     postData.put("comment_count", String.valueOf(re.getJSONObject("public_metrics").getInt("reply_count")));
                     postData.put("top_comments", new JSONArray());
                     outPosts.put(postData);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                }
             }
         }
         outJSON.put("posts", outPosts);
@@ -229,8 +232,3 @@ public class TwitterApiHandler implements IApiHandler {
         return id;
     }
 }
-
-
-
-
-

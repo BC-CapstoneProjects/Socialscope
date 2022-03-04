@@ -10,5 +10,6 @@ public interface IApiHandler {
     public boolean hasValidToken();
     public JSONObject makeQuery(String q, String maxValue, String start, String end);
     public List<RateLimiter> getLimiters();
+	
 }
 
