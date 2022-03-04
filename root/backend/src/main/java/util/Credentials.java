@@ -29,17 +29,29 @@ public class Credentials {
     private String twitterUserAgent;
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
+    
+    private LanguageServiceSettings googleLanguageServiceSettings;
 
     public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
+        readGoogleCredentials(DEFAULT_CREDENTIALS_GOOGLEFILE);
     }
-    public LanguageServiceSettings readGoogleCredentials() throws IOException {
-    	LanguageServiceSettings languageServiceSettings =
-            LanguageServiceSettings.newBuilder()
-                .setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(new FileInputStream(DEFAULT_CREDENTIALS_GOOGLEFILE))))
-                .build();
-        return languageServiceSettings;
-        }
+    
+    public void readGoogleCredentials(String fp) {
+    	try {
+    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
+    		if (in == null) 
+    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
+    		
+    		this.googleLanguageServiceSettings =
+    			LanguageServiceSettings.newBuilder()
+                	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
+                	.build();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
     private void readCredentialsFromFile(String fp) {
         BufferedReader reader;
         try {
@@ -59,7 +71,6 @@ public class Credentials {
             this.redditAppSecret = jo.getString("redditAppSecret");
             this.redditUserAgent = jo.getString("redditUserAgent");
             this.twitterAppId = jo.getString("twitterAppId");
-            System.out.println(this.redditUserAgent);
             this.twitterAppSecret = jo.getString("twitterAppSecret");
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
@@ -134,6 +145,11 @@ public class Credentials {
     }
     public String getYoutubeApiKey() {
         return youtubeApiKey ;
+    }
+    
+    // google credentials
+    public LanguageServiceSettings getGoogleLanguageServiceSettings() {
+    	return googleLanguageServiceSettings;
     }
 }
 

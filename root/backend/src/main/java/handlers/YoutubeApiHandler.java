@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import util.SentimentAnalysis;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +24,6 @@ public class YoutubeApiHandler implements IApiHandler {
     private Map<String, String> credentials;
     private Token youtubetoken;
     private List<RateLimiter> limiters = new LinkedList<>();
-    SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
     public YoutubeApiHandler(String key, String user) {
         credentials = new HashMap<>();
         credentials.put("api_key", key);
@@ -115,8 +113,7 @@ public class YoutubeApiHandler implements IApiHandler {
     }
 
     private JSONObject formatQueryJSON(JSONObject responseData) {
-    	
-    	System.out.println(responseData.toString());
+
 
         JSONObject outJSON = new JSONObject();
         try {
@@ -138,12 +135,6 @@ public class YoutubeApiHandler implements IApiHandler {
                 postData.put("post_id", hashPostID(currentPost.getJSONObject(0).getString("id")));
                 String text=currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description");
                 String title=currentPost.getJSONObject(0).getJSONObject("snippet").getString("title");
-                try {
-					sentimentanalysis.sentiment( postData,  text, title);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
                 
                 
                 if (currentPost.getJSONObject(0).getJSONObject("snippet").has("defaultAudioLanguage"))

@@ -15,12 +15,12 @@ public class SentimentAnalysis {
 	 private List<RateLimiter> limiters_per_day = new LinkedList<>();
 
 	private Sentiment sentiment =null;
-	Credentials credentials= new Credentials();
+	private Credentials credentials;
 	
-	public  SentimentAnalysis() {
+	public  SentimentAnalysis(Credentials credentials) {
 	 this.limiters_per_min.add(new RateLimiter(600, 60000));
 	 this.limiters_per_day.add(new RateLimiter(800000, 86400000));
-
+	 this.credentials = credentials;
 	}
 	
 	
@@ -94,7 +94,7 @@ public class SentimentAnalysis {
 	  
 	/** Identifies the sentiment in the string {@code text}. */
     public  Sentiment analyzeSentimentText(String text) throws Exception {
-      try (LanguageServiceClient language = LanguageServiceClient.create(credentials.readGoogleCredentials())) {
+      try (LanguageServiceClient language = LanguageServiceClient.create(credentials.getGoogleLanguageServiceSettings())) {
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
         AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
         Sentiment sentiment = response.getDocumentSentiment();
@@ -106,9 +106,9 @@ public class SentimentAnalysis {
      
     }
     
-    public void sentiment( JSONObject obj, String text, String title) throws Exception {
+    public void sentiment( JSONObject obj, String text, String title) {
     	
-    
+    try {
     
     if(text !="") {
         sentiment= analyzeSentimentText(text);
@@ -117,8 +117,6 @@ public class SentimentAnalysis {
         }else if(sentiment.getScore()>-0.1&& sentiment.getScore()<0.1) {
         	 obj.put("sentiment_score",  "Neutral");
         }else { obj.put("sentiment_score",  "Positive");}
-        System.out.println(sentiment.getScore());
-        System.out.println(sentiment.getMagnitude());
         obj.put("sentiment_confidence", sentiment.getMagnitude());
         }else {
         	sentiment= analyzeSentimentText(title);
@@ -127,11 +125,13 @@ public class SentimentAnalysis {
              }else if(sentiment.getScore()>-0.1 && sentiment.getScore()<0.1) {
              	 obj.put("sentiment_score",  "Neutral");
              }else { obj.put("sentiment_score",  "Positive");}
-        	  System.out.println(sentiment.getScore());
-        	  System.out.println(sentiment.getMagnitude());
              obj.put("sentiment_confidence", sentiment.getMagnitude());
           
         }
+    }
+    catch (Exception e) {
+    	e.printStackTrace();
+    }
 	
      }
     
