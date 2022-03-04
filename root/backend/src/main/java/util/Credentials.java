@@ -17,8 +17,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
-    private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
+    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
 
     private String redditAppId;
     private String redditAppSecret;  // private
@@ -51,6 +50,7 @@ public class Credentials {
         		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
         	else
         		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
+//                reader = new BufferedReader(new FileReader(fp));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();
@@ -59,9 +59,8 @@ public class Credentials {
             this.redditAppSecret = jo.getString("redditAppSecret");
             this.redditUserAgent = jo.getString("redditUserAgent");
             this.twitterAppId = jo.getString("twitterAppId");
-            System.out.println(this.twitterAppId);
+            System.out.println(this.redditUserAgent);
             this.twitterAppSecret = jo.getString("twitterAppSecret");
-            System.out.println(this.twitterAppSecret);
             this.twitterUserAgent = jo.getString("twitterUserAgent");
             this.youtubeUserAgent = jo.getString("youtubeUserAgent");
             this.youtubeApiKey = jo.getString("youtubeApiKey");
