@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+.settings
+bin
+.project
+*.class
+private
+aggregateResults.json
+*/resources/static/
