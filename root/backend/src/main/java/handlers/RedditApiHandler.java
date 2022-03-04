@@ -20,10 +20,6 @@ public class RedditApiHandler implements IApiHandler {
     SentimentAnalysis sentimentanalysis= new SentimentAnalysis();
     private List<RateLimiter> limiters = new LinkedList<>();
 
-    public List<RateLimiter> getLimiters() {
-        return limiters;
-    }
-
     public RedditApiHandler(String id, String secret, String user) {
         credentials = new HashMap<>();
         credentials.put("app_id", id);
@@ -43,7 +39,7 @@ public class RedditApiHandler implements IApiHandler {
     }
 
     @Override
-    public void requestToken() {
+    public void requestToken(String numberOfResults) {
     	boolean requestPassed = false;
     	
     	// request a token if sufficient budget and token needed

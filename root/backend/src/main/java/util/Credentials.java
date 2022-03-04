@@ -1,4 +1,3 @@
-
 package util;
 
 import java.io.BufferedReader;
@@ -8,16 +7,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.LanguageServiceSettings;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Credentials {
 
-    private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
 
     private String redditAppId;
@@ -29,11 +29,10 @@ public class Credentials {
     private String twitterUserAgent;
     private String youtubeUserAgent;
     private String youtubeApiKey;  // private
-       // private
+
     public Credentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
     }
-
     public LanguageServiceSettings readGoogleCredentials() throws IOException {
     	LanguageServiceSettings languageServiceSettings =
             LanguageServiceSettings.newBuilder()
@@ -47,7 +46,11 @@ public class Credentials {
         try {
         	String currPath = new java.io.File(".").getCanonicalPath();
         	System.out.println(currPath);
-            reader = new BufferedReader(new FileReader(fp));
+        	InputStream in = getClass().getResourceAsStream("/" + fp);  
+        	if (in != null)
+        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
+        	else
+        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();
@@ -134,6 +137,5 @@ public class Credentials {
         return youtubeApiKey ;
     }
 }
-
 
 
