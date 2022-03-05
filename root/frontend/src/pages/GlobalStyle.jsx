@@ -33,8 +33,17 @@ body {
 }
 
 a {
-  color: unset;
   text-decoration: none;
+  color: #000000;
+
+  &:hover {
+    color: #000099 !important;
+  }
+
+  &:visited {
+    color: #000000;
+  }
+
 }
 
 img {
