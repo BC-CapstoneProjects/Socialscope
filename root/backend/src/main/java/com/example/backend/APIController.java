@@ -28,7 +28,7 @@ public class APIController {
     @CrossOrigin
     @GetMapping("/api/")
     public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
-        System.out.println("Executing search...");
+    	System.out.println("Executing search...");
         List<String> namesOfHandlersInQuery = buildHandlerNames(twitterChoose, redditChoose, youtubeChoose);
         JSONObject results = manager.executeSearch(namesOfHandlersInQuery, keyword, maxResults, start, end);
         System.out.println(results.toString());

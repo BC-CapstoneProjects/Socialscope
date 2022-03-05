@@ -105,6 +105,24 @@ const SearchPage = (props) => {
     e.preventDefault();
     fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
+        .then(res => {
+          res.posts.forEach(post => {
+            
+            try {
+            post.title = decodeURIComponent(escape(atob(post.title)));
+            } catch (e) {
+              console.log(post.title);
+              console.log(e);
+            }
+            try {
+            post.text = decodeURIComponent(escape(atob(post.text)));
+            } catch (e) {
+              console.log(post.text);
+              console.log(e);
+            }
+          })
+          return res;
+        })
         .then(
             (result) => {
               setResult(result);

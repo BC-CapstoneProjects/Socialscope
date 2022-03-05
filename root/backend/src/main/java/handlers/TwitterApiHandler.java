@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
 import util.SentimentAnalysis;
+import util.TextEncoder;
 import util.Token;
 import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
@@ -14,10 +15,9 @@ import java.util.*;
 public class TwitterApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
-    private static final JSONObject outJSON = new JSONObject();
 
     private Token token;
-    private List<RateLimiter> limiters = new LinkedList<>();
+    private List<RateLimiter> limiters;
     public List<RateLimiter> getLimiters() {
         return limiters;
     }
@@ -28,6 +28,7 @@ public class TwitterApiHandler implements IApiHandler {
         credentials.put("app_secret", secret);
         credentials.put("user_agent", user);
         this.token = null;
+        this.limiters = new LinkedList<>();
         this.limiters.add(new RateLimiter(450, 900000));
     }
     private boolean hasRequestBudget(int amount) {
@@ -96,15 +97,17 @@ public class TwitterApiHandler implements IApiHandler {
 
     @Override
     public JSONObject makeQuery(String q, String maxResults, String start, String end){
-        final int temp = Integer.parseInt(maxResults);
         JSONObject out = null;
-        if(maxResults.equals(""))
+        String max = new String(maxResults);
+        if(max == null || max.equals(""))
         {
-            maxResults = "10";
+            max = "10";
         }
-        if (hasRequestBudget(Integer.parseInt(maxResults)) && (this.hasValidToken())) {
-            out = makeQueryRequest(q, maxResults, start, end);
-            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
+        if (hasRequestBudget(Integer.parseInt(max)) && (this.hasValidToken())) {
+            out = makeQueryRequest(q, max, start, end);
+            for (RateLimiter limiter : this.limiters) {
+            	limiter.spendBudget(Integer.parseInt(max));
+            }
         }
         if (out != null) {
             System.out.println("Twitter query successful");
@@ -127,12 +130,16 @@ public class TwitterApiHandler implements IApiHandler {
         Map<String, String> requestParameters = new HashMap<>();
         requestParameters.put("query", q);
         requestParameters.put("expansions","referenced_tweets.id");
-
-        if(maxResults.equals(""))
-        {
-            maxResults = "10";
+        
+        if (Integer.parseInt(maxResults) < 10) {
+        	requestParameters.put("max_results", "10");
         }
-        requestParameters.put("max_results", maxResults);
+        else if (Integer.parseInt(maxResults) > 100) {
+        	requestParameters.put("max_results", "100");
+        }
+        else {
+        	requestParameters.put("max_results", maxResults);
+        }
         if(!start.equals(""))
         {
             start += "T00:00:00.000Z";
@@ -149,6 +156,7 @@ public class TwitterApiHandler implements IApiHandler {
         if(responseJSON.has("data"))
         {
             JSONArray data = responseJSON.getJSONArray("data");
+            System.out.println("MAX: " + maxResults);
             for (int i = 0; i < data.length(); i++) {
                 String s = data.getJSONObject(i).toString();
                 if(s.contains("type"))
@@ -161,14 +169,20 @@ public class TwitterApiHandler implements IApiHandler {
                     idList.add(data.getJSONObject(i).getBigInteger("id").toString());
                 }
             }
-            return TweetDetails(idList);
+            if (idList.size() > Integer.parseInt(maxResults)) {
+            	return (filterDetailsToSize(getTweetDetails(idList), Integer.parseInt(maxResults)));
+            }
+            else {
+            	return getTweetDetails(idList);
+            }
         }
         else
         {
-            return TweetDetails(new ArrayList<>());
+        	System.out.println(responseJSON.toString());
+            return getTweetDetails(new ArrayList<>());
         }
     }
-    public JSONObject TweetDetails(ArrayList<String> idList) {
+    public JSONObject getTweetDetails(ArrayList<String> idList) {
         JSONArray outPosts = new JSONArray();
         if(idList.isEmpty())
         {
@@ -201,22 +215,49 @@ public class TwitterApiHandler implements IApiHandler {
                     postData.put("created_at", re.getString("created_at"));
                     postData.put("post_id", hashPostID(String.valueOf(re.getBigInteger("id"))));
                     postData.put("lang", re.getString("lang"));
-                    postData.put("title", "None");
-                    postData.put("text", re.getString("text"));
+                    postData.put("title", TextEncoder.ensureUTF8(""));
+                    postData.put("text", TextEncoder.base64encodeUTF8(TextEncoder.ensureUTF8(re.getString("text"))));
                     postData.put("author_id", hashPostID(String.valueOf(re.getBigInteger("author_id"))));
                     postData.put("positive_votes", re.getJSONObject("public_metrics").getInt("like_count"));
                     postData.put("has_embedded_media", re.has("attachments"));
                     postData.put("comment_count", re.getJSONObject("public_metrics").getInt("reply_count"));
                     postData.put("top_comments", new JSONArray());
                     outPosts.put(postData);
+                    System.out.println(outPosts.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+        JSONObject outJSON = new JSONObject();
         outJSON.put("posts", outPosts);
         return outJSON;
     }
+    
+    private JSONObject filterDetailsToSize(JSONObject details, int maxResults) {
+    	try {
+    		List<JSONObject> keep = new ArrayList<JSONObject>();
+    		details.getJSONArray("posts").forEach((obj) -> {keep.add((JSONObject)obj);});
+    		keep.sort((jo1, jo2) -> { return Integer.compare(getImpressionWeightFromJSON(jo1), getImpressionWeightFromJSON(jo2)); });
+    		while(keep.size() > maxResults) {
+    			keep.remove(0);
+    		}
+    		JSONObject outJSON = new JSONObject();
+    		JSONArray outPosts = new JSONArray();
+    		keep.forEach(j -> {outPosts.put(j);});
+    		outJSON.put("posts", outPosts);
+    		return outJSON;
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		return details;
+    	}
+    }
+    
+    private int getImpressionWeightFromJSON(JSONObject jo) {
+    	return jo.getInt("positive_votes") + jo.getInt("comment_count");
+    }
+    
     private String hashPostID(String id) {
         return id;
     }

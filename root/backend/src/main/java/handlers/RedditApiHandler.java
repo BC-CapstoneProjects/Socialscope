@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import util.SentimentAnalysis;
+import util.TextEncoder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +70,7 @@ public class RedditApiHandler implements IApiHandler {
         requestProperties.put("User-Agent", credentials.get("user_agent"));
         String auth = credentials.get("app_id") + ":" + credentials.get("app_secret");
         requestProperties.put("Authorization",
-                "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8)));
+                "Basic " + TextEncoder.base64encodeUTF8(auth));
 
         // build request parameters
         Map<String, String> requestParameters = new HashMap<>();
@@ -156,9 +158,9 @@ public class RedditApiHandler implements IApiHandler {
                 postData.put("platform", "reddit");
                 postData.put("created_at", currentPost.getInt("created_utc"));
                 postData.put("post_id", hashPostID(currentPost.getString("name")));
-                postData.put("lang", "");
-                postData.put("title", currentPost.getString("title"));
-                postData.put("text", currentPost.getString("selftext"));
+                postData.put("lang", "unknown");
+                postData.put("title", TextEncoder.base64encodeUTF8(TextEncoder.ensureUTF8(currentPost.getString("title"))));
+                postData.put("text", TextEncoder.base64encodeUTF8(TextEncoder.ensureUTF8(currentPost.getString("selftext"))));
                 postData.put("poster_id", hashPoster(currentPost.getString("author_fullname")));
                 postData.put("positive_votes", currentPost.getInt("ups"));
                 postData.put("has_embedded_media", currentPost.get("secure_media") != JSONObject.NULL
