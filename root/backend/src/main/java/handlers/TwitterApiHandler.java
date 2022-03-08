@@ -7,6 +7,7 @@ import util.HttpUtils;
 import util.RateLimiter;
 import util.SentimentAnalysis;
 import util.TextEncoder;
+import util.TimeTranslator;
 import util.Token;
 import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
@@ -212,7 +213,7 @@ public class TwitterApiHandler implements IApiHandler {
                     JSONObject re = inPosts.getJSONObject(0);
                     JSONObject postData = new JSONObject();
                     postData.put("platform", "twitter");
-                    postData.put("created_at", re.getString("created_at"));
+                    postData.put("created_at", TimeTranslator.getEpochTime(re.getString("created_at")));
                     postData.put("post_id", hashPostID(String.valueOf(re.getBigInteger("id"))));
                     postData.put("lang", re.getString("lang"));
                     postData.put("title", TextEncoder.ensureUTF8(""));

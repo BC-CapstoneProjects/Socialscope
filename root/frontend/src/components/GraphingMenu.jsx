@@ -36,6 +36,10 @@ const GraphingMenu = (props) => {
     'Comments':{'Over':{
       'Time':{'Group': {
         'Platform': ''}}
+    }},
+    'Sentiment':{'Over':{
+      'All':{'Group': {
+        'Score': ''}}
     }}
   }};
 

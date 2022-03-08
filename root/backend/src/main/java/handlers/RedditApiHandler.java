@@ -130,7 +130,7 @@ public class RedditApiHandler implements IApiHandler {
         // build request parameters
         Map<String, String> requestParameters = new HashMap<>();
         requestParameters.put("q", q);
-        requestParameters.put("t", "month");
+        requestParameters.put("t", "week");
         requestParameters.put("limit", maxResults);
 
         // process response
@@ -156,7 +156,7 @@ public class RedditApiHandler implements IApiHandler {
                 if (currentPost.getBoolean("over_18")) continue;  // skip posts flagged for mature content
                 JSONObject postData = new JSONObject();
                 postData.put("platform", "reddit");
-                postData.put("created_at", currentPost.getInt("created_utc"));
+                postData.put("created_at", currentPost.getLong("created_utc"));
                 postData.put("post_id", hashPostID(currentPost.getString("name")));
                 postData.put("lang", "unknown");
                 postData.put("title", TextEncoder.base64encodeUTF8(TextEncoder.ensureUTF8(currentPost.getString("title"))));

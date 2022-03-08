@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import util.HttpUtils;
 import util.RateLimiter;
 import util.TextEncoder;
+import util.TimeTranslator;
 import util.Token;
 
 public class YoutubeApiHandler implements IApiHandler {
@@ -134,7 +135,7 @@ public class YoutubeApiHandler implements IApiHandler {
                 System.out.println(currentPost.toString());
                 JSONObject postData = new JSONObject();
                 postData.put("platform", "youtube");
-                postData.put("created_at", currentPost.getJSONObject(0).getJSONObject("snippet").getString("publishedAt"));
+                postData.put("created_at", TimeTranslator.getEpochTime(currentPost.getJSONObject(0).getJSONObject("snippet").getString("publishedAt")));
                 postData.put("post_id", hashPostID(currentPost.getJSONObject(0).getString("id")));
                 String text=currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description");
                 String title=currentPost.getJSONObject(0).getJSONObject("snippet").getString("title");
@@ -148,10 +149,13 @@ public class YoutubeApiHandler implements IApiHandler {
                 postData.put("text", TextEncoder.base64encodeUTF8((TextEncoder.ensureUTF8(currentPost.getJSONObject(0).getJSONObject("snippet").getJSONObject("localized").getString("description"))))); 
                 if (currentPost.getJSONObject(0).getJSONObject("statistics").has("commentCount")) {
                     postData.put("comment_count", currentPost.getJSONObject(0).getJSONObject("statistics").getInt("commentCount"));
+		} else {
+                    postData.put("comment_count", 0);
+		}
+		if (currentPost.getJSONObject(0).getJSONObject("statistics").has("likeCount")) {
                     postData.put("positive_votes", currentPost.getJSONObject(0).getJSONObject("statistics").getInt("likeCount"));
                 } else {
-                    postData.put("comment_count", 0);
-                    postData.put("positive_votes", 0);
+			postData.put("positive_votes", 0);
                 }
                 outPosts.put(postData);
             }
