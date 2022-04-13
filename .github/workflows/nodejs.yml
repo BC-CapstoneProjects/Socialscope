@@ -33,12 +33,9 @@ jobs:
     - run: |
         npm run build --if-present
       working-directory: ./root/frontend
-
-  build1:
-    runs-on: ubuntu-latest
-    steps:
     - run: |
         mkdir ./backend/src/main/resources/static
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
+
