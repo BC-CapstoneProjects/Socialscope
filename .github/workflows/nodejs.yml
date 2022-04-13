@@ -36,6 +36,7 @@ jobs:
     - run: |
         mkdir ./backend/src/main/resources/static
         mv ./frontend/build ./frontend/static
+        mv .../private ./backend/src/main/resources/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
 
