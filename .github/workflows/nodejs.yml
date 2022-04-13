@@ -35,6 +35,7 @@ jobs:
       working-directory: ./root/frontend
 
   build1:
+    steps:
     - run: |
         mkdir ../backend/src/main/resources/static
         mv build static
