@@ -36,7 +36,7 @@ jobs:
     - run: |
         mkdir ./backend/src/main/resources/static
         mv ./frontend/build ./frontend/static
-        mv ./backend/private ./backend/src/main/resources
+        mv Socialscope/root/backend/private ./backend/src/main/resources
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
 
