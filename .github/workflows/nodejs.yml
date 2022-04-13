@@ -35,6 +35,7 @@ jobs:
       working-directory: ./root/frontend
 
   build1:
+    runs-on: ubuntu-latest
     steps:
     - run: |
         mkdir ../backend/src/main/resources/static
