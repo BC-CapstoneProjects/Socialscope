@@ -34,3 +34,9 @@ jobs:
         npm run build --if-present
       working-directory: ./root/frontend
 
+  build1:
+    - run: |
+        mkdir ../backend/src/main/resources/static
+        mv build static
+        mv static ../backend/src/main/resources/static
+      working-directory: ./root/frontend
