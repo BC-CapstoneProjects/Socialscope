@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        mkdir ../backend/src/main/resources/static
-        mv build static
-        mv static ../backend/src/main/resources/static
-      working-directory: ./root/frontend
+        mkdir ./backend/src/main/resources/static
+        mv ./frontend/build ./frontend/static
+        mv ./frontend/static ./backend/src/main/resources/static
+      working-directory: ./root
