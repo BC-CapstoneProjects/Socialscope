@@ -39,6 +39,35 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
+
+    - name: Get Credentials
+      env:
+        SECRET_REPO: ${{ secrets.SECRET_REPO }}
+      run: |
+        cd ..
+#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
+        echo ${{ secrets.SECRET_TOKEN }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #    - name: Get Credentials
 #      env:
 #        SECRET_REPO: ${{ secrets.SECRET_REPO }}
