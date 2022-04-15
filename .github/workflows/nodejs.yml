@@ -39,20 +39,12 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Decrypt secrets
-      uses: zgosalvez/github-actions-decrypt-secrets@v1
-      with:
-        secrets_file: .github/workflows/credentials.json.gpg
-        map: 'SECRET_PASSWORD=PASSWORD,PASSPHRASE=passphrase'
-      env:
-        GPG_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
-    - name: Test (Do not expose your actual secrets!)
-      run: |
-        echo $SECRET_PASSWORD
-        echo $PASSPHRASE
+    -run:
+        pwd
+#    - name: Get Credentials
+#      env:
+#        SECRET_REPO: ${{ secrets.SECRET_REPO }}
+#      run: |
 
 #    - uses: actions/checkout@v3
 #    - name: Set up JDK 11
