@@ -36,18 +36,17 @@ jobs:
     - run: |
         mkdir ./backend/src/main/resources/static
         mv ./frontend/build ./frontend/static
-        mv Socialscope/root/backend/private ./backend/src/main/resources
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
 
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-        cache: maven
-    - name: Build with Maven
-      run: |
-        mvn clean package
-      working-directory: ./root/backend
+#    - uses: actions/checkout@v3
+#    - name: Set up JDK 11
+#      uses: actions/setup-java@v3
+#      with:
+#        java-version: '11'
+#        distribution: 'adopt'
+#        cache: maven
+#    - name: Build with Maven
+#      run: |
+#        mvn clean package
+#      working-directory: ./root/backend
