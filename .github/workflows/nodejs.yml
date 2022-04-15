@@ -39,6 +39,11 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
+
+  build1:
+
+    runs-on: ubuntu-latest
+    steps:
     - name: Get Credentials
       env:
         SECRET_REPO: ${{ secrets.SECRET_REPO }}
