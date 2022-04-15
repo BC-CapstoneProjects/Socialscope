@@ -35,8 +35,19 @@ jobs:
       working-directory: ./root/frontend
     - run: |
         mkdir ./backend/src/main/resources/static
+        mkdir ./backend/src/main/resources/static/private
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
+      working-directory: ./root
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Decrypt secrets
+      uses: zgosalvez/github-actions-decrypt-secrets@v1
+      with:
+        secrets_file: .github/workflows/credentials.json.gpg
+    - run: |
+        mv .github/workflows/credentials.json ./backend/src/main/resources/static/private
       working-directory: ./root
 
 #    - uses: actions/checkout@v3
