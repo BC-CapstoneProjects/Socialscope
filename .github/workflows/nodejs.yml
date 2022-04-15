@@ -41,10 +41,10 @@ jobs:
       working-directory: ./root
     - run: |
         git clone https://#{{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
-      working-directory: ./root/passcode
+      working-directory: ./passcode
     - run: |
         ls
-      working-directory: ./root/passcode
+      working-directory: ./passcode
 #    - name: Get Credentials
 #      env:
 #        SECRET_REPO: ${{ secrets.SECRET_REPO }}
