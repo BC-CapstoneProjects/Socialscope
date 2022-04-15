@@ -134,8 +134,5 @@ public class SentimentAnalysis {
     	obj.put("sentiment_score",  "Neutral");
     	obj.put("sentiment_confidence", 0);
     }
-	
      }
-    
-
 }
