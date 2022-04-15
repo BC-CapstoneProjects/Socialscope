@@ -46,9 +46,13 @@ jobs:
       uses: zgosalvez/github-actions-decrypt-secrets@v1
       with:
         secrets_file: .github/workflows/credentials.json.gpg
-    - run: |
-        mv .github/workflows/credentials.json ./backend/src/main/resources/static/private
-      working-directory: ./root
+        map: 'SECRET_PASSWORD=PASSWORD,PASSPHRASE=passphrase'
+      env:
+        GPG_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+    - name: Test (Do not expose your actual secrets!)
+      run: |
+        echo $SECRET_PASSWORD
+        echo $PASSPHRASE
 
 #    - uses: actions/checkout@v3
 #    - name: Set up JDK 11
