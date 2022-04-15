@@ -43,9 +43,9 @@ jobs:
       env:
         SECRET_REPO: ${{ secrets.SECRET_REPO }}
       run: |
-        cd .. 
-        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
-
+#        cd ..
+#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
+        echo ${{ secrets.SECRET_TOKEN }}
 #    - uses: actions/checkout@v3
 #    - name: Set up JDK 11
 #      uses: actions/setup-java@v3
