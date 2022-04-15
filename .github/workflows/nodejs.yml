@@ -39,7 +39,7 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-    -run:
+    - run: |
         pwd
 #    - name: Get Credentials
 #      env:
