@@ -44,6 +44,7 @@ jobs:
         SECRET_REPO: ${{ secrets.SECRET_REPO }}
       run: |
         cd .. 
+        echo: @SECRET_REPO
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh/${{ secrets.SECRET_REPO }}.git
 
 #    - uses: actions/checkout@v3
