@@ -39,13 +39,13 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-    - name: Get Credentials
-      env:
-        SECRET_REPO: ${{ secrets.SECRET_REPO }}
-      run: |
+#    - name: Get Credentials
+#      env:
+#        SECRET_REPO: ${{ secrets.SECRET_REPO }}
+#      run: |
 #        cd ..
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
-        echo ${{ secrets.SECRET_TOKEN }}
+#        echo ${{ secrets.SECRET_TOKEN }}
 #    - uses: actions/checkout@v3
 #    - name: Set up JDK 11
 #      uses: actions/setup-java@v3
