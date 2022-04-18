@@ -41,6 +41,9 @@ jobs:
         mv ./frontend/static ./backend/src/main/resources/static
         ls
       working-directory: ./root
+    - run: |
+        ls
+      working-directory: ./root/backend/src/main/resources/static/private
 #    - run: |
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
 #      working-directory: ./root/secret
