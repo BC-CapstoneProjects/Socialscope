@@ -39,21 +39,21 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-    - name: Get Credentials
-      run: |
-        echo "The GitHub Action Secret will be masked:  "
-        if [ ${{ secrets.SECRET_REPO }} == "private" ]
-        then
-          echo "got it"
-        fi
-        if [ ${{ secrets.MY_GITHUB_TOKEN }} == "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" ]
-        then
-          echo "got it"
-        fi
-#    - name: Step 1 - Echo out a GitHub Actions Secret to the logs
+#    - name: Get Credentials
 #      run: |
-#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
-#        echo ${{ secrets.MY_GITHUB_TOKEN }}
+#        echo "The GitHub Action Secret will be masked:  "
+#        if [ ${{ secrets.SECRET_REPO }} == "private" ]
+#        then
+#          echo "got it"
+#        fi
+#        if [ ${{ secrets.MY_GITHUB_TOKEN }} == "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" ]
+#        then
+#          echo "got it"
+#        fi
+    - name: Step 1 - Echo out a GitHub Actions Secret to the logs
+      run: |
+        cd ..
+        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
 
 
 
