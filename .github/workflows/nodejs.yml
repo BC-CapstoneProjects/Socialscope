@@ -45,12 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Credentials
-      env:
-        SECRET_REPO: ${{ secrets.SECRET_REPO }}
       run: |
-        cd ..
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
-        echo ${{ secrets.SECRET_TOKEN }}
+        echo ${{ secrets.MY_GITHUB_TOKEN }}
 
 
 
