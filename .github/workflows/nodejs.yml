@@ -52,13 +52,10 @@ jobs:
 #        fi
     - name: Step 1 - Echo out a GitHub Actions Secret to the logs
       run: |
-        cd testss/root
-        mkdir ./private
-#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
-#        cp./root/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
-#        cp./root/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
-#        cd ./backend/src/main/resources/static/private
-        ls
+        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
+        cp./root/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
+        cp./root/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
+        cd ./backend/src/main/resources/static/private
 
 
 
