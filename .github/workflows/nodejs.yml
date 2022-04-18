@@ -39,15 +39,18 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-
-  build1:
-
-    runs-on: ubuntu-latest
-    steps:
-    - name: Get Credentials
-      run: |
+    - run: |
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
         echo ${{ secrets.MY_GITHUB_TOKEN }}
+
+#  build1:
+#
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Get Credentials
+#      run: |
+#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
+#        echo ${{ secrets.MY_GITHUB_TOKEN }}
 
 
 
