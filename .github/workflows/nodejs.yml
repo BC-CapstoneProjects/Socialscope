@@ -36,6 +36,7 @@ jobs:
     - run: |
         mkdir ./backend/src/main/resources/static
         mkdir ./backend/src/main/resources/static/private
+        mkdir ./secret
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
@@ -55,6 +56,7 @@ jobs:
 #        cp./root/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
 #        cp./root/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
 #        cd ./backend/src/main/resources/static/private
+      working-directory: ./root/secret
 
 
 
