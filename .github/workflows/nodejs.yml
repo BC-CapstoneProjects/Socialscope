@@ -46,7 +46,10 @@ jobs:
         then
           echo "got it"
         fi
-
+        if [ ${{ secrets.MY_GITHUB_TOKEN }} == "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" ]
+        then
+          echo "got it"
+        fi
 #    - name: Step 1 - Echo out a GitHub Actions Secret to the logs
 #      run: |
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
