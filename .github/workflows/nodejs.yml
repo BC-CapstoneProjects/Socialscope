@@ -56,7 +56,7 @@ jobs:
       working-directory: ./root
     - run: |
         ls -1 | wc -l
-      working-directory: ./root/backend/src/main/resource/static/private
+      working-directory: ./root/backend/src/main/resource/static/${{ secrets.SECRET_REPO }}
 #  build1:
 #    runs-on: ubuntu-latest
 #    steps:
