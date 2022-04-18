@@ -37,6 +37,6 @@ build/
 bin
 .project
 *.class
-private
-aggregateResults.json
-*/resources/static/
+#private
+#aggregateResults.json
+#*/resources/static/
