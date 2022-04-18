@@ -50,13 +50,13 @@ jobs:
     - run: |
         cat credentials.json
       working-directory: ./root/secret/${{ secrets.SECRET_REPO }}
-#    - run: |
-#        mv ./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
-#        mv ./secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
-#      working-directory: ./root
-#    - run: |
-#        ls
-#      working-directory: ./root/backend/src/main/resource/static/private
+    - run: |
+        mv ./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
+        mv ./secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
+      working-directory: ./root
+    - run: |
+        ls -1 | wc -l
+      working-directory: ./root/backend/src/main/resource/static/private
 #  build1:
 #    runs-on: ubuntu-latest
 #    steps:
