@@ -54,7 +54,7 @@ jobs:
       run: |
         cd ..
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
-
+        ls
 
 
 
