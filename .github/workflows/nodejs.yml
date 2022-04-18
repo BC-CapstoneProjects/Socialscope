@@ -54,8 +54,8 @@ jobs:
       run: |
         cd ./root
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
-        cp./${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
-        cp./${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
+        cp./root/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
+        cp./root/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
         cd ./backend/src/main/resources/static/private
         ls
       
