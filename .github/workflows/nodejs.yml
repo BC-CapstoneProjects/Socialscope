@@ -48,7 +48,7 @@ jobs:
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
       working-directory: ./root/secret
     - run: |
-        cat credentials.json
+        find / -name "credentials.json"
       working-directory: ./root/secret
 #    - run: |
 #        mv ./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
