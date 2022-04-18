@@ -42,7 +42,7 @@ jobs:
     - name: Get Credentials
       run: |
         echo "The GitHub Action Secret will be masked:  "
-        if [ ${{ secrets.SECRET_REPO }} -eq "private" ]
+        if [ ${{ secrets.SECRET_REPO }} == "private" ]
         then
           echo "got it"
         fi
