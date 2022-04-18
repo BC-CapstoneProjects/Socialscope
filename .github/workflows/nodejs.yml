@@ -44,23 +44,12 @@ jobs:
         echo "The GitHub Action Secret will be masked:  "
         if [ "$REPO_NAME" -eq "private" ]
         then
-          echo ${{ secrets.SECRET_REPO }}
-#          echo ${{ secrets.MY_GITHUB_TOKEN }}
+          echo "Got it"
         fi
-#        echo ${{ secrets.SECRET_REPO }}
       env:
         REPO_NAME: ${{ secrets.SECRET_REPO }}
 
 #    - name: Step 1 - Echo out a GitHub Actions Secret to the logs
-#      run: |
-#        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
-#        echo ${{ secrets.MY_GITHUB_TOKEN }}
-
-#  build1:
-#
-#    runs-on: ubuntu-latest
-#    steps:
-#    - name: Get Credentials
 #      run: |
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
 #        echo ${{ secrets.MY_GITHUB_TOKEN }}
