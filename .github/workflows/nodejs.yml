@@ -57,6 +57,10 @@ jobs:
 #        cp./root/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
 #        cd ./backend/src/main/resources/static/private
       working-directory: ./root/secret
+    - run: |
+        cp./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
+        cp./secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
+      working-directory: ./root
 
 
 
