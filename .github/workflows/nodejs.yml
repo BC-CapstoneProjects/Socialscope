@@ -39,7 +39,8 @@ jobs:
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
       working-directory: ./root
-    - run: |
+    - name: Step 1 - Echo out a GitHub Actions Secret to the logs
+      run: |
 #        git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/${{ secrets.SECRET_REPO }}.git
         echo ${{ secrets.MY_GITHUB_TOKEN }}
 
