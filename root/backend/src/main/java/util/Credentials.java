@@ -9,6 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.LanguageServiceSettings;
@@ -40,9 +44,12 @@ public class Credentials {
     public void readGoogleCredentials(String fp) {
     	try {
     		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
-    		if (in == null) 
+    		if (in == null)
     			in = new FileInputStream("src/main/resources/" + fp); // not in jar
-    		
+//            if( in == null)
+//            {
+//                in = new FileInputStream()
+//            }
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))

@@ -36,7 +36,7 @@ jobs:
     - run: |
         mkdir ./backend/src/main/resources/static
         mkdir ./backend/src/main/resources/static/private
-        mkdir ./secret
+        mkdir ./backend/secret
         mv ./frontend/build ./frontend/static
         mv ./frontend/static ./backend/src/main/resources/static
         ls
@@ -46,13 +46,13 @@ jobs:
 #      working-directory: ./root/backend/src/main/resources/static/private
     - run: |
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
-      working-directory: ./root/secret
+      working-directory: ./root/backend/secret
     - run: |
         cat credentials.json
-      working-directory: ./root/secret/${{ secrets.SECRET_REPO }}
+      working-directory: ./root/backend/secret/${{ secrets.SECRET_REPO }}
     - run: |
-        mv ./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
-        mv ./secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
+        mv ./backend/secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
+        mv ./backend/secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
       working-directory: ./root
     - run: |
         ls -1 | wc -l
