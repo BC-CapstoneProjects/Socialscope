@@ -110,6 +110,7 @@ const SearchPage = (props) => {
   const [loadState, setLoadState] = useState({
     display: false, 
     loading: false, 
+    finish: false,
     value: 0, 
     target: 0, 
     step: 0,
@@ -132,10 +133,18 @@ const SearchPage = (props) => {
       ...loadState,
       display: true,
       loading: true,
+      finish: false,
       target: target,
       step: ((target - loadState.value) / steps),
       trans: duration / steps,
       after: promise
+    })
+  }
+
+  function finishLoad() {
+    setLoadState({
+      ...loadState,
+      finish: true
     })
   }
 
@@ -145,7 +154,6 @@ const SearchPage = (props) => {
         .then(res => res.json())
         .then(res => {
           res.posts.forEach(post => {
-            
             try {
             post.title = decodeURIComponent(escape(atob(post.title)));
             } catch (e) {
@@ -173,6 +181,10 @@ const SearchPage = (props) => {
               setResult(resultsTest);
               sessionStorage.setItem('result', JSON.stringify(resultsTest));
             }
+        )
+        .then(res => {
+          //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
+          }
         );
     const loadDuration = 3 + (Math.round(1.5 * (parseInt(max) || 0)));
     triggerLoad(loadDuration, 100, 2*loadDuration, p);
@@ -186,6 +198,15 @@ const SearchPage = (props) => {
         if (loadState.value >= 100) {
           setLoadState({...loadState, loading: false, value: 100});
         }
+        else if (loadState.finish) {
+          newState={
+            ...newState,
+            finish: false,
+            value: 100
+          };
+          console.log("load end")
+          updateState = true;
+        }
         else if (loadState.loading && loadState.value >= loadState.target) {
           newState = {
             ...newState,
@@ -197,19 +218,21 @@ const SearchPage = (props) => {
         }
         else if (loadState.loading) {
           const initialProgress = loadState.value;
-          const newValue = (loadState.value + loadState.step) > 100 ? 100: loadState.value + loadState.step;
+          const newValue = (initialProgress + loadState.step) > 100 ? 100: initialProgress + loadState.step;
           newState = {
             ...newState,
             value: newValue
           };
+          console.log("load proceed");
           updateState = true;
         }
         if (updateState) {
+          console.log(newState);
           setLoadState(newState);
         }
       }, loadState.trans * 1000)
       return () => clearInterval(interval);
-      }
+    }
     else if (loadState.value >= 100) {
       loadState.after.then(
         navigate('../results/preview')

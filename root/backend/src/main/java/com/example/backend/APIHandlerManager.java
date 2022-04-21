@@ -1,12 +1,18 @@
 package com.example.backend;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import handlers.IApiHandler;
@@ -25,11 +31,18 @@ public class APIHandlerManager {
 	private Map<String, IApiHandler> handlers;
 	private SentimentAnalysis sentimentAnalysis;
 	
+	private ThreadPoolTaskExecutor taskExecutor;
+	
 	public APIHandlerManager() {
 		Credentials cred = new Credentials();
 		this.handlers = initializeApiHandlers(cred);
 		this.sentimentAnalysis = new SentimentAnalysis(cred);
 		System.out.println("Handlers initialized");
+		this.taskExecutor = new ThreadPoolTaskExecutor();
+		this.taskExecutor.setCorePoolSize(4);
+		this.taskExecutor.setMaxPoolSize(4);
+		this.taskExecutor.setThreadNamePrefix("api_handler_executor_thread");
+		this.taskExecutor.initialize();
 	}
 	
 	public Map<String, IApiHandler> initializeApiHandlers(Credentials cred) {
@@ -40,37 +53,65 @@ public class APIHandlerManager {
 		return handlerMap;
 	}
 	
+	private static JSONObject attemptHandlerRequest(IApiHandler handler, Map<String, String> params, int maxRetries) {
+		int counter = 0;
+		JSONObject resultObject = null;
+		while (resultObject == null && counter < MAX_REQUEST_RETRIES) {
+			handler.requestToken();
+			if (handler.hasValidToken()) {
+				resultObject = handler.makeQuery(params.get("queryText"), params.get("maxResults"), params.get("start"), params.get("end"));
+			}
+			counter++;
+		}
+		if (resultObject == null)
+			System.out.println("Null response object");
+		return resultObject;
+	}
+	
 	public JSONObject executeSearch(List<String> namesOfHandlersInQuery, String queryText, String maxResults, String start, String end) {
+		 Map<String, String> queryParams = new HashMap<>();
+		queryParams.put("queryText", queryText);
+        queryParams.put("maxResults", maxResults);
+        queryParams.put("start", start);
+        queryParams.put("end", end);
+        return this.executeSearch(namesOfHandlersInQuery, queryParams);
+	}
+	
+	public JSONObject executeSearch(List<String> namesOfHandlersInQuery, Map<String, String> queryParams) {
 		long searchStartTime = System.currentTimeMillis();
 		JSONObject aggregateResults = new JSONObject();
 		try {
-			int maxResultsNumeric = Integer.parseInt(maxResults) / namesOfHandlersInQuery.size();
-			JSONArray aggregatePosts = new JSONArray();
+			// make new params item containing the number of results for an individual search
+			Map<String, String> splitQueryParams = new HashMap<>();
+			splitQueryParams.putAll(queryParams);
+			splitQueryParams.remove("maxResults");
+			int maxResultsNumeric = Integer.parseInt(queryParams.get("maxResults")) / namesOfHandlersInQuery.size();
+			splitQueryParams.put("maxResults", Integer.toString(maxResultsNumeric));
+			List<Future<JSONObject>> resultObjectFutures = new ArrayList<>();
 			// get posts
 			for (Map.Entry<String, IApiHandler> handler : this.handlers.entrySet()) {
 				if (namesOfHandlersInQuery.contains(handler.getKey())) {
-					int counter = 0;
-					JSONArray posts = null;
-					while (posts == null && counter < MAX_REQUEST_RETRIES) {
-						handler.getValue().requestToken();
-						if (handler.getValue().hasValidToken())
-							posts = handler.getValue().makeQuery(queryText, Integer.toString(maxResultsNumeric), start, end).getJSONArray("posts");
-						counter++;
-					}
-					if (posts == null || posts.length() == 0) continue;  // move on to the next api if unable to retrieve posts even after multiple requests
-					for (int i = 0; i < posts.length(); i++) aggregatePosts.put(posts.get(i));
+					resultObjectFutures.add(this.taskExecutor.submit(() -> attemptHandlerRequest(handler.getValue(), splitQueryParams, MAX_REQUEST_RETRIES)));
 				}
 			}
+			// wait for posts to be retrieved and aggregate to single array
+			JSONArray aggregatePosts = new JSONArray();
+			for(Future<JSONObject> resultObjectFuture : resultObjectFutures) {
+				JSONObject resultPosts = resultObjectFuture.get();//.getJSONArray("posts");
+				System.out.println(resultPosts.toString());
+				aggregatePosts.putAll(resultPosts.getJSONArray("posts"));
+			}
+			// process posts and add to results object
 			aggregateResults.put("posts", this.processPosts(aggregatePosts));
-			// add metadata
+			// add metadata to results object
 			JSONObject metaInfo = new JSONObject();
-			metaInfo.put("query", queryText);
+			metaInfo.put("query", queryParams.get("queryText"));
 			aggregateResults.put("meta", metaInfo);
 			System.out.println(String.format("EXECUTION TIME: %d", System.currentTimeMillis() - searchStartTime));
 		} catch (NumberFormatException e) {
 			System.out.println("Max results not an integer.");
 			JSONObject metaInfo = new JSONObject();
-			metaInfo.put("query", queryText);
+			metaInfo.put("query", queryParams.get("queryText"));
 			JSONObject errorObj = new JSONObject();
 			errorObj.put("type", "illegal parameter");
 			errorObj.put("details", "invalid maximum results value");
@@ -78,6 +119,12 @@ public class APIHandlerManager {
 			aggregateResults.put("meta", metaInfo);
 			
 		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {  // thrown if taskExecutor thread interrupted and throws
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {  // thrown if taskExecutor thread was aborted with an exception  TODO: ensure does not occur and cause crash.
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return aggregateResults;

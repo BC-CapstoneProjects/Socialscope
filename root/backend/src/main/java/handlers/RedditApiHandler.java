@@ -134,6 +134,9 @@ public class RedditApiHandler implements IApiHandler {
         requestParameters.put("limit", maxResults);
 
         // process response
+        System.out.println(requestProperties.toString());
+        System.out.println(requestParameters.toString());
+        
         JSONObject responseJSON = HttpUtils.executeHttpRequest(requestUri, "GET",
                 requestProperties, requestParameters);
 

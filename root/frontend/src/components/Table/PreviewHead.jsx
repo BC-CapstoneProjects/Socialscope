@@ -45,7 +45,7 @@ const PreviewHead = (props) => {
   
   function renderSortButtons(field) {
     return(
-      <SortButtonContainer>
+      <SortButtonContainer data-cy='sort-button-container'>
         <SortButton onClick={() => props.sortHandler(field, true)}>{'\u2191'}</SortButton>
         <SortButton onClick={() => props.sortHandler(field, false)}>{'\u2193'}</SortButton>
       </SortButtonContainer>

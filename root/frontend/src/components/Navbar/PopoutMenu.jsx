@@ -33,7 +33,7 @@ const Menu = styled.div`
 const PopoutMenu = (props) => {
   return (
     <MenuContainer>
-      <Menu>
+      <Menu data-cy='popout-menu-container'>
         {props.children}
       </Menu>
     </MenuContainer>
