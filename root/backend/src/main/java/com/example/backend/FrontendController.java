@@ -12,7 +12,7 @@ public class FrontendController implements ErrorController {
 	
 	private static final String ERROR_PATH = "/error";
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/*")
 	public String home() {
 		return "index";
 	}

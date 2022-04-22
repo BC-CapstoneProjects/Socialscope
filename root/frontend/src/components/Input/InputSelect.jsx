@@ -78,7 +78,7 @@ const InputSelect = (props) => {
     let renderedSelectItems = [];
     for (let i = 1; i < props.options.length; i++) { 
       renderedSelectItems.push(
-        <SelectItem key={i} isSelected={selectionIndex === i} onClick={() => updateSelection(i)}>   
+        <SelectItem key={i} isSelected={selectionIndex === i} onClick={() => updateSelection(i)} data-cy='select-menu-option'>   
           {props.options[i].text}
         </SelectItem>);
     }
@@ -92,7 +92,7 @@ const InputSelect = (props) => {
 
   return (
     <SelectContainer ref={sRef} width={props.width}>
-      <Selected onClick={toggleItemList}>
+      <Selected onClick={toggleItemList} data-cy='select-menu-selection'>
         {props.options[selectionIndex] ? props.options[selectionIndex].text : props.options[0].text}
       </Selected>
       <SelectItemListContainer hidden={selectionListHidden}>

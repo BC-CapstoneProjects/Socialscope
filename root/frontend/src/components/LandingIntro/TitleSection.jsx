@@ -26,13 +26,13 @@ const TitleSection = () => {
     <TitleContainer>
 
         <h1>
-          Head Title
+          Welcome to Socialscope
         </h1>
 
         <TitleSpacer/>
 
         <h3>
-          Subheading tagline that is a bit longer
+          Social media analytics made easy
         </h3>
 
         <LaunchButton />

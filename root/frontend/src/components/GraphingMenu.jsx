@@ -29,46 +29,45 @@ const GraphingMenu = (props) => {
 
   const menuInputWidth = {label: '100px', content: '150px'}
   const menuOptionTree = {'Graph':
-    {'Sentiment': {'Over':
-      {'All':{'Group': {
-        'Platform': ''}}, 
-      'Time':{'Group':{
-        'Platform': '', 'None': ''}}
-    }}, 
-    'Likes':{'Over':{
+    { 'Likes':{'Over':{
       'All':{'Group': {
-        'Platform': ''}}, 
-      'Time':{'Group':{
-        'Platform': '', 
-        'None': ''}}
+        'Platform': ''}}
     }}, 
     'Comments':{'Over':{
+      'Time':{'Group': {
+        'Platform': ''}}
+    }},
+    'Sentiment':{'Over':{
       'All':{'Group': {
-        'Platform': ''}}, 
-      'Sentiment':{'Group': {
-        'None': ''}}
+        'Score': ''}}
     }}
   }};
 
   const updateGraphValue = (val) => {
-    setGraphValue(val);
-    props.updateMenuSelections(val, '', '');
-    setLastSelected(1);
-    setOverValue(0);
-    setGroupValue(0);
+    if (graphValue !== val) {
+      setGraphValue(val);
+      props.updateMenuSelections(val, '', '');
+      setLastSelected(1);
+      setOverValue(0);
+      setGroupValue(0);
+    }
   }
 
   const updateOverValue = (val) => {
-    setOverValue(val);
-    props.updateMenuSelections(undefined, val, '');
-    setLastSelected(2);
-    setGroupValue(0);
+    if(overValue !== val) {
+      setOverValue(val);
+      props.updateMenuSelections(undefined, val, '');
+      setLastSelected(2);
+      setGroupValue(0);
+    } 
   }
 
   const updateGroupValue = (val) => {
-    setGroupValue(val);
-    props.updateMenuSelections(undefined, undefined, val);
-    setLastSelected(3);
+    if(groupValue !== val) {
+      setGroupValue(val);
+      props.updateMenuSelections(undefined, undefined, val);
+      setLastSelected(3);
+    }
   }
 
   const mapOptions = (optionSubTree, placeholder='--') => [{text:placeholder, value:''}, ...Object.keys(optionSubTree).map(option => ({text:option, value:option}))]

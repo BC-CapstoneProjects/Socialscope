@@ -21,7 +21,7 @@ const Button = styled.button`
 const PopoutButton = (props) => {
   return (
     <ButtonContainer className={props.className}>
-      <Button onClick={props.onClick}>
+      <Button onClick={props.onClick} data-cy='popout-menu-button'>
         {props.children}
       </Button>
     </ButtonContainer>

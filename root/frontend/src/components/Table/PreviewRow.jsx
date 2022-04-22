@@ -59,15 +59,15 @@ const PreviewRow = (props) => {
     }
     cellContent.push(
       <TableCell key='button'>
-        <ToggleButton shadeClass={shadeClass} onClick={() => props.descriptionToggleHandler()}>
+        <ToggleButton shadeClass={shadeClass} onClick={() => props.descriptionToggleHandler()} data-cy='description-toggle-button'>
           {props.data.descriptionMinimized ? '+' : '-'}
         </ToggleButton>
       </TableCell>
     );
     const descriptionSection = (
       <DescriptionContainer minimized={props.data.descriptionMinimized}>
-        <DescriptionTitle>{props.data.post.title}</DescriptionTitle>
-        <div>
+        <DescriptionTitle data-cy="description-text-container">{props.data.post.title}</DescriptionTitle>
+        <div data-cy="description-text-container">
           {
             (props.data.post.text.length === 0 && props.data.post.has_embedded_media === true)
             ? '[Body consists of an embedded link or non-textual media]'
