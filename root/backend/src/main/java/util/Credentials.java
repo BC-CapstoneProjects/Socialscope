@@ -49,7 +49,7 @@ public class Credentials {
     			in = new FileInputStream("src/main/resources/" + fp); // not in jar
             if(in == null)
             {
-                in = getClass().getResourceAsStream("/secret/socialsentanalysis.json");
+                in = new FileInputStream("/secret/socialsentanalysis.json");
             }
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
