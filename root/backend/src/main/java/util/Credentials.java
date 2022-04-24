@@ -44,13 +44,14 @@ public class Credentials {
 
     public void readGoogleCredentials(String fp) {
     	try {
-    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
-    		if (in == null) 
-    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
-            if(in == null)
-            {
-                in = new FileInputStream("/secret/socialsentanalysis.json");
-            }
+//    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
+//    		if (in == null)
+//    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
+//            if(in == null)
+//            {
+//                in = new FileInputStream("/secret/socialsentanalysis.json");
+//            }
+            InputStream in = new FileInputStream("/secret/socialsentanalysis.json"); // in jar
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
