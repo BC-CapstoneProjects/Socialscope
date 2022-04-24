@@ -50,19 +50,22 @@ jobs:
     - run: |
         cat credentials.json
       working-directory: ./root/backend/secret/${{ secrets.SECRET_REPO }}
+    - run: |
+        ls
+      working-directory: ./root/backend/secret/${{ secrets.SECRET_REPO }}
 #    - run: |
 #        mv ./secret/${{ secrets.SECRET_REPO }}/credentials.json ./backend/src/main/resources/static/private
 #        mv ./secret/${{ secrets.SECRET_REPO }}/socialsentanalysis.json ./backend/src/main/resources/static/private
 #      working-directory: ./root
-  build1:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-          cache: 'maven'
-      - run: mvn clean package
-        working-directory: ./root/backend
+#  build1:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-java@v3
+#        with:
+#          distribution: 'adopt'
+#          java-version: '11'
+#          cache: 'maven'
+#      - run: mvn clean package
+#        working-directory: ./root/backend
 
