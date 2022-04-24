@@ -51,7 +51,7 @@ public class Credentials {
 //            {
 //                in = new FileInputStream("/secret/socialsentanalysis.json");
 //            }
-            InputStream in = new FileInputStream("/secret/socialsentanalysis.json"); // in jar
+            InputStream in = new FileInputStream("/secret/private/socialsentanalysis.json"); // in jar
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
