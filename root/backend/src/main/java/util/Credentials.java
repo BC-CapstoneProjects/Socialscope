@@ -68,19 +68,22 @@ public class Credentials {
         	String currPath = new java.io.File(".").getCanonicalPath();
         	System.out.println(currPath);
         	InputStream in = getClass().getResourceAsStream("/" + fp);
-        	if (in != null)
-        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
-        	else
-            {
-                reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
-                System.out.println("reader " + reader);
-                if(reader == null)
-                {
-                    in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
-                    reader = new BufferedReader(new InputStreamReader(in));
-                }
-            }
+//        	if (in != null)
+//        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
+//        	else
+//            {
+//                reader = new BufferedReader(new FileReader("src/main/resources/" + fp));
+//            }
 //                reader = new BufferedReader(new FileReader(fp));
+            if (in == null)
+            {
+                in = new FileInputStream("src/main/resources/" + fp);
+            }
+            if(in == null)
+            {
+                in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
+            }
+            reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();
