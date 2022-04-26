@@ -108,15 +108,29 @@ public class Credentials {
 //        }
 //    }
 
-    private void readCredentialsFromFile() {
-        this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
-        this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
-        this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
-        this.twitterAppId = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
-        this.twitterAppSecret = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";
-        this.twitterUserAgent = "TwitterBot/1.0";
-        this.youtubeUserAgent = "SocialScope/0.1";
-        this.youtubeApiKey = "AIzaSyC4oyxeg5BaxWs2LU3hsvDngZQwX6gSj0s";
+    private void readCredentialsFromFile() throws IOException {
+//        this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
+//        this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
+//        this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
+//        this.twitterAppId = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
+//        this.twitterAppSecret = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";
+//        this.twitterUserAgent = "TwitterBot/1.0";
+//        this.youtubeUserAgent = "SocialScope/0.1";
+//        this.youtubeApiKey = "AIzaSyC4oyxeg5BaxWs2LU3hsvDngZQwX6gSj0s";
+        InputStream in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/socialsentanalysis.json");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder sb = new StringBuilder();
+        reader.lines().forEach((String line) -> sb.append(line));
+        reader.close();
+        JSONObject jo = new JSONObject(sb.toString());
+        this.redditAppId = jo.getString("redditAppId");
+        this.redditAppSecret = jo.getString("redditAppSecret");
+        this.redditUserAgent = jo.getString("redditUserAgent");
+        this.twitterAppId = jo.getString("twitterAppId");
+        this.twitterAppSecret = jo.getString("twitterAppSecret");
+        this.twitterUserAgent = jo.getString("twitterUserAgent");
+        this.youtubeUserAgent = jo.getString("youtubeUserAgent");
+        this.youtubeApiKey = jo.getString("youtubeApiKey");
     }
 
     @SuppressWarnings("unused")
