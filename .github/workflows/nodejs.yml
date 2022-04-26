@@ -55,6 +55,7 @@ jobs:
       working-directory: ./root/backend/secret/apple
     - run: export NAME=thien
     - run: set
+    - run: echo $NAME
 #    - uses: actions/setup-java@v3
 #      with:
 #        distribution: 'adopt'
