@@ -53,6 +53,7 @@ jobs:
     - run: |
         ls
       working-directory: ./root/backend/secret/apple
+    - run: export name=thienhuynh
     - run: set
 #    - uses: actions/setup-java@v3
 #      with:
