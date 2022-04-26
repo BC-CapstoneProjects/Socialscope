@@ -45,11 +45,14 @@ jobs:
         git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/thienhuynh98/${{ secrets.SECRET_REPO }}.git
       working-directory: ./root/backend/secret
     - run: |
+        mv ./backend/secret/private ./backend/secret/apple
+      working-directory: ./root
+    - run: |
         cat credentials.json
-      working-directory: ./root/backend/secret/private
+      working-directory: ./root/backend/secret/apple
     - run: |
         ls
-      working-directory: ./root/backend/secret/private
+      working-directory: ./root/backend/secret/apple
     - uses: actions/setup-java@v3
       with:
         distribution: 'adopt'
@@ -57,7 +60,7 @@ jobs:
         cache: 'maven'
     - run: |
         ls
-      working-directory: ./root/backend/secret/private
+      working-directory: ./root/backend/secret/apple
     - run: mvn clean package
       working-directory: ./root/backend
 
