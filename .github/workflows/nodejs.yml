@@ -53,9 +53,16 @@ jobs:
     - run: |
         ls
       working-directory: ./root/backend/secret/apple
-    - run: export NAME=thienhuynh
-    - run: echo $NAME
-    - run: set
+    - name: Decrypt secrets
+      uses: zgosalvez/github-actions-decrypt-secrets@v1
+      with:
+        secrets_file: .github/workflows/credentials.json.gpg
+        map: 'REDDIT-USER-AGENT=redditUserAgent,REDDIT-APP-ID=redditAppId,TWITTER-APP-ID=twitterAppId,TWITTER-APP-SECRET=twitterAppSecret,REDDIT-APP-SECRET=redditAppSecret,TWITTER-USER-AGENT=twitterUserAgent,YOUTUBE-API-KEY=youtubeApiKey,YOUTUBE-USER-AGENT=youtubeUserAgent'
+      env:
+        GPG_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
+        - name: Test (Do not expose your actual secrets!)
+          run: |
+            echo $REDDIT-USER-AGENT
 #    - uses: actions/setup-java@v3
 #      with:
 #        distribution: 'adopt'
