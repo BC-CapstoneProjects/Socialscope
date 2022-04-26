@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class Credentials {
 
-//	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
+	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
 
     private String redditAppId;
@@ -38,7 +38,7 @@ public class Credentials {
 //    }
 
     public Credentials() {
-        readCredentialsFromFile();
+        readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
         readGoogleCredentials(DEFAULT_CREDENTIALS_GOOGLEFILE);
     }
 
@@ -71,12 +71,15 @@ public class Credentials {
         	if (in != null)
         		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
         	else
-        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
-            if(in == null)
             {
-                in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
-                reader = new BufferedReader(new InputStreamReader(in));
+                reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
+                if(reader == null)
+                {
+                    in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
+                    reader = new BufferedReader(new InputStreamReader(in));
+                }
             }
+//                reader = new BufferedReader(new FileReader(fp));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();
