@@ -109,7 +109,7 @@ public class Credentials {
 //    }
 
     private void readCredentialsFromFile() {
-        System.out.println(System.getenv("REDDIT-USER-AGENT"));
+//        System.out.println(System.getenv("REDDIT-USER-AGENT"));
         this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
         this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
         this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
