@@ -44,16 +44,15 @@ public class Credentials {
 
     public void readGoogleCredentials(String fp) {
     	try {
-//    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
-//    		if (in == null)
-//    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
-//            if(in == null)
-//            {
-//                in = new FileInputStream("/secret/socialsentanalysis.json");
-//            }
             System.out.println("working-directory");;
             System.out.println(System.getProperty("user.dir"));
-            InputStream in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/socialsentanalysis.json"); // in jar
+    		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
+    		if (in == null)
+    			in = new FileInputStream("src/main/resources/" + fp); // not in jar
+            if(in == null)
+            {
+                in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/socialsentanalysis.json");
+            }
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
@@ -63,51 +62,55 @@ public class Credentials {
     	}
     }
     
-//    private void readCredentialsFromFile() {
-//        BufferedReader reader;
-//        try {
-//        	String currPath = new java.io.File(".").getCanonicalPath();
-//        	System.out.println(currPath);
-//        	InputStream in = getClass().getResourceAsStream("/" + fp);
-//        	if (in != null)
-//        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
-//        	else
-//        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
-////                reader = new BufferedReader(new FileReader(fp));
-//            StringBuilder sb = new StringBuilder();
-//            reader.lines().forEach((String line) -> sb.append(line));
-//            reader.close();
-//            JSONObject jo = new JSONObject(sb.toString());
-//            this.redditAppId = jo.getString("redditAppId");
-//            this.redditAppSecret = jo.getString("redditAppSecret");
-//            this.redditUserAgent = jo.getString("redditUserAgent");
-//            this.twitterAppId = jo.getString("twitterAppId");
-//            this.twitterAppSecret = jo.getString("twitterAppSecret");
-//            this.twitterUserAgent = jo.getString("twitterUserAgent");
-//            this.youtubeUserAgent = jo.getString("youtubeUserAgent");
-//            this.youtubeApiKey = jo.getString("youtubeApiKey");
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-
-    private void readCredentialsFromFile() {
-        this.redditAppId = System.getenv("redditAppId");
-        this.redditAppSecret = System.getenv("redditAppSecret");
-        this.redditUserAgent = System.getenv("redditUserAgent");
-        this.twitterAppId = System.getenv("twitterAppId");
-        this.twitterAppSecret = System.getenv("twitterAppSecret");
-        this.twitterUserAgent = System.getenv("twitterUserAgent");
-        this.youtubeUserAgent = System.getenv("youtubeUserAgent");
-        this.youtubeApiKey = System.getenv("youtubeApiKey");
+    private void readCredentialsFromFile(String fp) {
+        BufferedReader reader;
+        try {
+        	String currPath = new java.io.File(".").getCanonicalPath();
+        	System.out.println(currPath);
+        	InputStream in = getClass().getResourceAsStream("/" + fp);
+        	if (in != null)
+        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
+        	else
+        		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
+            if(in == null)
+            {
+                in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
+                reader = new BufferedReader(new InputStreamReader(in));
+            }
+            StringBuilder sb = new StringBuilder();
+            reader.lines().forEach((String line) -> sb.append(line));
+            reader.close();
+            JSONObject jo = new JSONObject(sb.toString());
+            this.redditAppId = jo.getString("redditAppId");
+            this.redditAppSecret = jo.getString("redditAppSecret");
+            this.redditUserAgent = jo.getString("redditUserAgent");
+            this.twitterAppId = jo.getString("twitterAppId");
+            this.twitterAppSecret = jo.getString("twitterAppSecret");
+            this.twitterUserAgent = jo.getString("twitterUserAgent");
+            this.youtubeUserAgent = jo.getString("youtubeUserAgent");
+            this.youtubeApiKey = jo.getString("youtubeApiKey");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
+
+//    private void readCredentialsFromFile() {
+//        this.redditAppId = System.getenv("redditAppId");
+//        this.redditAppSecret = System.getenv("redditAppSecret");
+//        this.redditUserAgent = System.getenv("redditUserAgent");
+//        this.twitterAppId = System.getenv("twitterAppId");
+//        this.twitterAppSecret = System.getenv("twitterAppSecret");
+//        this.twitterUserAgent = System.getenv("twitterUserAgent");
+//        this.youtubeUserAgent = System.getenv("youtubeUserAgent");
+//        this.youtubeApiKey = System.getenv("youtubeApiKey");
+//    }
 
     @SuppressWarnings("unused")
     private void writeCredentialsToFile(String fp) {
