@@ -61,9 +61,6 @@ jobs:
     - run: echo "twitterUserAgent=${{ secrets.TWITTERUSERAGENT }}" >> $GITHUB_ENV
     - run: echo "youtubeApiKey=${{ secrets.YOUTUBEAPIKEY }}" >> $GITHUB_ENV
     - run: echo "youtubeUserAgent=${{ secrets.YOUTUBEUSERAGENT }}" >> $GITHUB_ENV
-#    - run: export NAME=bellevue-college
-#    - run: set
-#    - run: echo $NAME
     - uses: actions/setup-java@v3
       with:
         distribution: 'adopt'
@@ -76,6 +73,9 @@ jobs:
       working-directory: ./root/backend
     - run: |
         ls
+      working-directory: ./root/backend/target
+    - run: |
+        java -jar backend-0.0.1-SNAPSHOT.jar
       working-directory: ./root/backend/target
 
 
