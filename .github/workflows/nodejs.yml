@@ -54,7 +54,13 @@ jobs:
         ls
       working-directory: ./root/backend/secret/apple
     - run: echo "redditUserAgent=${{ secrets.REDDITUSERAGENT }}" >> $GITHUB_ENV
-    - run: echo "${{ env.redditUserAgent }}"
+    - run: echo "redditAppId=${{ secrets.REDDITAPPID }}" >> $GITHUB_ENV
+    - run: echo "twitterAppId=${{ secrets.TWITTERAPPID }}" >> $GITHUB_ENV
+    - run: echo "twitterAppSecret=${{ secrets.TWITTERAPPSECRET }}" >> $GITHUB_ENV
+    - run: echo "redditAppSecret=${{ secrets.REDDITAPPSECRET }}" >> $GITHUB_ENV
+    - run: echo "twitterUserAgent=${{ secrets.TWITTERUSERAGENT }}" >> $GITHUB_ENV
+    - run: echo "youtubeApiKey=${{ secrets.YOUTUBEAPIKEY }}" >> $GITHUB_ENV
+    - run: echo "youtubeUserAgent=${{ secrets.YOUTUBEUSERAGENT }}" >> $GITHUB_ENV
 #    - run: export NAME=bellevue-college
 #    - run: set
 #    - run: echo $NAME

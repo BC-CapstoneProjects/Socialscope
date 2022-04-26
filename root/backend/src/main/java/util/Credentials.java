@@ -109,15 +109,23 @@ public class Credentials {
 //    }
 
     private void readCredentialsFromFile() {
-        System.out.println("redditUserAgent " + System.getenv("redditUserAgent"));
-        this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
-        this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
-        this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
-        this.twitterAppId = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
-        this.twitterAppSecret = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";
-        this.twitterUserAgent = "TwitterBot/1.0";
-        this.youtubeUserAgent = "SocialScope/0.1";
-        this.youtubeApiKey = "AIzaSyC4oyxeg5BaxWs2LU3hsvDngZQwX6gSj0s";
+//        System.out.println("redditUserAgent " + System.getenv("redditUserAgent"));
+//        this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
+//        this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
+//        this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
+//        this.twitterAppId = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
+//        this.twitterAppSecret = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";
+//        this.twitterUserAgent = "TwitterBot/1.0";
+//        this.youtubeUserAgent = "SocialScope/0.1";
+//        this.youtubeApiKey = "AIzaSyC4oyxeg5BaxWs2LU3hsvDngZQwX6gSj0s";
+        this.redditAppId = System.getenv("redditAppId");
+        this.redditAppSecret = System.getenv("redditAppSecret");
+        this.redditUserAgent = System.getenv("redditUserAgent");
+        this.twitterAppId = System.getenv("twitterAppId");
+        this.twitterAppSecret = System.getenv("twitterAppSecret");
+        this.twitterUserAgent = System.getenv("twitterUserAgent");
+        this.youtubeUserAgent = System.getenv("youtubeUserAgent");
+        this.youtubeApiKey = System.getenv("youtubeApiKey");
     }
 
     @SuppressWarnings("unused")
