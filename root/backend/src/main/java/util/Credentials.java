@@ -73,6 +73,7 @@ public class Credentials {
         	else
             {
                 reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
+                System.out.println("reader " + reader);
                 if(reader == null)
                 {
                     in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
