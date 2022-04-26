@@ -51,6 +51,8 @@ public class Credentials {
 //            {
 //                in = new FileInputStream("/secret/socialsentanalysis.json");
 //            }
+            System.out.println("working-directory");;
+            System.out.println(System.getProperty("user.dir"));
             InputStream in = new FileInputStream("/secret/private/socialsentanalysis.json"); // in jar
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
