@@ -58,15 +58,15 @@ jobs:
 #    - run: export NAME=bellevue-college
 #    - run: set
 #    - run: echo $NAME
-#    - uses: actions/setup-java@v3
-#      with:
-#        distribution: 'adopt'
-#        java-version: '11'
-#        cache: 'maven'
-#    - run: |
-#        ls
-#      working-directory: ./root/backend/secret/apple
-#    - run: mvn clean package
-#      working-directory: ./root/backend
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+        cache: 'maven'
+    - run: |
+        ls
+      working-directory: ./root/backend/secret/apple
+    - run: mvn clean package
+      working-directory: ./root/backend
 
 
