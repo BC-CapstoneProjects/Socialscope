@@ -54,7 +54,6 @@ jobs:
         ls
       working-directory: ./root/backend/secret/apple
     - run: export NAME=thienhuynh
-    - run: printenv NAME
     - run: set
 #    - uses: actions/setup-java@v3
 #      with:
