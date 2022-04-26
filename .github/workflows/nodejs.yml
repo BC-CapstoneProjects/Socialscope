@@ -53,17 +53,8 @@ jobs:
     - run: |
         ls
       working-directory: ./root/backend/secret/apple
-    - name: Decrypt secrets
-      uses: zgosalvez/github-actions-decrypt-secrets@v1
-      with:
-        secrets_file: .github/workflows/secrets.json.gpg
-        map: 'SECRET_PASSWORD=PASSWORD,PASSPHRASE=passphrase'
-      env:
-        GPG_PASSPHRASE: ${{ secrets.PASSWORD }}
-    - name: Test (Do not expose your actual secrets!)
-      run: |
-        echo $SECRET_PASSWORD
-        echo $PASSPHRASE
+    - run: echo "redditUserAgent=${{ secrets.REDDITUSERAGENT }}" >> $GITHUB_ENV
+    - run: echo "${{ env.redditUserAgent }}"
 #    - run: export NAME=bellevue-college
 #    - run: set
 #    - run: echo $NAME
