@@ -62,7 +62,7 @@ jobs:
         GPG_PASSPHRASE: ${{ secrets.SECRETS_PASSPHRASE }}
     - name: Test (Do not expose your actual secrets!)
       run: |
-        echo $REDDIT-USER-AGENT
+        echo $TWITTER-APP-ID
 #    - uses: actions/setup-java@v3
 #      with:
 #        distribution: 'adopt'
