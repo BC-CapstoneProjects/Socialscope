@@ -77,5 +77,8 @@ jobs:
     - run: |
         java -jar backend-0.0.1-SNAPSHOT.jar
       working-directory: ./root/backend/target
-
+    - name: Cypress run
+      uses: cypress-io/github-action@v2
+      with:
+        start: npm start port=5000
 
