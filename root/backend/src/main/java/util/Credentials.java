@@ -53,7 +53,7 @@ public class Credentials {
 //            }
             System.out.println("working-directory");;
             System.out.println(System.getProperty("user.dir"));
-            InputStream in = new FileInputStream("/secret/apple/socialsentanalysis.json"); // in jar
+            InputStream in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/socialsentanalysis.json"); // in jar
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
