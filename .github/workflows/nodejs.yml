@@ -46,10 +46,10 @@ jobs:
       working-directory: ./root/backend/secret
     - run: |
         cat credentials.json
-      working-directory: ./root/backend/secret/${{ secrets.SECRET_REPO }}
+      working-directory: ./root/backend/secret/private
     - run: |
         ls
-      working-directory: ./root/backend/secret/${{ secrets.SECRET_REPO }}
+      working-directory: ./root/backend/secret/private
     - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
       with:
