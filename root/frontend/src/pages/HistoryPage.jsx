@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+/*import React, { useState } from "react";
 import Papa from "papaparse";
 import ContentContainer from '../components/ContentContainer'
 
@@ -164,3 +164,44 @@ if(bool=true){
 
 }
 export default HistoryPage;
+*/
+
+export default class App extends React.Component {
+       handleDownloadDoc = fileName => e => {
+         // Downloads the file
+         const link = document.createElement("a");
+         link.download = `${fileName}.json`;
+         const blob = new Blob([JSON.stringify({"platform":"wewe",
+         "created_at":"asas", 
+        "post_id":"efe",
+         "lang":"th",
+        "title":"rtr",
+         "text":"dsdc", 
+        "author_id":"asa",
+        "positive_votes":3,
+         "has_embedded_media":"xzx",
+         "comment_count":9, 
+        "top_comments":"dda",
+         "sentiment_score":5,
+         "sentiment_confidence":4
+        })], { type: "json" });
+         link.href = URL.createObjectURL(blob);
+         link.click();
+         URL.revokeObjectURL(link.href);
+     
+        
+       };
+       render() {
+         return (
+           <div className="App">
+             <button onClick={this.handleDownloadDoc("resultats")}>
+               Download
+             </button>
+           </div>
+         );
+       }
+     }
+     
+     const rootElement = document.getElementById("root");
+     ReactDOM.render(<App />, rootElement);
+     
