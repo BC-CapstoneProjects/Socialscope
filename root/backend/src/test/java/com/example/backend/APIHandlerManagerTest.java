@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import util.Credentials;
+import util.AppCredentials;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ class APIHandlerManagerTest extends APIHandlerManager {
     Map<String, IApiHandler> handlers;
 
     void APIHandlerManager() {
-        Credentials cred = new Credentials();
+        AppCredentials cred = new AppCredentials();
         this.handlers = initializeApiHandlers(cred);
         System.out.println("Handlers initialized");
     }
@@ -49,7 +49,7 @@ class APIHandlerManagerTest extends APIHandlerManager {
 
     @Test
     void testReddit() {
-        Credentials cred = new Credentials();
+        AppCredentials cred = new AppCredentials();
         this.handlers = initializeApiHandlers(cred);
         List<String> namesOfHandlersInQuery = new ArrayList<>();
         namesOfHandlersInQuery.add("reddit");
@@ -57,14 +57,14 @@ class APIHandlerManagerTest extends APIHandlerManager {
         JSONObject meta = actual.getJSONObject("meta");
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
-        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
+        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getBudgetRemaining());
         assert (posts.length() == 10);
         assert (text.equals("facebook"));
     }
 
     @Test
     void testReddit1() {
-        Credentials cred = new Credentials();
+        AppCredentials cred = new AppCredentials();
         this.handlers = initializeApiHandlers(cred);
         List<String> namesOfHandlersInQuery = new ArrayList<>();
         namesOfHandlersInQuery.add("reddit");
@@ -72,7 +72,7 @@ class APIHandlerManagerTest extends APIHandlerManager {
         JSONObject meta = actual.getJSONObject("meta");
         String text = meta.getString("query");
         JSONArray posts = actual.getJSONArray("posts");
-        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getCurrentPeriodBudgetSpent());
+        System.out.println(this.handlers.get("reddit").getLimiters().get(0).getBudgetRemaining());
         assert (posts.length() == 10);
         assert (text.equals("facebook"));
     }

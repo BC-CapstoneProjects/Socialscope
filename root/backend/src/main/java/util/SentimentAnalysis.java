@@ -1,9 +1,13 @@
 package util;
 import java.util.LinkedList;
 import java.util.List;
-import util.RateLimiter;
+
 import org.json.JSONObject;
-import util.Credentials;
+import util.AppCredentials;
+import util.limiter.IRateLimiter;
+import util.limiter.LocalRateLimiter;
+import util.limiter.RedisRateLimiter;
+
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 //Imports the Google Cloud client library
 import com.google.cloud.language.v1.Document;
@@ -11,37 +15,47 @@ import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 public class SentimentAnalysis {
-	 private List<RateLimiter> limiters_per_min = new LinkedList<>();
-	 private List<RateLimiter> limiters_per_day = new LinkedList<>();
+	 private List<IRateLimiter> limiters = new LinkedList<>();
 
 	private Sentiment sentiment =null;
-	private Credentials credentials;
+	private AppCredentials credentials;
 	
-	public  SentimentAnalysis(Credentials credentials) {
-	 this.limiters_per_min.add(new RateLimiter(600, 60000));
-	 this.limiters_per_day.add(new RateLimiter(800000, 86400000));
+	public  SentimentAnalysis(AppCredentials credentials) {
+	 IRateLimiter minuteLimiter = null;
+	 IRateLimiter dayLimiter = null;
+	 try {
+		minuteLimiter = new RedisRateLimiter(600, 60000); 
+		dayLimiter = new RedisRateLimiter(800000, 86400000);
+	 }
+	 catch (RuntimeException ex) {
+		System.out.println("Local sentiment limiter fallback triggered...");
+		minuteLimiter = new LocalRateLimiter(600, 60000); 
+		dayLimiter = new LocalRateLimiter(800000, 86400000);
+	 }
+	 limiters.add(minuteLimiter);
+	 limiters.add(dayLimiter);
 	 this.credentials = credentials;
 	}
 	
-	
-	  private boolean hasRequestBudget_per_min(int amount) {
+	  private boolean hasRequestBudget(int amount) {
 	        boolean hasBudget = true;
-	        for (RateLimiter limiter : this.limiters_per_min) {
+	        for (IRateLimiter limiter : this.limiters) {
 	            if (!limiter.hasBudget(amount))
 	                hasBudget = false;
 	        }
 	        return hasBudget;
 	    }
-	  private boolean hasRequestBudget_per_day(int amount) {
-	        boolean hasBudget = true;
-	        for (RateLimiter limiter : this.limiters_per_day) {
-	            if (!limiter.hasBudget(amount))
-	                hasBudget = false;
-	        }
-	        return hasBudget;
-	    }
+	  
+	  public boolean allocateBudget(int amount) {
+		  // spend necessary budget to process a batch; return true if possible and successful
+		  if (this.hasRequestBudget(amount)) {
+			  this.limiters.forEach((limiter) -> limiter.spendBudget(amount));
+			  return true;
+		  }
+		  return false;
+	  }
 	
-	  public void requestBudget_per_min(String numberOfResults, String text) {
+	  private void requestBudget(String numberOfResults, String text) {
 	        boolean requestPassed = false;
 	        if(numberOfResults.equals(""))
 	        {
@@ -49,7 +63,7 @@ public class SentimentAnalysis {
 	        }
 	        int temp = 1 + Integer.parseInt(numberOfResults);
 	        // request a token if sufficient budget and token needed
-	        if (hasRequestBudget_per_min(temp)) {
+	        if (hasRequestBudget(temp)) {
 	            requestPassed = true;
 	            try {
 					analyzeSentimentText(text);
@@ -57,7 +71,7 @@ public class SentimentAnalysis {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	            this.limiters_per_min.forEach((limiter) -> {limiter.spendBudget(temp);});
+	            this.limiters.forEach((limiter) -> {limiter.spendBudget(temp);});
 	        }
 	        if (requestPassed)
 	            System.out.println("The Sentiment request passed");
@@ -66,31 +80,6 @@ public class SentimentAnalysis {
 	    
 	    }
 	  
-	    public void requestBudget_per_day(String numberOfResults, String text) {
-	        boolean requestPassed = false;
-	        if(numberOfResults.equals(""))
-	        {
-	            numberOfResults = "1000";
-	        }
-	        int temp = 1 + Integer.parseInt(numberOfResults);
-	        // request a token if sufficient budget and token needed
-	        if (hasRequestBudget_per_day(temp)) {
-	            requestPassed = true;
-	            try {
-					analyzeSentimentText(text);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	            this.limiters_per_day.forEach((limiter) -> {limiter.spendBudget(temp);});
-	        }
-	        if (requestPassed)
-	            System.out.println("The Sentiment reques passed");
-	        else
-	            System.out.println("The Sentiment reques failed");
-	    
-	    }
-
 	  
 	/** Identifies the sentiment in the string {@code text}. */
     public  Sentiment analyzeSentimentText(String text) throws Exception {
@@ -106,7 +95,7 @@ public class SentimentAnalysis {
      
     }
     
-    public void sentiment( JSONObject obj, String text, String title) {
+    public JSONObject sentiment( JSONObject obj, String text, String title) {
     	
     try {
     
@@ -134,6 +123,7 @@ public class SentimentAnalysis {
     	obj.put("sentiment_score",  "Neutral");
     	obj.put("sentiment_confidence", 0);
     }
+    return obj;
 	
      }
     

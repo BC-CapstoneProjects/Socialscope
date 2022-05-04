@@ -3,12 +3,16 @@ package handlers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.lettuce.core.RedisException;
 import util.HttpUtils;
-import util.RateLimiter;
 import util.SentimentAnalysis;
 import util.TextEncoder;
 import util.TimeTranslator;
 import util.Token;
+import util.limiter.IRateLimiter;
+import util.limiter.LocalRateLimiter;
+import util.limiter.RedisRateLimiter;
 import util.SentimentAnalysis;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -18,8 +22,8 @@ public class TwitterApiHandler implements IApiHandler {
     private Map<String, String> credentials;
 
     private Token token;
-    private List<RateLimiter> limiters;
-    public List<RateLimiter> getLimiters() {
+    private List<IRateLimiter> limiters;
+    public List<IRateLimiter> getLimiters() {
         return limiters;
     }
 
@@ -30,11 +34,21 @@ public class TwitterApiHandler implements IApiHandler {
         credentials.put("user_agent", user);
         this.token = null;
         this.limiters = new LinkedList<>();
-        this.limiters.add(new RateLimiter(450, 900000));
+        IRateLimiter primaryLimiter = null;
+        try { 
+        	primaryLimiter = new RedisRateLimiter(450, 900000);
+        }
+        catch (RedisException ex) { 
+        	System.out.println("Local twitter limiter fallback triggered...");
+        	primaryLimiter = new LocalRateLimiter(450, 900000);
+        }
+        if (primaryLimiter != null) {
+        	this.limiters.add(primaryLimiter);
+        }
     }
     private boolean hasRequestBudget(int amount) {
         boolean hasBudget = true;
-        for (RateLimiter limiter : this.limiters) {
+        for (IRateLimiter limiter : this.limiters) {
             if (!limiter.hasBudget(amount))
                 hasBudget = false;
         }
@@ -104,10 +118,10 @@ public class TwitterApiHandler implements IApiHandler {
         {
             max = "10";
         }
-        if (hasRequestBudget(Integer.parseInt(max)) && (this.hasValidToken())) {
+        if (hasRequestBudget(Integer.parseInt(max) + 1) && (this.hasValidToken())) {
             out = makeQueryRequest(q, max, start, end);
-            for (RateLimiter limiter : this.limiters) {
-            	limiter.spendBudget(Integer.parseInt(max));
+            for (IRateLimiter limiter : this.limiters) {
+            	limiter.spendBudget(Integer.parseInt(max) + 1);  // initial search + one detail lookup per tweet
             }
         }
         if (out != null) {
@@ -115,7 +129,10 @@ public class TwitterApiHandler implements IApiHandler {
             return out;
         }
         else {
-            System.out.println("Twitter access token request failed");
+            System.out.println("Twitter query failed");
+            System.out.println("max: " + maxResults);
+            System.out.println("has token: " + Boolean.toString(this.hasValidToken()));
+            System.out.println("has budget: " + Boolean.toString(this.hasRequestBudget(Integer.parseInt(max) + 1)));
             return null;
         }
     }
