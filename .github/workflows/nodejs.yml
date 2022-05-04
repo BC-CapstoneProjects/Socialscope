@@ -74,9 +74,9 @@ jobs:
     - run: |
         ls
       working-directory: ./root/backend/target
-#    - name: Upload JAR
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: artifact
-#        path: target/backend-0.0.1-SNAPSHOT.jar
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+      working-directory: ./root/backend/target/backend-0.0.1-SNAPSHOT.jar
 
