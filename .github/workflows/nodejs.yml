@@ -98,4 +98,5 @@ jobs:
           use_existing_version_if_available: false
           application_name: SocialScope-BellevueCollege
           environment_name: socialscope-bellevuecollege-env
+          version_label: ${{ github.SHA }}
           region: us-east-1
