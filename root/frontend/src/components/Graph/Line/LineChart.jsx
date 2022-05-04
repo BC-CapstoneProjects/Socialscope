@@ -36,7 +36,7 @@ const LineChart = (props) => {
     <ChartContainer width={props.structure.width + 2* props.structure.margin} height={props.structure.height + 2*props.structure.margin}>
       <div className='chart-legend' ref={lref}/>
       <div className='chart-image'>
-        <LineSvg data={props.data} lref={lref} structure={props.structure}/>
+        <LineSvg data={props.data} dtype={props.dtype} lref={lref} structure={props.structure}/>
       </div>
     </ChartContainer>
   );

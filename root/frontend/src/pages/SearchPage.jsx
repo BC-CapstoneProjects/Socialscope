@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-
+import HistoryPage from './HistoryPage';
 import ContentContainer from '../components/ContentContainer'
 import InputButton from '../components/Input/InputButton'
 import InputField from '../components/Input/InputField';
@@ -21,7 +21,7 @@ const SearchBar = styled(InputContainer)`
   min-width: 210px;
 
   @media screen and (max-width: 450px) {
-    margin: 1.5rem auto 1.5rem auto;
+    margin: 1rem auto 1rem auto;
   }
 `
 
@@ -61,6 +61,7 @@ const LaunchButtonContainer = styled.div`
 
 const ProgressBarContainer = styled.div`
   margin: 4rem 0 1rem 0;
+  visibility: ${props => props.show ? 'visible' : 'hidden'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,11 +78,24 @@ const ProgressBar = styled.div`
   margin: 0 1rem 0 1rem;
   flex: 4;
   display: block;
-  height: 1rem;
+  height: 1.2rem;
   width: 100%;
+  border-radius: 5px;
   max-width: 500px;
   min-width: 200px;
   background-color: ${props => props.theme.colors.secondary};
+`
+
+const ProgressBarFill = styled.div`
+  margin: none;
+  padding: none;
+  text-align: right;
+  font-size: 1rem;
+  height: 100%;
+  width: ${props => props.progress}%;
+  border-radius: 5px;
+  transition: width ${props => props.step}s;
+  background-color: ${props => props.theme.colors.outline};
 `
 
 const SearchPage = (props) => {
@@ -93,6 +107,15 @@ const SearchPage = (props) => {
   const [youtubeCheck, setYoutubeCheck] = useState(false);
   const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
   const [endDate, setEndDate] = useState("");
+  const [loadState, setLoadState] = useState({
+    display: false, 
+    loading: false, 
+    finish: false,
+    value: 0, 
+    target: 0, 
+    step: 0,
+    after: undefined
+  });
 
   const {
     result,
@@ -101,22 +124,121 @@ const SearchPage = (props) => {
 
   const navigate = useNavigate();
 
-  function searchRedirect(e){
+  function triggerLoad(duration, target, steps=10, promise=(new Promise)) {
+    while (loadState.loading) {
+      console.log('already loading');
+      setTimeout(() => {}, 500)
+    }
+    setLoadState({ 
+      ...loadState,
+      display: true,
+      loading: true,
+      finish: false,
+      target: target,
+      step: ((target - loadState.value) / steps),
+      trans: duration / steps,
+      after: promise
+    })
+  }
+
+  function finishLoad() {
+    setLoadState({
+      ...loadState,
+      finish: true
+    })
+  }
+
+  async function searchRedirect(e){
     e.preventDefault();
-    fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
+    const p = fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
+        .then(res => {
+          res.posts.forEach(post => {
+            try {
+            post.title = decodeURIComponent(escape(atob(post.title)));
+            } catch (e) {
+              console.log(post.title);
+              console.log(e);
+            }
+            try {
+            post.text = decodeURIComponent(escape(atob(post.text)));
+            } catch (e) {
+              console.log(post.text);
+              console.log(e);
+            }
+          })
+          return res;
+        })
         .then(
-            (result) => {
-              setResult(result);
-              sessionStorage.setItem('result', result);
-              console.log(result);
+            res => {
+              setResult(res);
+              sessionStorage.setItem('result', JSON.stringify(res));
+              return res
             },
-            (error) => {
+            error => {
               alert(error);
+              const resultsTest = {"meta":{"query":"bellevue"},"posts":[{"comment_count":359,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1644937612,"title":"Man attacks Bellevue Applebee's employee with meat cleaver over COVID-19 vaccine proof","platform":"reddit","sentiment_confidence":0,"post_id":"t3_st4zxq","top_comments":[],"positive_votes":488,"text":"","poster_id":"t2_3l1oj988","lang":""},{"comment_count":219,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1644513420,"title":"Bellevue passes Manhattan in housing prices","platform":"reddit","sentiment_confidence":0,"post_id":"t3_spbnmg","top_comments":[],"positive_votes":462,"text":"","poster_id":"t2_lmcf2","lang":""},{"comment_count":163,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1643682209,"title":"Sticker shock in the Seattle area: Bellevue home sells for nearly $1M over asking price","platform":"reddit","sentiment_confidence":0,"post_id":"t3_shjgvd","top_comments":[],"positive_votes":384,"text":"","poster_id":"t2_53gdj","lang":""},{"comment_count":87,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1643788339,"title":"Bellevue University Teacher Quits Job","platform":"reddit","sentiment_confidence":0,"post_id":"t3_siiyq9","top_comments":[],"positive_votes":223,"text":"","poster_id":"t2_wmpuiwi","lang":""},{"comment_count":53,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1643820089,"title":"Woman charged with threatening Bellevue gas station employee with gun after she refused to wear mask","platform":"reddit","sentiment_confidence":0,"post_id":"t3_sit70u","top_comments":[],"positive_votes":194,"text":"","poster_id":"t2_316zl","lang":""},{"comment_count":51,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1644719987,"title":"Shiro Kashiba Plans a New Sushi Restaurant in Bellevue","platform":"reddit","sentiment_confidence":0,"post_id":"t3_sr81aw","top_comments":[],"positive_votes":60,"text":"","poster_id":"t2_3gtb4j32","lang":""},{"comment_count":69,"sentiment_score":"Neutral","has_embedded_media":true,"created_at":1643591931,"title":"Mercer Island and Bellevue Squander Housing Opportunities Near East Link","platform":"reddit","sentiment_confidence":0,"post_id":"t3_sgofa1","top_comments":[],"positive_votes":147,"text":"","poster_id":"t2_76kvzp9g","lang":""},{"comment_count":23,"sentiment_score":"Neutral","has_embedded_media":false,"created_at":1645574654,"title":"I was born in Newport, and grew up on Bellevue Avenue. AMA.","platform":"reddit","sentiment_confidence":0,"post_id":"t3_sz2l8w","top_comments":[],"positive_votes":43,"text":"I\u2019ve been waiting for this show for quite some time, Newport gilded age is my favorite period in history. My dad had a Newport Preservation Society membership and I would take tours of the mansions almost weekly in the summer. We also used to attend events at the mansions for the Newport Classical Music series that is done every year. I even went to a gala at the age of 11 that was hosted at Rosecliff. I would love to answer questions about my hometown, if anyone is interested. I can try to find some old photos, as well. My family comes from a long line of Rhode Islanders, dating back to Mary Dyer (my great many times over grandmother) and the founding of Rhode Island by Roger Williams.","poster_id":"t2_58xlgs78","lang":""},{"comment_count":8,"sentiment_score":"Neutral","has_embedded_media":false,"created_at":1645378341,"title":"City Center Bellevue tower, Bellevue, WA, 1986","platform":"reddit","sentiment_confidence":0,"post_id":"t3_sx6h4h","top_comments":[],"positive_votes":347,"text":"","poster_id":"t2_h78sti7s","lang":""},{"comment_count":9,"sentiment_score":"Neutral","has_embedded_media":false,"created_at":1645730377,"title":"Inside the Bellevue Hotel","platform":"reddit","sentiment_confidence":0,"post_id":"t3_t0izoz","top_comments":[],"positive_votes":171,"text":"","poster_id":"t2_5ie097x3","lang":""}]}
+              setResult(resultsTest);
+              sessionStorage.setItem('result', JSON.stringify(resultsTest));
             }
         )
-        navigate('../results/preview', {result: result});
+        .then(res => {
+          //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
+          }
+        );
+    const loadDuration = 3 + (Math.round(1.5 * (parseInt(max) || 0)));
+    triggerLoad(loadDuration, 100, 2*loadDuration, p);
   }
+
+  useEffect(() => {
+    if (loadState.loading) {
+      const interval = setInterval(() => {
+        let newState = {...loadState};
+        let updateState = false;
+        if (loadState.value >= 100) {
+          setLoadState({...loadState, loading: false, value: 100});
+        }
+        else if (loadState.finish) {
+          newState={
+            ...newState,
+            finish: false,
+            value: 100
+          };
+          console.log("load end")
+          updateState = true;
+        }
+        else if (loadState.loading && loadState.value >= loadState.target) {
+          newState = {
+            ...newState,
+            loading: false,
+            target: undefined,
+            step: undefined
+          };
+          updateState = true;
+        }
+        else if (loadState.loading) {
+          const initialProgress = loadState.value;
+          const newValue = (initialProgress + loadState.step) > 100 ? 100: initialProgress + loadState.step;
+          newState = {
+            ...newState,
+            value: newValue
+          };
+          console.log("load proceed");
+          updateState = true;
+        }
+        if (updateState) {
+          console.log(newState);
+          setLoadState(newState);
+        }
+      }, loadState.trans * 1000)
+      return () => clearInterval(interval);
+    }
+    else if (loadState.value >= 100) {
+      loadState.after.then(
+        navigate('../results/preview')
+      );
+    }
+  }, [loadState])
 
   return (
     <ContentContainer>
@@ -129,9 +251,11 @@ const SearchPage = (props) => {
             type='text'
             value={keyword}
             setValue={setKeyword}
-            placeholder='Key word or phrase'/>
+            placeholder='Key word or phrase'/>  
       </SearchBar>
-
+  
+  
+ 
       <FilterContainerOuter>
 
         <h3>
@@ -201,7 +325,9 @@ const SearchPage = (props) => {
         </FilterContainerInner>
         
         <ResetButtonContainer>
-          <InputButton type='secondary' onClick={() => {console.log('reset triggered')}}>
+          <InputButton type='secondary' onClick={() => {
+              console.log('reset triggered')
+            }}>
             Reset Filters
           </InputButton>
         </ResetButtonContainer>
@@ -214,11 +340,23 @@ const SearchPage = (props) => {
         </InputButton>
       </LaunchButtonContainer>
 
-      <ProgressBarContainer>
+      <ProgressBarContainer show={loadState.display ? 1 : 0}>
         <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
-        <ProgressBar>progress bar placeholder</ProgressBar>
+        <ProgressBar>
+          <ProgressBarFill progress={Math.round(loadState.value)} 
+            step={loadState.trans && loadState.trans * 2}>
+              {Math.round(loadState.value) + '%'}
+            </ProgressBarFill>
+        </ProgressBar>
         <ProgressBarMarginSpacer>
-          <InputButton type='tertiary' onClick={() => {console.log('cancel triggered')}}>
+          <InputButton type='tertiary' onClick={() => {
+            console.log('cancel triggered');
+            setLoadState({
+              ...loadState,
+              loading: false,
+              value: 0,
+            });
+          }}>
             Cancel
           </InputButton>
         </ProgressBarMarginSpacer>

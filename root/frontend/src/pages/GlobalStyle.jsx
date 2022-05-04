@@ -2,8 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalTheme = {
     colors: {
-      "primary": "#C4C4C4",
-      "secondary": "#D6D6D6",
+      "primary": "#D6D6D6",
+      "secondary": "#E7E7E7",
       "background": "#FFFFFF",
       "outline": "#6D6D6D"
     },
@@ -33,8 +33,17 @@ body {
 }
 
 a {
-  color: unset;
   text-decoration: none;
+  color: #000000;
+
+  &:hover {
+    color: #000099 !important;
+  }
+
+  &:visited {
+    color: #000000;
+  }
+
 }
 
 img {

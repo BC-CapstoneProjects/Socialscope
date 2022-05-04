@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import util.Credentials;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +29,14 @@ public class APIController {
     @CrossOrigin
     @GetMapping("/api/")
     public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
-        System.out.println("Executing search...");
+    	System.out.println("Executing search...");
         List<String> namesOfHandlersInQuery = buildHandlerNames(twitterChoose, redditChoose, youtubeChoose);
-        JSONObject results = manager.executeSearch(namesOfHandlersInQuery, keyword, maxResults, start, end);
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("queryText", keyword);
+        queryParams.put("maxResults", maxResults);
+        queryParams.put("start", start);
+        queryParams.put("end", end);
+        JSONObject results = manager.executeSearch(namesOfHandlersInQuery, queryParams);
         System.out.println(results.toString());
         return results.toMap();
     }

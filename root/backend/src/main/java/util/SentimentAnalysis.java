@@ -110,7 +110,7 @@ public class SentimentAnalysis {
     	
     try {
     
-    if(text !="") {
+    if(!text.equals("")) {
         sentiment= analyzeSentimentText(text);
         if(sentiment.getScore()<=-0.1) {
         	 obj.put("sentiment_score",  "Negative");  	

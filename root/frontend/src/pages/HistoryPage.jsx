@@ -1,7 +1,7 @@
-
 /*import React, { useState } from "react";
 import Papa from "papaparse";
 import ContentContainer from '../components/ContentContainer'
+import ReactDOM from "react-dom";
 
 const HistoryPage = () => {
 
@@ -58,8 +58,8 @@ return (
     onChange={handleChange} />
       {filename.map((file) => ( 
         <p key={file.name}>
-         {fileExtension = file.name.split('.').pop()}
-         { Selectfunction( fileExtension, jsonData, tableRows, values,uploadFile)}
+        
+         { Selectfunction( fileExtension= file.name.split('.').pop(), jsonData, tableRows, values,uploadFile)}
         </p>
       ))}
          
@@ -134,7 +134,7 @@ if(objKeys.length === required.length  && JSON.stringify( objKeys)===JSON.string
  }else{return objKeys}
 }
 
-function generateCsvData(tableRows, values)
+function generateCsvData(tableRows, values,uploadFile)
 {
   const required = ["platform", "created_at", "post_id", "lang","title", "text", "author_id","positive_votes", "has_embedded_media", "comment_count", "top_comments", "sentiment_score", "sentiment_confidence"];
   const requiredval = ["platform", "created_at", "post_id", "lang","title", "text", "author_id",0, "has_embedded_media", 0, "kj", 0, 0];
@@ -154,19 +154,30 @@ if(bool=true){
       {
           if(typeof values[i]!== typeof requiredval[j])
           {
-            return false.toString()
+            return "Please check the type of the values"
           }
           i++
       }
     }
-    return "yes"
+    window.localStorage.setItem("File", JSON.stringify(uploadFile));
+
+    return "CSV files uploaded"
   }else{return "key error"}
 
 }
 export default HistoryPage;
+
 */
 
-export default class App extends React.Component {
+
+
+
+
+
+
+   
+     
+    /* export default class App extends React.Component {
        handleDownloadDoc = fileName => e => {
          // Downloads the file
          const link = document.createElement("a");
@@ -204,4 +215,195 @@ export default class App extends React.Component {
      
      const rootElement = document.getElementById("root");
      ReactDOM.render(<App />, rootElement);
-     
+     */
+ /*import createHistory from "history/createBrowserHistory";
+
+const history = createHistory();
+
+export default class Page extends React.Component {
+  state = {
+    value: "",
+    query: "",
+    data: ["foo", "bar", "test"],
+    filteredData: []
+  };
+
+  componentDidMount() {
+    this.setQuery();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.query !== this.props.match.params.query) {
+      this.setQuery();
+    }
+  }
+
+  setQuery = () => {
+    const { query = "" } = this.props.match.params;
+    const filteredData = this.state.data.filter(element =>
+      element.toLowerCase().includes(query.toLowerCase())
+    );
+    this.setState({ value: query, query, filteredData });
+  };
+
+  onChange = event => {
+    this.setState({ value: event.target.value });
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    history.push(`/${this.state.value}`);
+  };
+
+  render() {
+    const { value, filteredData } = this.state;
+
+    return (
+      <div>
+        <form onSubmit={this.onSubmit}>
+          <input value={value} onChange={this.onChange} />
+          <input type="submit" value="Search" />
+          {filteredData.map(element => <div key={element}> {element} </div>)}
+        </form>
+      </div>
+    );
+  }
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <Router history={history}>
+        <Switch>
+          <Route path="/:query?" component={Page} />
+        </Switch>
+      </Router>
+    );
+  }
+}
+  */   
+/*import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate 
+} from "react-router-dom";
+
+const Foo = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <button onClick={navigate.goBack}>Back</button>
+      <p>foo</p>
+    </div>
+  );
+};
+
+const Bar = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <button onClick={navigate.goBack}>Back</button>
+      <p>bar</p>
+    </div>
+  );
+};
+
+export default function App() {
+  return (
+    <Router>
+      <div>
+        <ul>
+          <li>
+            <Link to="/foo">foo</Link>
+          </li>
+          <li>
+            <Link to="/bar">bar</Link>
+          </li>
+        </ul>
+
+        <Routes>
+          <Route path="/foo" children={<Foo />} />
+          <Route path="/bar" children={<Bar />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}*/
+
+/*import React from 'react';
+import SearchPage from './SearchPage';
+import {useState, useEffect} from 'react';
+
+const ObjectState= () => {
+    const [HistoryData, SetHistoryData] =  useState([]);
+
+    const HistorySet = () => {
+      SetHistoryData((prevState) => {
+           //[...theArray, `Entry ${theArray.length}`];
+            const data = {
+                ...prevState, 
+                Query: "query",
+                Time: Date().toLocaleString() ,
+                Select:'select'
+            }
+            return HistoryData
+        });
+    }
+
+    return(
+        <React.Fragment>
+            <button onClick= {HistorySet}>
+                Store Object
+            </button>
+            {HistoryData.Query} {HistoryData.Time} {HistoryData.Select} 
+        </React.Fragment>
+    )
+}
+
+export default ObjectState;
+*/
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+ //import SearchPage from './SearchPage';
+ import PreviewPage from './PreviewPage';
+ const HistoryPage = (props) => {
+  const [HistoryData, SetHistoryData] =  useState([]);
+  const navigate = useNavigate();
+   
+     const table=[]
+     const data = {
+      Query: <>{props.keywork}</>,
+      Time: Date().toLocaleString(),
+      Results: <>{props.result}</>
+  }
+    table.push(data);
+
+    const someEventHandler = event => {
+      navigate('../results/preview');
+       <PreviewPage result={table.Results}/>
+    };
+  return (
+    <div>
+    <>{props.message}</>
+    {table.map(({ Query, Time}) => (
+        <p key={Query}> 
+        {Query}  
+        {Time}  
+        { <button
+          onClick={() => someEventHandler} >
+          Select
+       </button>} 
+       </p>
+      ))}
+      
+    </div>
+  );
+}
+
+
+export default HistoryPage;
