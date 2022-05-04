@@ -19,7 +19,8 @@ import handlers.IApiHandler;
 import handlers.RedditApiHandler;
 import handlers.TwitterApiHandler;
 import handlers.YoutubeApiHandler;
-import util.Credentials;
+import io.lettuce.core.RedisClient;
+import util.AppCredentials;
 import util.SentimentAnalysis;
 import util.TextEncoder;
 
@@ -34,7 +35,7 @@ public class APIHandlerManager {
 	private ThreadPoolTaskExecutor taskExecutor;
 	
 	public APIHandlerManager() {
-		Credentials cred = new Credentials();
+		AppCredentials cred = new AppCredentials();
 		this.handlers = initializeApiHandlers(cred);
 		this.sentimentAnalysis = new SentimentAnalysis(cred);
 		System.out.println("Handlers initialized");
@@ -45,7 +46,7 @@ public class APIHandlerManager {
 		this.taskExecutor.initialize();
 	}
 	
-	public Map<String, IApiHandler> initializeApiHandlers(Credentials cred) {
+	public Map<String, IApiHandler> initializeApiHandlers(AppCredentials cred) {
 		Map<String, IApiHandler> handlerMap = new HashMap<>();
 		handlerMap.put("twitter", new TwitterApiHandler(cred.getTwitterAppId(), cred.getTwitterAppSecret(), cred.getTwitterAppUserAgent()));
 		handlerMap.put("youtube", new YoutubeApiHandler(cred.getYoutubeApiKey(), cred.getYoutubeAppUserAgent()));
@@ -53,7 +54,7 @@ public class APIHandlerManager {
 		return handlerMap;
 	}
 	
-	private static JSONObject attemptHandlerRequest(IApiHandler handler, Map<String, String> params, int maxRetries) {
+	private JSONObject attemptHandlerRequest(IApiHandler handler, Map<String, String> params, int maxRetries) {
 		int counter = 0;
 		JSONObject resultObject = null;
 		while (resultObject == null && counter < MAX_REQUEST_RETRIES) {
@@ -66,6 +67,21 @@ public class APIHandlerManager {
 		if (resultObject == null)
 			System.out.println("Null response object");
 		return resultObject;
+	}
+	
+	private JSONArray attemptSentimentAnalysis(List<JSONObject> posts) {
+		JSONArray processedPosts = new JSONArray();
+		if (this.sentimentAnalysis.allocateBudget(posts.size())) { // this is an antipattern with our system, but cannot be avoided without redoing the entire sentiment class, which I would do if there was time.
+			for (JSONObject post : posts) {
+				String postTitle = TextEncoder.base64decodeUTF8(post.getString("title"));
+				String postText = TextEncoder.base64decodeUTF8(post.getString("text"));
+				processedPosts.put(this.sentimentAnalysis.sentiment(post, postText, postTitle));
+			}
+		}
+		else {
+			processedPosts.putAll(posts);
+		}
+		return processedPosts; //TODO: temp
 	}
 	
 	public JSONObject executeSearch(List<String> namesOfHandlersInQuery, String queryText, String maxResults, String start, String end) {
@@ -91,13 +107,14 @@ public class APIHandlerManager {
 			// get posts
 			for (Map.Entry<String, IApiHandler> handler : this.handlers.entrySet()) {
 				if (namesOfHandlersInQuery.contains(handler.getKey())) {
-					resultObjectFutures.add(this.taskExecutor.submit(() -> attemptHandlerRequest(handler.getValue(), splitQueryParams, MAX_REQUEST_RETRIES)));
+					resultObjectFutures.add(this.taskExecutor.submit(() -> this.attemptHandlerRequest(handler.getValue(), splitQueryParams, MAX_REQUEST_RETRIES)));
 				}
 			}
 			// wait for posts to be retrieved and aggregate to single array
 			JSONArray aggregatePosts = new JSONArray();
 			for(Future<JSONObject> resultObjectFuture : resultObjectFutures) {
-				JSONObject resultPosts = resultObjectFuture.get();//.getJSONArray("posts");
+				JSONObject resultPosts = resultObjectFuture.get();
+				System.out.println("results retrieved!");
 				System.out.println(resultPosts.toString());
 				aggregatePosts.putAll(resultPosts.getJSONArray("posts"));
 			}
@@ -132,14 +149,49 @@ public class APIHandlerManager {
 	
 	public JSONArray processPosts(JSONArray posts) {
 		System.out.println("Retrieving sentiment...");
-		for (int i = 0; i < posts.length(); i++) {
-			JSONObject post = posts.getJSONObject(i);
-			String postTitle = TextEncoder.base64decodeUTF8(post.getString("title"));
-			String postText = TextEncoder.base64decodeUTF8(post.getString("text"));
-			sentimentAnalysis.sentiment(post, postText, postTitle);
-			System.out.println("Progress: " + Float.valueOf(i/((float)posts.length())));
+		JSONArray processedPosts = new JSONArray();
+		try {
+			int postIndex = 0;
+			int processingBatchSize = Math.max(posts.length() / 5, 5);
+			List<Future<JSONArray>> processedPostFutures = new ArrayList<>();
+			for (; postIndex + processingBatchSize <= posts.length(); postIndex += processingBatchSize) {  // divide posts into equal batches of size "step"
+				List<JSONObject> postBatch = new ArrayList<>();
+				for (int i = postIndex; i < postIndex + processingBatchSize; i++) {
+					postBatch.add(posts.getJSONObject(i));
+				}
+				processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(postBatch)));
+				System.out.println("Progress: " + Float.valueOf(postIndex / ((float)posts.length())));
+			}
+			if (postIndex < posts.length()) {  // fenceposting for remainder posts after dividing as many as possible into equal batches
+				List<JSONObject> finalBatch = new ArrayList<>();
+				for (int i = postIndex; i < posts.length(); i++) {
+					finalBatch.add(posts.getJSONObject(i));
+				}
+				processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(finalBatch)));
+			}
+			for (Future<JSONArray> processedPostFuture : processedPostFutures) {
+				processedPosts.putAll(processedPostFuture.get());
+			}
+		}
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if (processedPosts.length() > posts.length()) {
+				throw new RuntimeException("Error processing post sentiment: output size greater than input size");
+			}
+			else if (processedPosts.length() < posts.length()) {
+				for (int i = processedPosts.length(); i < posts.length(); i++) {
+					processedPosts.put(posts.get(i));
+				}
+			}
 		}
 		System.out.println("Sentiment retrieval complete");
-		return posts;
+		return processedPosts;
 	}
 }

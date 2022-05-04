@@ -9,13 +9,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.LanguageServiceSettings;
+import com.google.common.collect.ImmutableSet;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Credentials {
+public class AppCredentials {
 
 	private static final String DEFAULT_CREDENTIALS_FILE = "private/credentials.json";
     private static final String DEFAULT_CREDENTIALS_GOOGLEFILE ="private/socialsentanalysis.json";
@@ -32,7 +36,7 @@ public class Credentials {
     
     private LanguageServiceSettings googleLanguageServiceSettings;
 
-    public Credentials() {
+    public AppCredentials() {
         readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
         readGoogleCredentials(DEFAULT_CREDENTIALS_GOOGLEFILE);
     }
@@ -42,7 +46,6 @@ public class Credentials {
     		InputStream in = getClass().getResourceAsStream("/" + fp); // in jar
     		if (in == null) 
     			in = new FileInputStream("src/main/resources/" + fp); // not in jar
-    		
     		this.googleLanguageServiceSettings =
     			LanguageServiceSettings.newBuilder()
                 	.setCredentialsProvider(FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(in)))
