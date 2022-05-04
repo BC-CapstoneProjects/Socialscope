@@ -18,9 +18,9 @@ jobs:
       matrix:
         node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    permissions:
-      id-token: write
-      contents: read
+#    permissions:
+#      id-token: write
+#      contents: read
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -95,7 +95,8 @@ jobs:
       run: aws s3 cp backend-0.0.1-SNAPSHOT.jar s3://thienhuynh-bucket/
     - name: Create new ElasticBeanstalk Application Version
       run: |
-        aws elasticbeanstalk create-application --application-name MyApp --description "my application"
+        aws elasticbeanstalk create-application-version \
+        --application-name MyAwesomeApp \
 #
 #    - name: Deploy new ElasticBeanstalk Application Version
 #      run: aws elasticbeanstalk update-environment --environment-name Myawesomeapp-env-1 --version-label "ver-${{ github.sha }}"
