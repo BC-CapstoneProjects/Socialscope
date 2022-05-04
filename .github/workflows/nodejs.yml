@@ -91,6 +91,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::356271724309:role/thienhuynhCICD
           aws-region: us-east-1
+          role-session-name: MySessionName
 
 #    - name: Configure AWS Credentials
 #      uses: aws-actions/configure-aws-credentials@v1
