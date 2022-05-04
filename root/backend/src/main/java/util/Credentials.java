@@ -1,14 +1,11 @@
 package util;
 
-import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.LanguageServiceSettings;
@@ -31,11 +28,6 @@ public class Credentials {
     private String youtubeApiKey;  // private
     
     private LanguageServiceSettings googleLanguageServiceSettings;
-
-//    public Credentials() {
-//        readCredentialsFromFile(DEFAULT_CREDENTIALS_FILE);
-//        readGoogleCredentials(DEFAULT_CREDENTIALS_GOOGLEFILE);
-//    }
 
     public Credentials() {
         readCredentialsFromFile();
@@ -61,63 +53,7 @@ public class Credentials {
     		e.printStackTrace();
     	}
     }
-    
-//    private void readCredentialsFromFile(String fp) {
-//        BufferedReader reader;
-//        try {
-//        	String currPath = new java.io.File(".").getCanonicalPath();
-//        	System.out.println(currPath);
-//        	InputStream in = getClass().getResourceAsStream("/" + fp);
-////        	if (in != null)
-////        		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar
-////        	else
-////            {
-////                reader = new BufferedReader(new FileReader("src/main/resources/" + fp));
-////            }
-////                reader = new BufferedReader(new FileReader(fp));
-//            if (in == null)
-//            {
-//                in = new FileInputStream("src/main/resources/" + fp);
-//            }
-//            if(in == null)
-//            {
-//                in = new FileInputStream("/home/runner/work/tests/tests/root/backend/secret/apple/credentials.json");
-//            }
-//            reader = new BufferedReader(new InputStreamReader(in));
-//            StringBuilder sb = new StringBuilder();
-//            reader.lines().forEach((String line) -> sb.append(line));
-//            reader.close();
-//            JSONObject jo = new JSONObject(sb.toString());
-//            this.redditAppId = jo.getString("redditAppId");
-//            this.redditAppSecret = jo.getString("redditAppSecret");
-//            this.redditUserAgent = jo.getString("redditUserAgent");
-//            this.twitterAppId = jo.getString("twitterAppId");
-//            this.twitterAppSecret = jo.getString("twitterAppSecret");
-//            this.twitterUserAgent = jo.getString("twitterUserAgent");
-//            this.youtubeUserAgent = jo.getString("youtubeUserAgent");
-//            this.youtubeApiKey = jo.getString("youtubeApiKey");
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-
     private void readCredentialsFromFile() {
-//        System.out.println("redditUserAgent " + System.getenv("redditUserAgent"));
-//        this.redditAppId = "AV79bHKhGrsMuZgmoL2chw";
-//        this.redditAppSecret = "3eYG48zgNaVKoTWJcf3KTfVBin1GNQ";
-//        this.redditUserAgent = "SocialScope/0.1 by u/SocialScopeBot";
-//        this.twitterAppId = "eIRfrSsJ0OFDmxH1NVkqXb8oV";
-//        this.twitterAppSecret = "T3HMN5Xxz3sAM1d3iyVgaARdmfsPnZVq6f4SVGG5ixunlG0AFo";
-//        this.twitterUserAgent = "TwitterBot/1.0";
-//        this.youtubeUserAgent = "SocialScope/0.1";
-//        this.youtubeApiKey = "AIzaSyC4oyxeg5BaxWs2LU3hsvDngZQwX6gSj0s";
         this.redditAppId = System.getenv("redditAppId");
         this.redditAppSecret = System.getenv("redditAppSecret");
         this.redditUserAgent = System.getenv("redditUserAgent");
