@@ -95,9 +95,6 @@ jobs:
       run: aws s3 cp backend-0.0.1-SNAPSHOT.jar s3://thienhuynh-bucket/
     - name: Create new ElasticBeanstalk Application Version
       run: aws elasticbeanstalk create-application --application-name MyApp --description "my application"
-#        --source-bundle S3Bucket="thienhuynh-bucket",S3Key="backend-0.0.1-SNAPSHOT.jar" \
-#        --version-label "ver-${{ github.sha }}" \
-#        --description "commit-sha-${{ github.sha }}"
 #
 #    - name: Deploy new ElasticBeanstalk Application Version
 #      run: aws elasticbeanstalk update-environment --environment-name Myawesomeapp-env-1 --version-label "ver-${{ github.sha }}"
