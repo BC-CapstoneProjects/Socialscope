@@ -79,31 +79,29 @@ jobs:
       with:
         name: artifact
         path: ./root/backend/target/backend-0.0.1-SNAPSHOT.jar
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Download JAR
-        uses: actions/download-artifact@v2
-        with:
-          name: artifact
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"
+    - uses: actions/checkout@v2
+    - name: Download JAR
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: "us-east-1"
 
-      - name: Upload package to S3 bucket
-        run: aws s3 cp backend-0.0.1-SNAPSHOT.jar s3://thienhuynh-bucket/
+    - name: Upload package to S3 bucket
+      run: aws s3 cp backend-0.0.1-SNAPSHOT.jar s3://thienhuynh-bucket/
 
-      - name: Create new ElasticBeanstalk Application Version
-        run: |
-          aws elasticbeanstalk create-application-version \
-          --application-name MyAwesomeApp \
-          --source-bundle S3Bucket="thienhuynh-bucket",S3Key="backend-0.0.1-SNAPSHOT.jar" \
-          --version-label "ver-${{ github.sha }}" \
-          --description "commit-sha-${{ github.sha }}"
+    - name: Create new ElasticBeanstalk Application Version
+      run: |
+        aws elasticbeanstalk create-application-version \
+        --application-name MyAwesomeApp \
+        --source-bundle S3Bucket="thienhuynh-bucket",S3Key="backend-0.0.1-SNAPSHOT.jar" \
+        --version-label "ver-${{ github.sha }}" \
+        --description "commit-sha-${{ github.sha }}"
 
-      - name: Deploy new ElasticBeanstalk Application Version
-        run: aws elasticbeanstalk update-environment --environment-name Myawesomeapp-env-1 --version-label "ver-${{ github.sha }}"
+    - name: Deploy new ElasticBeanstalk Application Version
+      run: aws elasticbeanstalk update-environment --environment-name Myawesomeapp-env-1 --version-label "ver-${{ github.sha }}"
+
