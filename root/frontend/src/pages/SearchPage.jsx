@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import HistoryPage from './HistoryPage';
+
 import ContentContainer from '../components/ContentContainer'
 import InputButton from '../components/Input/InputButton'
 import InputField from '../components/Input/InputField';
@@ -251,11 +251,9 @@ const SearchPage = (props) => {
             type='text'
             value={keyword}
             setValue={setKeyword}
-            placeholder='Key word or phrase'/>  
+            placeholder='Key word or phrase'/>
       </SearchBar>
-  
-  
- 
+
       <FilterContainerOuter>
 
         <h3>

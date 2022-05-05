@@ -11,7 +11,7 @@ describe('SocialScope action', () => {
       cy.get('input[name=endDate]').type("2022-02-26")
       cy.get('input[name=maxResults]').type("20")
       cy.contains("Launch Search").click()
-      cy.wait(5000)
+      cy.wait(10000)
       cy.contains("Graph").click()
     })
 

@@ -1,28 +1,28 @@
 package handlers;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import util.SentimentAnalysis;
 import util.TextEncoder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.lettuce.core.RedisException;
 import util.HttpUtils;
-import util.RateLimiter;
 import util.Token;
+import util.limiter.IRateLimiter;
+import util.limiter.LocalRateLimiter;
+import util.limiter.RedisRateLimiter;
 
 public class RedditApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token token;
-    private List<RateLimiter> limiters;
-    public List<RateLimiter> getLimiters() {
+    private List<IRateLimiter> limiters;
+    public List<IRateLimiter> getLimiters() {
         return limiters;
     }
 
@@ -33,12 +33,22 @@ public class RedditApiHandler implements IApiHandler {
         this.credentials.put("user_agent", user);
         this.token = null;
         this.limiters = new LinkedList<>();
-        this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
+        IRateLimiter primaryLimiter = null;
+        try {  // attempt to create limiter connecting to redis cache
+        	primaryLimiter = new RedisRateLimiter(60, 60000);
+        }
+        catch (RedisException ex) {  // fall back to local tracking if no redis instance found
+        	System.out.println("Local reddit limiter fallback triggered...");
+        	primaryLimiter = new LocalRateLimiter(60, 60000);
+        }
+        if (primaryLimiter != null) {
+        	this.limiters.add(primaryLimiter);
+        }
     }
     
     private boolean hasRequestBudget(int amount) {
     	boolean hasBudget = true;
-    	for (RateLimiter limiter : this.limiters) {
+    	for (IRateLimiter limiter : this.limiters) {
     		if (!limiter.hasBudget(amount))
     			hasBudget = false;
     	}

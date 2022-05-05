@@ -3,8 +3,13 @@ package util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import util.limiter.IRateLimiter;
+import util.limiter.LocalRateLimiter;
+import util.limiter.RedisRateLimiter;
+
 class RateLimiterTest {
-    RateLimiter testRateLimit = new RateLimiter(20, 900000);
+    IRateLimiter testRateLimit = new RedisRateLimiter(20, 900000);
+    
     @Test
     void getBudgetRemaining() {
         assert(testRateLimit.getBudgetRemaining() == 20);
@@ -14,6 +19,7 @@ class RateLimiterTest {
     void spendBudget()
     {
         testRateLimit.spendBudget(10);
+        System.out.println(testRateLimit.getBudgetRemaining());
         assert(testRateLimit.getBudgetRemaining() == 10);
     }
 
@@ -32,11 +38,5 @@ class RateLimiterTest {
         assert(testRateLimit.hasBudget(18) == true);
     }
 
-    @Test
-    void isCurrentPeriodOver() {
-    }
-
-    @Test
-    void resetPeriodIfElapsed() {
-    }
+    
 }

@@ -15,7 +15,6 @@ import DownloadPage from './DownloadPage';
 
 function App() {
   const [result, setResult] = useState(undefined);
-  const [keyword, setKeyword] = useState("");
   return (
     <BrowserRouter>
       <Routes>
@@ -27,8 +26,6 @@ function App() {
               <SearchPage
                   result={result}
                   setResult={setResult}
-                  keyword={keyword}
-                  setKeyword={setKeyword}
               />
           } />
           <Route path="/results" element={<ResultsView />}>
@@ -36,7 +33,7 @@ function App() {
             <Route path="/results/graph" element={<GraphPage result={result}/>} />
             <Route path="/results/download" element={<DownloadPage result={result}/>}/>
           </Route>
-          <Route path="/history" element={<HistoryPage keyword={keyword} result={result}/>}/>
+          <Route path="/history" element={<HistoryPage />}/>
           <Route path="/faq" element={<FaqPage />}/>
         </Route>
       </Routes>

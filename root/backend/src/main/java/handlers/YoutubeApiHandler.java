@@ -15,26 +15,41 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.lettuce.core.RedisException;
 import util.HttpUtils;
-import util.RateLimiter;
 import util.TextEncoder;
 import util.TimeTranslator;
 import util.Token;
+import util.limiter.IRateLimiter;
+import util.limiter.LocalRateLimiter;
+import util.limiter.RedisRateLimiter;
 
 public class YoutubeApiHandler implements IApiHandler {
 
     private Map<String, String> credentials;
     private Token youtubetoken;
-    private List<RateLimiter> limiters = new LinkedList<>();
+    private List<IRateLimiter> limiters;
+    
     public YoutubeApiHandler(String key, String user) {
         credentials = new HashMap<>();
         credentials.put("api_key", key);
         credentials.put("user_agent", user);
         this.youtubetoken = null;
-        this.limiters.add(new RateLimiter(60, 60000));  // 60 requests per minute; currently unimplemented
+        this.limiters = new LinkedList<>();
+        IRateLimiter primaryLimiter = null;
+        try {
+        	primaryLimiter = new RedisRateLimiter(60, 60000);
+        }
+        catch (RedisException ex) { 
+        	System.out.println("Local youtube limiter fallback triggered...");
+        	primaryLimiter = new LocalRateLimiter(60, 60000);
+        }
+        if (primaryLimiter != null) {
+        	this.limiters.add(primaryLimiter);
+        }
     }
 
-    public List<RateLimiter> getLimiters() {
+    public List<IRateLimiter> getLimiters() {
         return limiters;
     }
 
