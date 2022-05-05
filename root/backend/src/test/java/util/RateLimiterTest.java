@@ -3,12 +3,25 @@ package util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.lettuce.core.RedisException;
 import util.limiter.IRateLimiter;
 import util.limiter.LocalRateLimiter;
 import util.limiter.RedisRateLimiter;
 
 class RateLimiterTest {
-    IRateLimiter testRateLimit = new RedisRateLimiter(20, 900000);
+    IRateLimiter testRateLimit = initializeTestLimiter();
+    
+    private IRateLimiter initializeTestLimiter() {
+    	IRateLimiter testLimiter = null;
+    	try {
+    		testLimiter = new RedisRateLimiter(20, 900000);
+    	}
+    	catch (RedisException ex) {
+    		testLimiter = new LocalRateLimiter(20, 900000);
+    	}
+    	return testLimiter;
+    	
+    }
     
     @Test
     void getBudgetRemaining() {
