@@ -29,24 +29,37 @@ public class RedisRateLimiter implements IRateLimiter{
 	}
 	
 	public RedisRateLimiter(String id, int budget, long duration) {
+		if (client == null) throw new RedisException("Could not instantiate redis client");
 		this.id = id;
 		this.budget = budget;
 		this.duration = duration;
-		if (client == null) setupClient();
 	}
 	
 	private static RedisClient setupClient() {
 		System.out.println("setting up new redis client");
-		RedisClient client;
+		RedisClient client = null;
 		StatefulRedisConnection<String, String> conn = null;
 		try {
 			client = RedisClient.create(CONNECTION_URI);
 			conn = client.connect();
 		}
 		catch (RedisConnectionException ex) {
-			client = RedisClient.create(TEST_URI);
-			conn = client.connect();
+			client = null;
 		}
+		if (client == null) {
+			try {
+				client = RedisClient.create(TEST_URI);
+				conn = client.connect();
+			}
+			catch (RedisConnectionException ex) {
+				client = null;
+			}
+		}
+		if (client == null) {
+			System.out.println("Could not instantiate redis client");
+			return client;
+		}
+		System.out.println("testing redis connection");
 		try {
 			RedisAsyncCommands<String, String> async = conn.async();
 			RedisFuture<String> ping = async.ping();
@@ -64,12 +77,7 @@ public class RedisRateLimiter implements IRateLimiter{
 		if (conn != null && conn.isOpen()) {
 			conn.close();
 		}
-		if (client == null) {
-			throw new RedisException("Unable to connect to redis cache when initializing singleton rate limiter client");
-		}
-		else {
-			return client;
-		}
+		return client;
 	}
 	
 	@Override

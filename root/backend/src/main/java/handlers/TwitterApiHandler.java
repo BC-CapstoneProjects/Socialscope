@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.lettuce.core.RedisConnectionException;
 import io.lettuce.core.RedisException;
 import util.HttpUtils;
 import util.SentimentAnalysis;
@@ -35,7 +36,7 @@ public class TwitterApiHandler implements IApiHandler {
         this.token = null;
         this.limiters = new LinkedList<>();
         IRateLimiter primaryLimiter = null;
-        try { 
+        try {
         	primaryLimiter = new RedisRateLimiter(450, 900000);
         }
         catch (RedisException ex) { 
