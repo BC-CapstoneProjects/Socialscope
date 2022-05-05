@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.lettuce.core.RedisConnectionException;
 import io.lettuce.core.RedisException;
 import util.HttpUtils;
 import util.TextEncoder;
