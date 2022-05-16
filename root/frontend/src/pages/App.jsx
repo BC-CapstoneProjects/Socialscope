@@ -40,7 +40,6 @@ function App() {
     </BrowserRouter>
   );
 }
-
 const ViewWrapper= () => {
   return (
     <React.Fragment>

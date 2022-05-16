@@ -216,194 +216,49 @@ export default HistoryPage;
      const rootElement = document.getElementById("root");
      ReactDOM.render(<App />, rootElement);
      */
- /*import createHistory from "history/createBrowserHistory";
 
-const history = createHistory();
-
-export default class Page extends React.Component {
-  state = {
-    value: "",
-    query: "",
-    data: ["foo", "bar", "test"],
-    filteredData: []
-  };
-
-  componentDidMount() {
-    this.setQuery();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.match.params.query !== this.props.match.params.query) {
-      this.setQuery();
-    }
-  }
-
-  setQuery = () => {
-    const { query = "" } = this.props.match.params;
-    const filteredData = this.state.data.filter(element =>
-      element.toLowerCase().includes(query.toLowerCase())
-    );
-    this.setState({ value: query, query, filteredData });
-  };
-
-  onChange = event => {
-    this.setState({ value: event.target.value });
-  };
-
-  onSubmit = event => {
-    event.preventDefault();
-    history.push(`/${this.state.value}`);
-  };
-
-  render() {
-    const { value, filteredData } = this.state;
-
-    return (
-      <div>
-        <form onSubmit={this.onSubmit}>
-          <input value={value} onChange={this.onChange} />
-          <input type="submit" value="Search" />
-          {filteredData.map(element => <div key={element}> {element} </div>)}
-        </form>
-      </div>
-    );
-  }
-}
-
-class App extends React.Component {
-  render() {
-    return (
-      <Router history={history}>
-        <Switch>
-          <Route path="/:query?" component={Page} />
-        </Switch>
-      </Router>
-    );
-  }
-}
-  */   
-/*import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useNavigate 
-} from "react-router-dom";
-
-const Foo = () => {
-  const navigate = useNavigate();
-
-  return (
-    <div>
-      <button onClick={navigate.goBack}>Back</button>
-      <p>foo</p>
-    </div>
-  );
-};
-
-const Bar = () => {
-  const navigate = useNavigate();
-
-  return (
-    <div>
-      <button onClick={navigate.goBack}>Back</button>
-      <p>bar</p>
-    </div>
-  );
-};
-
-export default function App() {
-  return (
-    <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/foo">foo</Link>
-          </li>
-          <li>
-            <Link to="/bar">bar</Link>
-          </li>
-        </ul>
-
-        <Routes>
-          <Route path="/foo" children={<Foo />} />
-          <Route path="/bar" children={<Bar />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}*/
-
-/*import React from 'react';
-import SearchPage from './SearchPage';
-import {useState, useEffect} from 'react';
-
-const ObjectState= () => {
-    const [HistoryData, SetHistoryData] =  useState([]);
-
-    const HistorySet = () => {
-      SetHistoryData((prevState) => {
-           //[...theArray, `Entry ${theArray.length}`];
-            const data = {
-                ...prevState, 
-                Query: "query",
-                Time: Date().toLocaleString() ,
-                Select:'select'
-            }
-            return HistoryData
-        });
-    }
-
-    return(
-        <React.Fragment>
-            <button onClick= {HistorySet}>
-                Store Object
-            </button>
-            {HistoryData.Query} {HistoryData.Time} {HistoryData.Select} 
-        </React.Fragment>
-    )
-}
-
-export default ObjectState;
-*/
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
  //import SearchPage from './SearchPage';
  import PreviewPage from './PreviewPage';
+ import App from './App';
+ import ContentContainer from '../components/ContentContainer'
  const HistoryPage = (props) => {
-  const [HistoryData, SetHistoryData] =  useState([]);
+  const [count, setCount] =  useState(0);
   const navigate = useNavigate();
-   
-     const table=[]
-     const data = {
-      Query: <>{props.keywork}</>,
-      Time: Date().toLocaleString(),
-      Results: <>{props.result}</>
-  }
-    table.push(data);
-
-    const someEventHandler = event => {
+  const [data, setData] = useState([
+    {
+      keyword: "",
+      index: "",
+      time:"",
+      button:""
+    }]
+  );
+ 
+  function someEventHandler(){
       navigate('../results/preview');
-       <PreviewPage result={table.Results}/>
-    };
+      };
   return (
-    <div>
-    <>{props.message}</>
-    {table.map(({ Query, Time}) => (
-        <p key={Query}> 
-        {Query}  
-        {Time}  
-        { <button
-          onClick={() => someEventHandler} >  
-          Select
-       </button>} 
-       </p>
+    <ContentContainer>
+     {props.allKeyword.map(key => 
+     {
+      data.push({ keyword:key, index:data.length, time:props.date, button: <button
+        onClick={someEventHandler} >
+        Select
+      </button> })
+    })
+     }
+  {data.map(({ keyword, index, time, button}) => (
+       <p>
+          {keyword} 
+          {index} 
+          {time}
+          {button}
+        </p>
       ))}
-      
-    </div>
+    </ContentContainer>
   );
 }
-
+ 
 
 export default HistoryPage;
