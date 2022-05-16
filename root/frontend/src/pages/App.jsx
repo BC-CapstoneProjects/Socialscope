@@ -15,6 +15,9 @@ import DownloadPage from './DownloadPage';
 
 function App() {
   const [result, setResult] = useState(undefined);
+  const [allKeyword, setAllKeyword] =  useState([]);
+  const [HistoryData, SetHistoryData] =  useState([]);
+  const [date, setDate] =  useState("");
   return (
     <BrowserRouter>
       <Routes>
@@ -26,20 +29,30 @@ function App() {
               <SearchPage
                   result={result}
                   setResult={setResult}
+                  HistoryData={HistoryData}
+                  SetHistoryData={SetHistoryData}
+                  allKeyword={allKeyword}
+                  setAllKeyword={setAllKeyword}
+                  date={date}
+                  setDate={setDate}
               />
           } />
-          <Route path="/results" element={<ResultsView />}>
-            <Route path="/results/preview" element={<PreviewPage result={result}/>}/>
+          <Route path="/results" element={<ResultsView />}> 
+            <Route path="/results/preview" element={<PreviewPage result={result} HistoryData={HistoryData}/>}/>
             <Route path="/results/graph" element={<GraphPage result={result}/>} />
             <Route path="/results/download" element={<DownloadPage result={result}/>}/>
           </Route>
-          <Route path="/history" element={<HistoryPage />}/>
+          <Route path="/history" element={<HistoryPage HistoryData={HistoryData} SetHistoryData={SetHistoryData}
+           allKeyword={allKeyword} setAllKeyword={setAllKeyword} 
+           date={date} setDate={setDate}
+           />}/>
           <Route path="/faq" element={<FaqPage />}/>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
+
 const ViewWrapper= () => {
   return (
     <React.Fragment>
