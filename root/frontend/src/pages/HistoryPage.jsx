@@ -395,7 +395,7 @@ import React, { useState } from "react";
         {Query}  
         {Time}  
         { <button
-          onClick={() => someEventHandler} >
+          onClick={() => someEventHandler} >  
           Select
        </button>} 
        </p>
