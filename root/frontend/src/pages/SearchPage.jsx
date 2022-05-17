@@ -108,7 +108,7 @@ const SearchPage = (props) => {
   const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
   const [endDate, setEndDate] = useState("");
   const [visibility, setVisibility] = useState(false);
-  const [checkNavigate, setCheckNavigate] = useState(false);
+  const [checkNavigate, setCheckNavigate] = useState(true);
   const {
     result,
     setResult
@@ -276,7 +276,7 @@ const SearchPage = (props) => {
                         setResult(undefined);
                         console.log("triggered");
                         setVisibility(false);
-                        setCheckNavigate(true);
+                        setCheckNavigate(false);
                     }}>
                         Cancel
                     </InputButton>
