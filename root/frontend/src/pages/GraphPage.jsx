@@ -154,19 +154,19 @@ const GraphPage = (props) => {
     if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group ==='Platform') {
       setGraphData({
         type: 'pie',
-        entries: getTotalLikesPerPlatform(props.result['posts'])
+        entries: getTotalLikesPerPlatform(props.HistoryData.result['posts'])
       }); // props.result['posts']
     }
     else if (menuSelections.graph === 'Sentiment' && menuSelections.over === 'All' && menuSelections.group ==='Score') {
       setGraphData({
         type: 'pie',
-        entries: getAmountPerSentimentScore(props.result['posts'])
+        entries: getAmountPerSentimentScore(props.HistoryData.result['posts'])
       }); // props.result['posts']
     }
     else if (menuSelections.graph === 'Comments' && menuSelections.over === 'Time' && menuSelections.group ==='Platform') {
       setGraphData({
         type: 'line',
-        entries: getCommentsOverTimePerPlatform(props.result['posts'])
+        entries: getCommentsOverTimePerPlatform(props.HistoryData.result['posts'])
       });
     }
   }, [menuSelections]);

@@ -16,7 +16,18 @@ import DownloadPage from './DownloadPage';
 function App() {
   const [result, setResult] = useState(undefined);
   const [allKeyword, setAllKeyword] =  useState([]);
-  const [HistoryData, SetHistoryData] =  useState([]);
+  //const [HistoryData, SetHistoryData] =  useState([]);
+  const [HistoryData, setHistoryData] = useState([
+    {
+      keyword: "",
+      result: undefined,
+      date:"",
+      index:"",
+      button:""
+    }]
+  );
+
+
   const [date, setDate] =  useState("");
   return (
     <BrowserRouter>
@@ -27,24 +38,30 @@ function App() {
               path="/search"
               element={
               <SearchPage
-                  result={result}
-                  setResult={setResult}
+                 // result={result}
+                 // setResult={setResult}
                   HistoryData={HistoryData}
-                  SetHistoryData={SetHistoryData}
-                  allKeyword={allKeyword}
-                  setAllKeyword={setAllKeyword}
-                  date={date}
-                  setDate={setDate}
+                  setHistoryData={setHistoryData}
+                 // allKeyword={allKeyword}
+                 // setAllKeyword={setAllKeyword}
+                 // date={date}
+                 // setDate={setDate}
               />
           } />
           <Route path="/results" element={<ResultsView />}> 
-            <Route path="/results/preview" element={<PreviewPage result={result} HistoryData={HistoryData}/>}/>
-            <Route path="/results/graph" element={<GraphPage result={result}/>} />
-            <Route path="/results/download" element={<DownloadPage result={result}/>}/>
+            <Route path="/results/preview" element={<PreviewPage 
+            //result={result} 
+            HistoryData={HistoryData}/>}/>
+            <Route path="/results/graph" element={<GraphPage HistoryData={HistoryData}
+            //result={result}
+            />}/>
+            <Route path="/results/download" element={<DownloadPage HistoryData={HistoryData}
+            //result={result}
+            />}/>
           </Route>
-          <Route path="/history" element={<HistoryPage HistoryData={HistoryData} SetHistoryData={SetHistoryData}
-           allKeyword={allKeyword} setAllKeyword={setAllKeyword} 
-           date={date} setDate={setDate}
+          <Route path="/history" element={<HistoryPage HistoryData={HistoryData}
+          // allKeyword={allKeyword} setAllKeyword={setAllKeyword} 
+           //date={date} setDate={setDate}
            />}/>
           <Route path="/faq" element={<FaqPage />}/>
         </Route>

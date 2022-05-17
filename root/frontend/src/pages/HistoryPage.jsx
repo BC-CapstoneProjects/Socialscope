@@ -235,24 +235,15 @@ import React, { useState } from "react";
     }]
   );
  
-  function someEventHandler(){
-      navigate('../results/preview');
-      };
+ 
   return (
     <ContentContainer>
-     {props.allKeyword.map(key => 
-     {
-      data.push({ keyword:key, index:data.length, time:props.date, button: <button
-        onClick={someEventHandler} >
-        Select
-      </button> })
-    })
-     }
-  {data.map(({ keyword, index, time, button}) => (
+    
+  {props.HistoryData.map(({ keyword, result, date, button}) => (
        <p>
           {keyword} 
-          {index} 
-          {time}
+          {result} 
+          {date}
           {button}
         </p>
       ))}
