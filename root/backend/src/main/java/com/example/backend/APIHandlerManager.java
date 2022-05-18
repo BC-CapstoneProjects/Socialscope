@@ -118,6 +118,9 @@ public class APIHandlerManager {
 				System.out.println(resultPosts.toString());
 				aggregatePosts.putAll(resultPosts.getJSONArray("posts"));
 			}
+
+
+
 			// process posts and add to results object
 			aggregateResults.put("posts", this.processPosts(aggregatePosts));
 			// add metadata to results object

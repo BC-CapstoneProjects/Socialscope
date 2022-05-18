@@ -1,16 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
 import ContentContainer from '../components/ContentContainer'
 import InputButton from '../components/Input/InputButton'
 import InputField from '../components/Input/InputField';
 import InputContainer from '../components/Input/InputContainer';
+import {SpinnerDotted} from "spinners-react";
 
 const SectionTitle = styled.h2`
   text-align: center;
   text-decoration: underline;
 `;
+
 
 const SearchBar = styled(InputContainer)`
   font-size: 1.2rem;
@@ -19,7 +21,6 @@ const SearchBar = styled(InputContainer)`
   width: 100%;
   max-width: 550px;
   min-width: 210px;
-
   @media screen and (max-width: 450px) {
     margin: 1rem auto 1rem auto;
   }
@@ -61,16 +62,15 @@ const LaunchButtonContainer = styled.div`
 
 const ProgressBarContainer = styled.div`
   margin: 4rem 0 1rem 0;
-  visibility: ${props => props.show ? 'visible' : 'hidden'};
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
 const ProgressBarMarginSpacer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
+  // grid: 2;
+  // display: grid;
+  justify-content: space-between;
   min-width: 100px;
 `
 
@@ -86,16 +86,16 @@ const ProgressBar = styled.div`
   background-color: ${props => props.theme.colors.secondary};
 `
 
-const ProgressBarFill = styled.div`
-  margin: none;
-  padding: none;
-  text-align: right;
-  font-size: 1rem;
-  height: 100%;
-  width: ${props => props.progress}%;
-  border-radius: 5px;
-  transition: width ${props => props.step}s;
-  background-color: ${props => props.theme.colors.outline};
+function blinkingEffect() {
+    return keyframes`
+    50% {
+      opacity: 0;
+    }
+  `;
+}
+
+const AnimatedComponent = styled.div`
+  animation: ${blinkingEffect} 2s linear infinite;
 `
 
 const SearchPage = (props) => {
@@ -107,16 +107,8 @@ const SearchPage = (props) => {
   const [youtubeCheck, setYoutubeCheck] = useState(false);
   const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
   const [endDate, setEndDate] = useState("");
-  const [loadState, setLoadState] = useState({
-    display: false, 
-    loading: false, 
-    finish: false,
-    value: 0, 
-    target: 0, 
-    step: 0,
-    after: undefined
-  });
-
+  const [visibility, setVisibility] = useState(false);
+  const [checkNavigate, setCheckNavigate] = useState(true);
   const {
     result,
     setResult
@@ -124,44 +116,32 @@ const SearchPage = (props) => {
 
   const navigate = useNavigate();
 
-  function triggerLoad(duration, target, steps=10, promise=(new Promise)) {
-    while (loadState.loading) {
-      console.log('already loading');
-      setTimeout(() => {}, 500)
-    }
-    setLoadState({ 
-      ...loadState,
-      display: true,
-      loading: true,
-      finish: false,
-      target: target,
-      step: ((target - loadState.value) / steps),
-      trans: duration / steps,
-      after: promise
-    })
-  }
-
-  function finishLoad() {
-    setLoadState({
-      ...loadState,
-      finish: true
-    })
+  function refreshInput(e)
+  {
+      setKeyword("");
+      setStartDate("");
+      setMax("");
+      setEndDate("");
+      setTwitterCheck(false);
+      setRedditCheck(false);
+      setYoutubeCheck(false);
   }
 
   async function searchRedirect(e){
     e.preventDefault();
-    const p = fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
+    setVisibility(true);
+    fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
         .then(res => {
           res.posts.forEach(post => {
             try {
-            post.title = decodeURIComponent(escape(atob(post.title)));
+              post.title = decodeURIComponent(escape(atob(post.title)));
             } catch (e) {
               console.log(post.title);
               console.log(e);
             }
             try {
-            post.text = decodeURIComponent(escape(atob(post.text)));
+              post.text = decodeURIComponent(escape(atob(post.text)));
             } catch (e) {
               console.log(post.text);
               console.log(e);
@@ -183,185 +163,127 @@ const SearchPage = (props) => {
             }
         )
         .then(res => {
-          //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
-          }
+              //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
+            if(checkNavigate === true) {
+                navigate('../results/preview')
+            }
+            }
         );
-    const loadDuration = 3 + (Math.round(1.5 * (parseInt(max) || 0)));
-    triggerLoad(loadDuration, 100, 2*loadDuration, p);
   }
 
-  useEffect(() => {
-    if (loadState.loading) {
-      const interval = setInterval(() => {
-        let newState = {...loadState};
-        let updateState = false;
-        if (loadState.value >= 100) {
-          setLoadState({...loadState, loading: false, value: 100});
-        }
-        else if (loadState.finish) {
-          newState={
-            ...newState,
-            finish: false,
-            value: 100
-          };
-          console.log("load end")
-          updateState = true;
-        }
-        else if (loadState.loading && loadState.value >= loadState.target) {
-          newState = {
-            ...newState,
-            loading: false,
-            target: undefined,
-            step: undefined
-          };
-          updateState = true;
-        }
-        else if (loadState.loading) {
-          const initialProgress = loadState.value;
-          const newValue = (initialProgress + loadState.step) > 100 ? 100: initialProgress + loadState.step;
-          newState = {
-            ...newState,
-            value: newValue
-          };
-          console.log("load proceed");
-          updateState = true;
-        }
-        if (updateState) {
-          console.log(newState);
-          setLoadState(newState);
-        }
-      }, loadState.trans * 1000)
-      return () => clearInterval(interval);
-    }
-    else if (loadState.value >= 100) {
-      loadState.after.then(
-        navigate('../results/preview')
-      );
-    }
-  }, [loadState])
-
   return (
-    <ContentContainer>
-      
-      <SectionTitle>Search</SectionTitle>
-      
-      <SearchBar label='Query'>
-        <InputField
-            name='query'
-            type='text'
-            value={keyword}
-            setValue={setKeyword}
-            placeholder='Key word or phrase'/>
-      </SearchBar>
+      <ContentContainer>
 
-      <FilterContainerOuter>
+        <SectionTitle>Search</SectionTitle>
 
-        <h3>
-          Filters:
-        </h3>
+        <SearchBar label='Query'>
+          <InputField
+              name='query'
+              type='text'
+              value={keyword}
+              setValue={setKeyword}
+              placeholder='Key word or phrase'/>
+        </SearchBar>
 
-        <FilterContainerInner>
+        <FilterContainerOuter>
 
-          <FilterRowFull>
-            <InputContainer label='Platforms'>
-              <InputField
-                name='twitter'
-                type='checkbox'
-                value={twitterCheck}
-                setValue={setTwitterCheck}
-                label='twitter'/>
-              <InputField
-                name='reddit'
-                type='checkbox'
-                value={redditCheck}
-                setValue={setRedditCheck}
-                label='reddit'/>
-            <InputField
-                name='youtube'
-                type='checkbox'
-                value={youtubeCheck}
-                setValue={setYoutubeCheck}
-                label='youtube'/>
-            </InputContainer>
-          </FilterRowFull>
+          <h3>
+            Filters:
+          </h3>
 
-          <FilterRowHalf>
-            <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
-            <InputField
-                name='startDate'
-                type='date'
-                value={startDate}
-                setValue={setStartDate}
-            />
-            </InputContainer>
-          </FilterRowHalf>
+          <FilterContainerInner>
 
-          <FilterRowHalf>
-            <InputContainer label='End Date' labelWidth='99px' contentWidth="163px">
-            <InputField
-                name='endDate'
-                type='date'
-                value={endDate}
-                setValue={setEndDate}
-            />
-            </InputContainer>
-          </FilterRowHalf>
+            <FilterRowFull>
+              <InputContainer label='Platforms'>
+                <InputField
+                    name='twitter'
+                    type='checkbox'
+                    value={twitterCheck}
+                    setValue={setTwitterCheck}
+                    label='twitter'/>
+                <InputField
+                    name='reddit'
+                    type='checkbox'
+                    value={redditCheck}
+                    setValue={setRedditCheck}
+                    label='reddit'/>
+                <InputField
+                    name='youtube'
+                    type='checkbox'
+                    value={youtubeCheck}
+                    setValue={setYoutubeCheck}
+                    label='youtube'/>
+              </InputContainer>
+            </FilterRowFull>
 
-          <FilterRowHalf>
-            <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
-            <InputField
-                name="maxResults"
-                type="text"
-                key="loaded"
-                value={max}
-                setValue={setMax}
-                defaultValue="20"
-                width='153px'/>
-            </InputContainer>
-          </FilterRowHalf>
+            <FilterRowHalf>
+              <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
+                <InputField
+                    name='startDate'
+                    type='date'
+                    value={startDate}
+                    setValue={setStartDate}
+                />
+              </InputContainer>
+            </FilterRowHalf>
 
-        </FilterContainerInner>
-        
-        <ResetButtonContainer>
-          <InputButton type='secondary' onClick={() => {
-              console.log('reset triggered')
-            }}>
-            Reset Filters
+            <FilterRowHalf>
+              <InputContainer label='End Date' labelWidth='99px' contentWidth="163px">
+                <InputField
+                    name='endDate'
+                    type='date'
+                    value={endDate}
+                    setValue={setEndDate}
+                />
+              </InputContainer>
+            </FilterRowHalf>
+
+            <FilterRowHalf>
+              <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
+                <InputField
+                    name="maxResults"
+                    type="text"
+                    key="loaded"
+                    value={max}
+                    setValue={setMax}
+                    defaultValue="20"
+                    width='153px'/>
+              </InputContainer>
+            </FilterRowHalf>
+
+          </FilterContainerInner>
+
+          <ResetButtonContainer>
+            <InputButton type='secondary' onClick={refreshInput}>
+              Reset Filters
+            </InputButton>
+          </ResetButtonContainer>
+
+        </FilterContainerOuter>
+
+        <LaunchButtonContainer>
+          <InputButton type='primary' onClick={searchRedirect}>
+            Launch Search
           </InputButton>
-        </ResetButtonContainer>
-
-      </FilterContainerOuter>
-
-      <LaunchButtonContainer>
-        <InputButton  type='primary' onClick={searchRedirect}>
-          Launch Search
-        </InputButton>
-      </LaunchButtonContainer>
-
-      <ProgressBarContainer show={loadState.display ? 1 : 0}>
-        <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
-        <ProgressBar>
-          <ProgressBarFill progress={Math.round(loadState.value)} 
-            step={loadState.trans && loadState.trans * 2}>
-              {Math.round(loadState.value) + '%'}
-            </ProgressBarFill>
-        </ProgressBar>
-        <ProgressBarMarginSpacer>
-          <InputButton type='tertiary' onClick={() => {
-            console.log('cancel triggered');
-            setLoadState({
-              ...loadState,
-              loading: false,
-              value: 0,
-            });
-          }}>
-            Cancel
-          </InputButton>
-        </ProgressBarMarginSpacer>
-      </ProgressBarContainer>
-
-    </ContentContainer>
-
+        </LaunchButtonContainer>
+        {visibility && (
+            <ProgressBarContainer>
+                <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
+                <AnimatedComponent style={{marginRight: "30px"}}>Start collecting data and analyzing...</AnimatedComponent>
+                <SpinnerDotted size={67} thickness={150} speed={80} color="rgba(172, 136, 57, 1)" style={{marginRight: "30px"}}/>
+                <ProgressBarMarginSpacer>
+                    <InputButton type='tertiary' onClick={() => {
+                        setResult(undefined);
+                        console.log("triggered");
+                        setVisibility(false);
+                        setCheckNavigate(false);
+                    }}>
+                        Cancel
+                    </InputButton>
+                </ProgressBarMarginSpacer>
+            </ProgressBarContainer>
+        )}
+      </ContentContainer>
   );
 }
 export default SearchPage;
