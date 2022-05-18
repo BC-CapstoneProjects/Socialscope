@@ -11,11 +11,22 @@ const ButtonContainer = styled.div`
 const ButtonTemplate = styled.button`
   width: max-content;
   height: max-content;
-  background: ${props => props.theme.colors.secondary};
+  background: ${props => props.theme.colors.tertiary_dark};
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   outline: none;
   cursor: pointer;
+
+  &:hover {
+    background: ${props => props.theme.colors.tertiary_focus};
+  }
+
+  &:active {
+    box-shadow: 0 0 10px 5px ${props => props.theme.colors.secondary};
+    transform: translateY(2px);
+  }
+
 `;
 
 const ButtonPrimary = styled(ButtonTemplate)`

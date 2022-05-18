@@ -21,12 +21,17 @@ const TitleSpacer = styled.div`
   flex: 0.2;
 `
 
+const TitleEmphasis = styled.span`
+  font-weight: bold;
+  color: ${props => props.theme.colors.tertiary_dark};
+`
+
 const TitleSection = () => {
   return (
     <TitleContainer>
 
         <h1>
-          Welcome to Socialscope
+          Welcome to <TitleEmphasis>Socialscope</TitleEmphasis>
         </h1>
 
         <TitleSpacer/>

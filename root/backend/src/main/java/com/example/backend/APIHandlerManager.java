@@ -122,7 +122,7 @@ public class APIHandlerManager {
 
 
 			// process posts and add to results object
-			aggregateResults.put("posts", this.processPosts(aggregatePosts));
+			aggregateResults.put("posts", this.processPosts(aggregatePosts, Boolean.parseBoolean(queryParams.get("doSentimentAnalysis"))));
 			// add metadata to results object
 			JSONObject metaInfo = new JSONObject();
 			metaInfo.put("query", queryParams.get("queryText"));
@@ -150,51 +150,67 @@ public class APIHandlerManager {
 		return aggregateResults;
 	}
 	
-	public JSONArray processPosts(JSONArray posts) {
-		System.out.println("Retrieving sentiment...");
+	public JSONArray processPosts(JSONArray posts, boolean doSentimentAnalysis) {
 		JSONArray processedPosts = new JSONArray();
-		try {
-			int postIndex = 0;
-			int processingBatchSize = Math.max(posts.length() / 5, 5);
-			List<Future<JSONArray>> processedPostFutures = new ArrayList<>();
-			for (; postIndex + processingBatchSize <= posts.length(); postIndex += processingBatchSize) {  // divide posts into equal batches of size "step"
-				List<JSONObject> postBatch = new ArrayList<>();
-				for (int i = postIndex; i < postIndex + processingBatchSize; i++) {
-					postBatch.add(posts.getJSONObject(i));
+		if (doSentimentAnalysis) {
+			System.out.println("Retrieving sentiment...");
+			try {
+				int postIndex = 0;
+				int processingBatchSize = Math.max(posts.length() / 5, 5);
+				List<Future<JSONArray>> processedPostFutures = new ArrayList<>();
+				for (; postIndex + processingBatchSize <= posts.length(); postIndex += processingBatchSize) {  // divide posts into equal batches of size "step"
+					List<JSONObject> postBatch = new ArrayList<>();
+					for (int i = postIndex; i < postIndex + processingBatchSize; i++) {
+						postBatch.add(posts.getJSONObject(i));
+					}
+					processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(postBatch)));
+					System.out.println("Progress: " + Float.valueOf(postIndex / ((float)posts.length())));
 				}
-				processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(postBatch)));
-				System.out.println("Progress: " + Float.valueOf(postIndex / ((float)posts.length())));
-			}
-			if (postIndex < posts.length()) {  // fenceposting for remainder posts after dividing as many as possible into equal batches
-				List<JSONObject> finalBatch = new ArrayList<>();
-				for (int i = postIndex; i < posts.length(); i++) {
-					finalBatch.add(posts.getJSONObject(i));
+				if (postIndex < posts.length()) {  // fenceposting for remainder posts after dividing as many as possible into equal batches
+					List<JSONObject> finalBatch = new ArrayList<>();
+					for (int i = postIndex; i < posts.length(); i++) {
+						finalBatch.add(posts.getJSONObject(i));
+					}
+					processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(finalBatch)));
 				}
-				processedPostFutures.add(this.taskExecutor.submit(() -> this.attemptSentimentAnalysis(finalBatch)));
-			}
-			for (Future<JSONArray> processedPostFuture : processedPostFutures) {
-				processedPosts.putAll(processedPostFuture.get());
-			}
-		}
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			if (processedPosts.length() > posts.length()) {
-				throw new RuntimeException("Error processing post sentiment: output size greater than input size");
-			}
-			else if (processedPosts.length() < posts.length()) {
-				for (int i = processedPosts.length(); i < posts.length(); i++) {
-					processedPosts.put(posts.get(i));
+				for (Future<JSONArray> processedPostFuture : processedPostFutures) {
+					processedPosts.putAll(processedPostFuture.get());
 				}
 			}
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				if (processedPosts.length() > posts.length()) {
+					throw new RuntimeException("Error processing post sentiment: output size greater than input size");
+				}
+				else if (processedPosts.length() < posts.length()) {
+					for (int i = processedPosts.length(); i < posts.length(); i++) {
+						processedPosts.put(posts.get(i));
+					}
+				}
+				else if (processedPosts.length() < posts.length()) {
+					for (int i = processedPosts.length(); i < posts.length(); i++) {
+						processedPosts.put(posts.get(i));
+					}
+				}
+			}
+			System.out.println("Sentiment retrieval complete");
 		}
-		System.out.println("Sentiment retrieval complete");
+		else {
+			System.out.println("Sentiment retrieval skipped");
+			for (int i = 0; i < posts.length(); i++) {
+				JSONObject post = posts.getJSONObject(i);
+				post.put("sentiment_score",  "Unknown");
+				post.put("sentiment_confidence", 0);
+				processedPosts.put(post);
+			}
+		}
 		return processedPosts;
 	}
 }

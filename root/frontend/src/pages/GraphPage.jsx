@@ -74,7 +74,7 @@ const getAmountPerSentimentScore = (posts) => {
 }
 
 const renderChart = (graphData, graphWidth) => {
-  if (graphData == null || graphWidth == null) {
+  if (graphData == null || graphData.entries == null || graphData.entries.length == 0 || graphWidth == null) {
     return;
   }
   else if (graphData.type === 'pie')

@@ -28,11 +28,12 @@ public class APIController {
 	
     @CrossOrigin
     @GetMapping("/api/")
-    public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean twitterChoose, @RequestParam boolean redditChoose, @RequestParam boolean youtubeChoose, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
+    public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean doPlatformTwitter, @RequestParam boolean doPlatformReddit, @RequestParam boolean doPlatformYoutube, @RequestParam boolean doSentimentAnalysis, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
     	System.out.println("Executing search...");
-        List<String> namesOfHandlersInQuery = buildHandlerNames(twitterChoose, redditChoose, youtubeChoose);
+        List<String> namesOfHandlersInQuery = buildHandlerNames(doPlatformTwitter, doPlatformReddit, doPlatformYoutube);
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("queryText", keyword);
+        queryParams.put("doSentimentAnalysis", Boolean.toString(doSentimentAnalysis));
         queryParams.put("maxResults", maxResults);
         queryParams.put("start", start);
         queryParams.put("end", end);

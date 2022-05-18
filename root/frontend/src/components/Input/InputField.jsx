@@ -22,7 +22,7 @@ const Label = styled.label`
 `
 
 const InputField = (props) => {
-  function handleText(e)
+  function handleChange(e)
   {
     props.type === "checkbox" ? props.setValue(!props.value) : props.setValue(e.target.value)
   }
@@ -32,12 +32,13 @@ const InputField = (props) => {
         <Input className={props.className}
           name={props.name} //query id={props.value}
           aria-label={props.name}
-          type={props.type} //text, checkbox
+          type={props.type} //text, checkbox, radio
           value={props.value}
-          onChange={handleText}
+          onChange={handleChange}
           placeholder={props.placeholder}
           width={props.width}
           autoComplete={'off'}
+          checked={props.checked}
         />
         { (props.label) && (
           <Label htmlFor={props.id}>

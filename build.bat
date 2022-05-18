@@ -1,5 +1,6 @@
 @echo off
-set springStaticDir="backend\src\main\resources\static"
+set springStaticDir="root\backend\src\main\resources\static"
+set credentialsFolderDir="root\backend\src\main\resources\private\*"
 set front=1==1
 set back=1==1
 set run=1==0
@@ -22,13 +23,16 @@ if %front% (
     cd "root\frontend"
     call npm install || exit /b
     call npm run build || exit /b
-    cd "..\"
+    cd "..\..\"
     if exist %springStaticDir% rd /s /q %springStaticDir%
     md %springStaticDir%
-    xcopy /s /e "frontend\build\*" %springStaticDir%
-    cd "..\"
+    xcopy /s /e "root\frontend\build\*" %springStaticDir%
 )
 if %back% (
+    if not exist %credentialsFolderDir% (
+        echo No credentials detected!
+        exit /b
+    )
     cd "root\backend"
     if %test% (
         call mvn package || exit /b

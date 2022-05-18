@@ -29,7 +29,7 @@ const ImageSection = styled.div`
 `;
 
 const StyledGroup = styled.g`
-  fill: ${props => props.theme.colors.outline};
+  fill: ${props => props.theme.colors.secondary_dark};
   stroke: none;
 `
 
