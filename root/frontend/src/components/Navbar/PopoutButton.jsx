@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-
+import { FiMenu } from 'react-icons/fi';
 
 const ButtonContainer = styled.div`
   align-content: flex-start;
@@ -12,7 +12,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const Button = styled.button`
+const Button = styled(FiMenu)`
   width:25px;
   height:25px;
   background: white;

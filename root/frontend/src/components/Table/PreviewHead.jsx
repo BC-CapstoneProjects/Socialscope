@@ -30,7 +30,7 @@ const SortButtonContainer = styled.div`
 `;
 
 const SortButton = styled.button`
-  background: ${props => props.theme.colors.secondary}; // TODO: repeat button style
+  background-color: ${props => props.theme.colors.secondary}; // TODO: repeat button style
   border: none;
   border-radius: 5px;
   outline: none;
@@ -39,6 +39,12 @@ const SortButton = styled.button`
   margin: 1px;
   height: 20px;
   width: 20px;
+
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.secondary_dark};
+  }
 `;
 
 const PreviewHead = (props) => {

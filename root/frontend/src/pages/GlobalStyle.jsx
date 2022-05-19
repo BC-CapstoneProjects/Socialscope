@@ -40,6 +40,7 @@ body {
 a {
   text-decoration: none;
   color: #000000;
+  transition: color 0.2s;
 
   &:hover {
     color: ${GlobalTheme.colors.tertiary_focus} !important;

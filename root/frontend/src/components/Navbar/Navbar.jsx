@@ -32,8 +32,8 @@ const LogoContainer = styled.div`
 
 const LogoText = styled.span`
   background: ${props => props.theme.colors.primary};
-  outline: 3px solid ${props => props.theme.colors.tertiary_dark};
-  color: ${props => props.theme.colors.tertiary_dark};
+  outline: 3px solid ${props => props.theme.colors.tertiary_focus};
+  color: ${props => props.theme.colors.tertiary_focus};
   font-size: 2.5rem;
   font-weight: 150%;
   border: none;

@@ -17,14 +17,14 @@ const ButtonTemplate = styled.button`
   border-radius: 10px;
   outline: none;
   cursor: pointer;
-
+  transition: background-color 0.2s;
   &:hover {
     background: ${props => props.theme.colors.tertiary_focus};
   }
 
   &:active {
-    box-shadow: 0 0 10px 5px ${props => props.theme.colors.secondary};
-    transform: translateY(2px);
+    outline: 3px solid ${props => props.theme.colors.secondary};
+    transform: translateY(1px);
   }
 
 `;

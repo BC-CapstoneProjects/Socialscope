@@ -7,6 +7,7 @@ const MenuContainer = styled.div`
 
 const Menu = styled.div`
   display: none;
+  z-index: 1;
   justify-content: flex-end;
   align-items: flex-end;
   flex-direction: column;
@@ -22,12 +23,13 @@ const Menu = styled.div`
   border-radius: 5px;
   border-style: solid;
   border-width: 2px;
-  border-color: ${props => props.theme.colors.primary};
+  border-color: ${props => props.theme.colors.outline};
   box-shadow: 3px 3px 2px grey;
 
-  @media screen and (max-width: 750px) {
-  display: flex;
-}
+  @media screen and (max-width: 750px) 
+  {
+    display: flex;
+  }
 `;
 
 const PopoutMenu = (props) => {

@@ -13,7 +13,6 @@ const SectionTitle = styled.h2`
   text-decoration: underline;
 `;
 
-
 const SearchBar = styled(InputContainer)`
   font-size: 1.2rem;
   margin: 3rem auto 3rem auto;
@@ -22,7 +21,10 @@ const SearchBar = styled(InputContainer)`
   max-width: 550px;
   min-width: 210px;
   @media screen and (max-width: 450px) {
-    margin: 1rem auto 1rem auto;
+    margin: 1rem 0.5rem 1rem auto;
+  }
+  @media screen and (max-width: 283px) {
+    margin-bottom: 2rem;  // pad for box resize
   }
 `
 
@@ -60,11 +62,14 @@ const LaunchButtonContainer = styled.div`
 `
 
 const FilterMessageContainer = styled.div`
-  
+  min-height: 1.1rem;
+  margin: 10px 0;
 `
 
 const FilterMessage = styled.div`
-  
+  color: darkred;
+  text-align: center;
+  font-weight: bold;
 `
 
 const ProgressBarContainer = styled.div`
@@ -115,8 +120,7 @@ const SearchPage = (props) => {
   const [sentimentCheck, setSentimentCheck] = useState("true");  // have to use a string to prevent radio button from breaking
   const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
   const [endDate, setEndDate] = useState("");
-
-  const [visibility, setVisibility] = useState(false);
+  const [loadingBarVisibility, setVisibility] = useState(false);
   const [checkNavigate, setCheckNavigate] = useState(true);
   const [filterError, setFilterError] = useState("");
   const {
@@ -191,8 +195,7 @@ const SearchPage = (props) => {
             }
         )
         .then(res => {
-              //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
-            if(checkNavigate === true) {
+            if(checkNavigate === true) {  // issue: this does not actually do anything, since this fetch is fully loaded before the cancel button can be clicked, and will not account for new checkNavigate state
                 navigate('../results/preview')
             }
             }
@@ -216,7 +219,7 @@ const SearchPage = (props) => {
               type='text'
               value={keyword}
               setValue={setKeyword}
-              placeholder='Key word or phrase'/>
+              placeholder='Enter a key word or phrase...'/>
         </SearchBar>
 
         <FilterContainerOuter>
@@ -315,6 +318,14 @@ const SearchPage = (props) => {
             </InputButton>
           </ResetButtonContainer>
 
+          <FilterRowFull>
+            <FilterMessageContainer>
+              <FilterMessage visibility={filterError === "" ? "hidden" : "visible"}>
+                {filterError}
+              </FilterMessage>
+            </FilterMessageContainer>
+          </FilterRowFull>
+
         </FilterContainerOuter>
 
         <LaunchButtonContainer>
@@ -323,15 +334,11 @@ const SearchPage = (props) => {
           </InputButton>
         </LaunchButtonContainer>
 
-        <FilterMessageContainer>
-          <FilterMessage />
-        </FilterMessageContainer>
-
-        {visibility && (
+        {loadingBarVisibility && (
             <ProgressBarContainer>
                 <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
-                <AnimatedComponent style={{marginRight: "30px"}}>Start collecting data and analyzing...</AnimatedComponent>
-                <SpinnerDotted size={67} thickness={150} speed={80} color="rgba(172, 136, 57, 1)" style={{marginRight: "30px"}}/>
+                <AnimatedComponent style={{marginRight: "30px"}}>Collecting and analyzing data...</AnimatedComponent>
+                <SpinnerDotted size={67} thickness={150} speed={80} color={"#5066fe"} style={{marginRight: "30px"}}/>
                 <ProgressBarMarginSpacer>
                     <InputButton type='tertiary' onClick={() => {
                         setResult(undefined);

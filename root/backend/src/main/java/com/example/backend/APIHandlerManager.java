@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,6 @@ import handlers.IApiHandler;
 import handlers.RedditApiHandler;
 import handlers.TwitterApiHandler;
 import handlers.YoutubeApiHandler;
-import io.lettuce.core.RedisClient;
 import util.AppCredentials;
 import util.SentimentAnalysis;
 import util.TextEncoder;
@@ -210,6 +207,7 @@ public class APIHandlerManager {
 				post.put("sentiment_confidence", 0);
 				processedPosts.put(post);
 			}
+			System.out.println("Sentiment retrieval complete");
 		}
 		return processedPosts;
 	}

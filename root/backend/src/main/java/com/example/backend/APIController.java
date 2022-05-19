@@ -1,19 +1,11 @@
 package com.example.backend;
 
-import handlers.IApiHandler;
-import handlers.RedditApiHandler;
-import handlers.TwitterApiHandler;
-import handlers.YoutubeApiHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import util.AppCredentials;
 
 import java.util.ArrayList;
 import java.util.HashMap;

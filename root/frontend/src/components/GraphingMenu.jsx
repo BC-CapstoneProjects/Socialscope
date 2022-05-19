@@ -31,7 +31,11 @@ const GraphingMenu = (props) => {
   const menuOptionTree = {'Graph':
     { 'Likes':{'Over':{
       'All':{'Group': {
-        'Platform': ''}}
+        'Platform': ''}},
+      'Time':{'Group': {
+        'All': '',
+        'Platform': ''},
+      }
     }}, 
     'Comments':{'Over':{
       'Time':{'Group': {

@@ -23,7 +23,8 @@ const LineSvg = (props) => {
       let mtemp = d3.max(data[i].items, (d) => d[field]);
       if (ma < mtemp) ma = mtemp;
     }
-    return [mi - buffer, ma + buffer];
+    let pad = (ma - mi) * buffer
+    return [mi - pad, ma + pad];
   }
 
   const getTicks = (scale, amount) => {
@@ -35,13 +36,13 @@ const LineSvg = (props) => {
 
   const xScale = d3.scaleLinear()
     .domain(
-      getBufferedDomain('x')
+      getBufferedDomain('x', 0)
     )
     .range([props.structure.padding, props.structure.width - props.structure.padding]);
 
 
   const yScale = d3.scaleLinear()
-    .domain(getBufferedDomain('y', 2))
+    .domain(getBufferedDomain('y', 0.1))
     .range([props.structure.height - props.structure.padding, props.structure.padding]);
 
   const xTicks = 5, yTicks = 5;
