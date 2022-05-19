@@ -21,11 +21,10 @@ const PieContainer = styled.div`
     border-radius: 3px;  // repeated style for nav popout menu
     border-style: solid;
     border-width: 2px;
-    border-color: ${props => props.theme.colors.primary};
+    border-color: ${props => props.theme.colors.outline};
     box-shadow: 3px 3px 2px grey;
     font-style: italic;
   }
-
 `
 
 const PieChart = (props) => {

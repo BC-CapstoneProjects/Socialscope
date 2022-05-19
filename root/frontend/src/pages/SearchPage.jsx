@@ -13,7 +13,6 @@ const SectionTitle = styled.h2`
   text-decoration: underline;
 `;
 
-
 const SearchBar = styled(InputContainer)`
   font-size: 1.2rem;
   margin: 3rem auto 3rem auto;
@@ -22,7 +21,10 @@ const SearchBar = styled(InputContainer)`
   max-width: 550px;
   min-width: 210px;
   @media screen and (max-width: 450px) {
-    margin: 1rem auto 1rem auto;
+    margin: 1rem 0.5rem 1rem auto;
+  }
+  @media screen and (max-width: 283px) {
+    margin-bottom: 2rem;  // pad for box resize
   }
 `
 
@@ -59,6 +61,16 @@ const LaunchButtonContainer = styled.div`
   min-width: 200px;
 `
 
+const FilterMessageContainer = styled.div`
+  min-height: 1.1rem;
+  margin: 10px 0;
+`
+
+const FilterMessage = styled.div`
+  color: darkred;
+  text-align: center;
+  font-weight: bold;
+`
 
 const ProgressBarContainer = styled.div`
   margin: 4rem 0 1rem 0;
@@ -105,10 +117,12 @@ const SearchPage = (props) => {
   const [twitterCheck, setTwitterCheck] = useState(false);
   const [redditCheck, setRedditCheck] = useState(false);
   const [youtubeCheck, setYoutubeCheck] = useState(false);
+  const [sentimentCheck, setSentimentCheck] = useState("true");  // have to use a string to prevent radio button from breaking
   const [startDate, setStartDate] = useState(""); //MM-DD-YYYY
   const [endDate, setEndDate] = useState("");
-  const [visibility, setVisibility] = useState(false);
+  const [loadingBarVisibility, setVisibility] = useState(false);
   const [checkNavigate, setCheckNavigate] = useState(true);
+  const [filterError, setFilterError] = useState("");
   const {
     result,
     setResult
@@ -116,21 +130,39 @@ const SearchPage = (props) => {
 
   const navigate = useNavigate();
 
-  function refreshInput(e)
-  {
-      setKeyword("");
-      setStartDate("");
-      setMax("");
-      setEndDate("");
-      setTwitterCheck(false);
-      setRedditCheck(false);
-      setYoutubeCheck(false);
+
+  function resetFilters() {
+    console.log('resetFilters triggered')
+    setMax(10);
+    setTwitterCheck(true);
+    setRedditCheck(true);
+    setYoutubeCheck(true);
+    setSentimentCheck("true");
+    setStartDate("");  // Work in progress / date input string to js datetime conversion
+    setEndDate("");
   }
 
   async function searchRedirect(e){
     e.preventDefault();
-    setVisibility(true);
-    fetch(`/api/?keyword=${keyword}&twitterChoose=${twitterCheck}&redditChoose=${redditCheck}&youtubeChoose=${youtubeCheck}&maxResults=${max}&start=${startDate}&end=${endDate}`)
+    // check if search fields invalid / display appropriate message
+    if (keyword.length <= 0 || keyword.length > 200) {
+      setFilterError("Search query must be between 1 and 200 characters.");
+    }
+    else if (twitterCheck === false && youtubeCheck === false && redditCheck === false) {
+      setFilterError("At least one platform must be selected.");
+    }
+    else if (!Number.isInteger(Number(max)) || Number(max).valueOf() < 1 || Number(max).valueOf() > 100) {
+      setFilterError("Max results must be a number between 1 and 100.");
+    }
+    // execute search
+    else {
+      setVisibility(true);
+      const fetchPromise = fetch(`/api/?keyword=${keyword}`+
+        `&doPlatformTwitter=${twitterCheck}`+
+        `&doPlatformReddit=${redditCheck}` +
+        `&doPlatformYoutube=${youtubeCheck}` +
+        `&doSentimentAnalysis=${sentimentCheck}` +
+        `&maxResults=${max}&start=${startDate}&end=${endDate}`)
         .then(res => res.json())
         .then(res => {
           res.posts.forEach(post => {
@@ -163,13 +195,18 @@ const SearchPage = (props) => {
             }
         )
         .then(res => {
-              //finishLoad();  // issue: set state is reinstantiating the loadstate object, losing the progress made in useEffect intervals
-            if(checkNavigate === true) {
+            if(checkNavigate === true) {  // issue: this does not actually do anything, since this fetch is fully loaded before the cancel button can be clicked, and will not account for new checkNavigate state
                 navigate('../results/preview')
             }
             }
         );
+    }
   }
+  
+  useEffect(() => {
+    resetFilters();
+  }, [])
+
 
   return (
       <ContentContainer>
@@ -182,7 +219,7 @@ const SearchPage = (props) => {
               type='text'
               value={keyword}
               setValue={setKeyword}
-              placeholder='Key word or phrase'/>
+              placeholder='Enter a key word or phrase...'/>
         </SearchBar>
 
         <FilterContainerOuter>
@@ -199,22 +236,44 @@ const SearchPage = (props) => {
                     name='twitter'
                     type='checkbox'
                     value={twitterCheck}
+                    checked={twitterCheck}
                     setValue={setTwitterCheck}
                     label='twitter'/>
                 <InputField
                     name='reddit'
                     type='checkbox'
                     value={redditCheck}
+                    checked={redditCheck}
                     setValue={setRedditCheck}
                     label='reddit'/>
                 <InputField
                     name='youtube'
                     type='checkbox'
                     value={youtubeCheck}
+                    checked={youtubeCheck}
                     setValue={setYoutubeCheck}
                     label='youtube'/>
               </InputContainer>
             </FilterRowFull>
+
+            <FilterRowFull>
+            <InputContainer label='Sentiment' labelWidth='99px'>
+              <InputField
+                name='sentiment'
+                type='radio'
+                value={"true"}
+                setValue={setSentimentCheck}
+                checked={sentimentCheck === "true"}  // Todo: issue where you need to click radio twice on first change / setState async issue maybe?
+                label='yes'/>
+              <InputField
+                name='sentiment'
+                type='radio'
+                value={"false"}
+                setValue={setSentimentCheck}
+                checked={sentimentCheck === "false"}
+                label='no'/>
+            </InputContainer>
+          </FilterRowFull>
 
             <FilterRowHalf>
               <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
@@ -254,10 +313,18 @@ const SearchPage = (props) => {
           </FilterContainerInner>
 
           <ResetButtonContainer>
-            <InputButton type='secondary' onClick={refreshInput}>
+            <InputButton type='secondary' onClick={resetFilters}>
               Reset Filters
             </InputButton>
           </ResetButtonContainer>
+
+          <FilterRowFull>
+            <FilterMessageContainer>
+              <FilterMessage visibility={filterError === "" ? "hidden" : "visible"}>
+                {filterError}
+              </FilterMessage>
+            </FilterMessageContainer>
+          </FilterRowFull>
 
         </FilterContainerOuter>
 
@@ -266,11 +333,12 @@ const SearchPage = (props) => {
             Launch Search
           </InputButton>
         </LaunchButtonContainer>
-        {visibility && (
+
+        {loadingBarVisibility && (
             <ProgressBarContainer>
                 <ProgressBarMarginSpacer></ProgressBarMarginSpacer>
-                <AnimatedComponent style={{marginRight: "30px"}}>Start collecting data and analyzing...</AnimatedComponent>
-                <SpinnerDotted size={67} thickness={150} speed={80} color="rgba(172, 136, 57, 1)" style={{marginRight: "30px"}}/>
+                <AnimatedComponent style={{marginRight: "30px"}}>Collecting and analyzing data...</AnimatedComponent>
+                <SpinnerDotted size={67} thickness={150} speed={80} color={"#5066fe"} style={{marginRight: "30px"}}/>
                 <ProgressBarMarginSpacer>
                     <InputButton type='tertiary' onClick={() => {
                         setResult(undefined);

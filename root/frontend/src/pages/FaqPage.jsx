@@ -1,6 +1,5 @@
 import ContentContainer from '../components/ContentContainer'
 import React, { useState } from 'react';
-import { Data } from './Data';
 import styled from 'styled-components';
 import { FiPlus, FiMinus } from 'react-icons/fi';
 
@@ -8,52 +7,73 @@ const AccordionSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 60vh;
-`;
-
-const Container = styled.div`
-  position: absolute;
-  top: 10%;
-  box-shadow: 2px 10px 35px 1px rgba(153, 153, 153, 0.3);
+  justify-content: top;
+  height: 500px;
+  padding: 20px;
 `;
 
 const Wrap = styled.div`
-  background: gray;
+  background: ${props => props.theme.colors.tertiary_dark};
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 70%;
+  min-width: 150px;
   text-align: center;
   cursor: pointer;
   border-radius: 15px;
+  transition: background-color 0.2s;
+  &:hover{
+    background:  ${props => props.theme.colors.tertiary_focus};
+  }
   h1 {
+    flex-basis: 0;
+    flex-grow: 1;
+    min-width: 0;
     padding: 1.5rem;
     font-size: 1.5rem;
   }
   span {
+    min-width: 0;
     margin-right: 1.5rem;
   }
 `;
 
 const Dropdown = styled.div`
-  background: #1c1c1c;
-  color: #00ffb9;
-  width: 100%;
-  height: 100px;
+  background: ${props => props.theme.colors.secondary};
+  color: #000000;
+  width: 70%;
+  min-width: 150px;
+  height: ${props => props.active ? props.height : "0px"};
+  opacity: ${props => props.active ? 1 : 0};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #00ffb9;
-  border-top: 1px solid #00ffb9;
+  border: 1px solid ${props => props.theme.colors.outline};
   border-radius: 15px;
+  transition: height 0.5s , opacity 0.2s;
   p {
+    word-wrap: break-all;
     font-size: 1.5rem;
   }
 `;
+
+const FaqData = [
+  {
+      question: 'helloooooooooooooooooooooooooo?',
+      answer: 'thereeeeeeeeeeeeeeeeeeee.'
+  },
+  {
+      question: 'What is this project ',
+      answer: 'Socialscope.'
+  },
+  {
+      question: 'How far from here to the moon',
+      answer: 'Not sure man.'
+  }
+];
 
 const FaqPage = () => {
     const [clicked, setClicked] = useState(false);
@@ -70,25 +90,21 @@ const FaqPage = () => {
     return (
 
         <ContentContainer>
-            <h2 style={{textAlign: "center", textDecoration: "underline"}}>Frequently Asked Question</h2>
+            <h2 style={{textAlign: "center", textDecoration: "underline"}}>Frequently Asked Questions</h2>
             <AccordionSection>
-                <Container>
-                    {Data.map((item, index) => {
-                        return (
-                            <>
-                                <Wrap onClick={() => toggle(index)} key={index}>
-                                    <h1>{item.question}</h1>
-                                    <span>{clicked === index ? <FiMinus /> : <FiPlus />}</span>
-                                </Wrap>
-                                {clicked === index ? (
-                                    <Dropdown>
-                                        <p>{item.answer}</p>
-                                    </Dropdown>
-                                ) : null}
-                            </>
-                        );
-                    })}
-                </Container>
+              {FaqData.map((item, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <Wrap onClick={() => toggle(index)}>
+                      <h1>{item.question}</h1>
+                      <span>{clicked === index ? <FiMinus /> : <FiPlus />}</span>
+                    </Wrap>
+                    <Dropdown active={clicked === index} height={"100px"}>
+                      <p>{item.answer}</p>
+                    </Dropdown>
+                  </React.Fragment>
+                );
+              })}
             </AccordionSection>
         </ContentContainer>
     );

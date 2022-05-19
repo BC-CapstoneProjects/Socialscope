@@ -20,6 +20,50 @@ const GraphicContainer = styled.div`
   overflow-y: hidden;
 `
 
+const getLikesOverTime = (posts) => {
+  let likeMap = [
+    {name: 'all', items: []},
+  ];
+  for (let i = 0; i < posts.length; i++) {
+    likeMap[0].items.push({x: posts[i]['created_at'], y: posts[i]['positive_votes']})
+  }
+  if (likeMap[0].items.length < 2) {
+    likeMap = [];
+  }
+  else {
+    likeMap[0].items.sort((a, b) => {
+      if (a.x > b.x) return 1;
+      else if (a.x <= b.x) return -1;
+    });
+  }
+  return likeMap;
+}
+
+const getLikesOverTimePerPlatform = (posts) => {
+  let likeMap = [
+    {name: 'twitter', items: []},
+    {name: 'reddit', items: []},
+    {name: 'youtube', items: []}
+  ]
+  for (let i = 0; i < posts.length; i++) {
+    let mapIndex = likeMap.findIndex((el) => el.name === posts[i]['platform']);
+    likeMap[mapIndex].items.push({x: posts[i]['created_at'], y: posts[i]['positive_votes']})
+  }
+  for (let i = 0; i < likeMap.length; i++) {
+    if (likeMap[i].items.length < 2) {
+      likeMap.splice(i, 1);
+      i--;  // account for removal offset
+    }
+    else {
+      likeMap[i].items.sort((a, b) => {
+        if (a.x > b.x) return 1;
+        else if (a.x <= b.x) return -1;
+      });
+    }
+  }
+  return likeMap;
+}
+
 const getTotalLikesPerPlatform = (posts) => {
   let likeMap = [
     {name: 'twitter', index: 0, value: 0}, 
@@ -63,7 +107,8 @@ const getAmountPerSentimentScore = (posts) => {
   let scoreMap = [
     {name: 'positive', index: 0, value: 0},
     {name: 'neutral', index: 0, value: 0},
-    {name: 'negative', index: 0, value: 0}
+    {name: 'negative', index: 0, value: 0},
+    {name: 'unknown', index: 0, value: 0}
   ]
   for (let i = 0; i < posts.length; i++) {
     let mapIndex = scoreMap.findIndex((el) => el.name === posts[i]['sentiment_score'].toLowerCase())
@@ -74,13 +119,13 @@ const getAmountPerSentimentScore = (posts) => {
 }
 
 const renderChart = (graphData, graphWidth) => {
-  if (graphData == null || graphWidth == null) {
+  if (graphData == null || graphData.entries == null || graphData.entries.length == 0 || graphWidth == null) {
     return;
   }
   else if (graphData.type === 'pie')
     return <PieChart data={graphData.entries} width={graphWidth} height={graphWidth} />
   else if (graphData.type === 'line')
-    return <LineChart data={graphData.entries} dtype={'date'} structure={{width: 400, height: 400, margin: 50, padding: 10}} />
+    return <LineChart data={graphData.entries} dtype={'date'} structure={{width: graphWidth - 100, height: graphWidth - 100, margin:40, padding: 20}} />
 
 }
 
@@ -89,46 +134,6 @@ const GraphPage = (props) => {
   let [menuSelections, setMenuSelections] = useState({'graph': '', 'over': '', 'group': ''});
   let [graphData, setGraphData] = useState(null);
   let [graphWidth, setGraphWidth] = useState(500);
-
-  // const generateData = (length) => {
-  //   if (length === undefined) {
-  //     length = 2 + Math.random() * 10;
-  //   }
-  //   let out = []
-  //   for (let i = 0; i < length; i++) {
-  //     out.push({index: i, value: (10 + Math.random() * 90)});
-  //   }
-  //   return out;
-  // }
-
-  
-  // const lineTestData = [{name:'l1', items:[{x:1, y:2}, {x:2, y:4}, {x:3, y:5}, {x:5, y:11}, {x:6, y:12}]}, 
-  //   {name:'l2',items:[{x:1, y:2}, {x:4, y:9}, {x:5, y:7}, {x:6, y:9}]},
-  //   {name:'l3',items:[{x:1, y:-2}, {x:2, y:3}, {x:5, y:2},{x:6, y:2}]},
-  //   {name:'l4',items:[{x:1, y:1}, {x:2, y:7}, {x:3, y:8},{x:6, y:-2}]}];
-
-  // let [graphData, setGraphData] = useState(generateData());
-
-
-  // const dataFormulator = (posts, platforms, dataCollector, dataBundler, initialValue = 0) => {
-  //   let dataMap = [];
-  //   platforms.forEach(el => dataMap.push({name: el, value: initialValue}));
-  //   for (let i = 0; i < posts.length; i++) {
-  //     dataMap = dataCollector(posts[i], i, dataMap);
-  //   }
-  //   return dataBundler(dataMap);
-  // }
-
-  // const pieDataBundler = (dataMap) => {
-  //   return {type: 'pie', entries: dataMap.filter(el => el.value > 0)}
-  // }
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setGraphData(generateData());
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const updateMenuSelections = (graph, over, group) => {
     let sel = {...menuSelections};
@@ -148,22 +153,34 @@ const GraphPage = (props) => {
       setGraphWidth(300);
     else if (width > 650 && graphWidth < 500) 
       setGraphWidth(500);
-}, [width]);
+  }, [width]);
 
   useEffect(() => {
-    if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group ==='Platform') {
+    if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group === 'Platform') {
       setGraphData({
         type: 'pie',
         entries: getTotalLikesPerPlatform(props.result['posts'])
       }); // props.result['posts']
     }
-    else if (menuSelections.graph === 'Sentiment' && menuSelections.over === 'All' && menuSelections.group ==='Score') {
+    else if (menuSelections.graph === 'Likes' && menuSelections.over === 'Time' && menuSelections.group === 'All') {
+      setGraphData({
+        type: 'line',
+        entries: getLikesOverTime(props.result['posts'])
+      })
+    }
+    else if (menuSelections.graph === 'Likes' && menuSelections.over === 'Time' && menuSelections.group === 'Platform') {
+      setGraphData({
+        type: 'line',
+        entries: getLikesOverTimePerPlatform(props.result['posts'])
+      })
+    }
+    else if (menuSelections.graph === 'Sentiment' && menuSelections.over === 'All' && menuSelections.group === 'Score') {
       setGraphData({
         type: 'pie',
         entries: getAmountPerSentimentScore(props.result['posts'])
       }); // props.result['posts']
     }
-    else if (menuSelections.graph === 'Comments' && menuSelections.over === 'Time' && menuSelections.group ==='Platform') {
+    else if (menuSelections.graph === 'Comments' && menuSelections.over === 'Time' && menuSelections.group === 'Platform') {
       setGraphData({
         type: 'line',
         entries: getCommentsOverTimePerPlatform(props.result['posts'])

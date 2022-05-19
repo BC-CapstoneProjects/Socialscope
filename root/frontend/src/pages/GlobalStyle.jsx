@@ -2,10 +2,14 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalTheme = {
     colors: {
-      "primary": "#D6D6D6",
-      "secondary": "#E7E7E7",
-      "background": "#FFFFFF",
-      "outline": "#6D6D6D"
+      "primary": "#ffffff",
+      "secondary": "#dcdcee",
+      "secondary_dark": "#9e9ed0",
+      "tertiary": "#8493fe",
+      "tertiary_dark": "#5066fe",
+      "tertiary_focus": "#1e3afd",
+      "background": "#eeeeee",
+      "outline": "#2f336d"
     },
   };
 
@@ -25,7 +29,8 @@ html {
 body {
   height:100%;
   width: 100%;
-  background: ${GlobalTheme.colors.background};
+  background: linear-gradient(to bottom right, ${GlobalTheme.colors.tertiary}, ${GlobalTheme.colors.secondary} 50%);
+  background-attachment: fixed;
   font-family: 'Roboto', 'sans-serif';
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -35,9 +40,10 @@ body {
 a {
   text-decoration: none;
   color: #000000;
+  transition: color 0.2s;
 
   &:hover {
-    color: #000099 !important;
+    color: ${GlobalTheme.colors.tertiary_focus} !important;
   }
 
   &:visited {

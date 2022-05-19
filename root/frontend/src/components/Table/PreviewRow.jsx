@@ -29,12 +29,19 @@ const ToggleButton = styled.button`
   border-radius: 5px;
   outline: none;
   cursor: pointer;
+
+  &:hover {
+    outline: 1px solid ${props => props.theme.colors.outline}
+  }
+
 `;
 
 const DescriptionContainer = styled(TableCell)`
   flex: 1;
   padding: 10px;
   display: ${props => props.minimized ? 'none' : 'flex'};
+  transition: max-height 0.5s;
+  max-height: ${props => props.minimized ? '0px' : '1000px'};
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
