@@ -9,13 +9,19 @@ const PreviewPage = (props) => {
     positive_votes: 'Likes',
     comment_count: 'Comments'
   }
-
+  const {HistoryData, setHistoryData  } = props;
+  const {data, setData}=props
+  const {name, setName}=props
+  if(props.name==="")
+  {setData(props.HistoryData[props.HistoryData.length-1].result)
+  }
   return(
     <>
       <PreviewTable 
-        posts={(props.HistoryData.result !== undefined ? props.HistoryData.result.posts : undefined)}
+        posts={(props.data!== undefined ? props.data.posts : undefined)}
         displayFields={displayFieldNames}
       />
+      {setName=""}
     </>
   )
 }

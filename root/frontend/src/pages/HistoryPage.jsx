@@ -217,39 +217,28 @@ export default HistoryPage;
      ReactDOM.render(<App />, rootElement);
      */
 
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from "react";
- //import SearchPage from './SearchPage';
- import PreviewPage from './PreviewPage';
- import App from './App';
- import ContentContainer from '../components/ContentContainer'
- const HistoryPage = (props) => {
-  const [count, setCount] =  useState(0);
-  const navigate = useNavigate();
-  const [data, setData] = useState([
-    {
-      keyword: "",
-      index: "",
-      time:"",
-      button:""
-    }]
-  );
- 
- 
-  return (
-    <ContentContainer>
-    
-  {props.HistoryData.map(({ keyword, result, date, button}) => (
-       <p>
-          {keyword} 
-          {result} 
-          {date}
-          {button}
-        </p>
-      ))}
-    </ContentContainer>
-  );
-}
- 
-
-export default HistoryPage;
+     import { useNavigate } from 'react-router-dom';
+     import React, { useState } from "react";
+      //import SearchPage from './SearchPage';
+      import PreviewPage from './PreviewPage';
+      import App from './App';
+      import ContentContainer from '../components/ContentContainer'
+      const HistoryPage = (props) => {
+       const navigate = useNavigate();
+       return (
+         <ContentContainer>
+         
+       {props.HistoryData.map(({ keyword, index, date, button}) => (
+            <p>
+               {keyword} 
+               {index} 
+               {date}
+               {button}
+             </p>
+           ))}
+         </ContentContainer>
+       );
+     }
+      
+     
+     export default HistoryPage;

@@ -14,21 +14,15 @@ import GraphPage from './GraphPage';
 import DownloadPage from './DownloadPage';
 
 function App() {
-  const [result, setResult] = useState(undefined);
-  const [allKeyword, setAllKeyword] =  useState([]);
-  //const [HistoryData, SetHistoryData] =  useState([]);
-  const [HistoryData, setHistoryData] = useState([
-    {
-      keyword: "",
-      result: undefined,
-      date:"",
-      index:"",
-      button:""
-    }]
-  );
-
-
-  const [date, setDate] =  useState("");
+  const [data, setData] = useState(undefined)
+  const [name, setName] = useState("")
+  const [HistoryData, setHistoryData] = useState([{
+    result:"",
+    keyword:"",
+    index:"",
+    date:"",
+    button:""
+  }]);
   return (
     <BrowserRouter>
       <Routes>
@@ -38,31 +32,32 @@ function App() {
               path="/search"
               element={
               <SearchPage
-                 // result={result}
-                 // setResult={setResult}
-                  HistoryData={HistoryData}
-                  setHistoryData={setHistoryData}
-                 // allKeyword={allKeyword}
-                 // setAllKeyword={setAllKeyword}
-                 // date={date}
-                 // setDate={setDate}
+              HistoryData={HistoryData}
+               setHistoryData={setHistoryData}
+               data={data}
+               setData={setData}
+               name={name}
+               setName={setName}
               />
           } />
-          <Route path="/results" element={<ResultsView />}> 
-            <Route path="/results/preview" element={<PreviewPage 
-            //result={result} 
-            HistoryData={HistoryData}/>}/>
-            <Route path="/results/graph" element={<GraphPage HistoryData={HistoryData}
-            //result={result}
-            />}/>
-            <Route path="/results/download" element={<DownloadPage HistoryData={HistoryData}
-            //result={result}
-            />}/>
+          <Route path="/results" element={<ResultsView />}>
+            <Route path="/results/preview" element={<PreviewPage
+             HistoryData={HistoryData}
+             setHistoryData={setHistoryData}
+            data={data}
+             setData={setData}
+             name={name}
+             setName={setName}/>}/>
+            <Route path="/results/graph" element={<GraphPage 
+             HistoryData={HistoryData}
+             setHistoryData={setHistoryData}
+        />} />
+            <Route path="/results/download" element={<DownloadPage />}/>
           </Route>
-          <Route path="/history" element={<HistoryPage HistoryData={HistoryData}
-          // allKeyword={allKeyword} setAllKeyword={setAllKeyword} 
-           //date={date} setDate={setDate}
-           />}/>
+          <Route path="/history" element={<HistoryPage 
+           HistoryData={HistoryData}
+           setHistoryData={setHistoryData}
+          />}/>
           <Route path="/faq" element={<FaqPage />}/>
         </Route>
       </Routes>
