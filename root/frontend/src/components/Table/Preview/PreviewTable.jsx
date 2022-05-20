@@ -3,23 +3,7 @@ import styled from 'styled-components';
 
 import PreviewHead from './PreviewHead';
 import PreviewRow from './PreviewRow';
-
-const TableContainer = styled.div`
-  border: 2px solid ${props => props.theme.colors.outline};
-
-  & svg, & svg * {
-    pointer-events: none;
-  }
-
-`;
-
-const TableHeadContainer = styled.div`
-  
-`;
-
-const TableBodyContainer = styled.div`
-  
-`;
+import {TableContainer, TableHeadContainer, TableBodyContainer} from '../TableStyledComponents';
 
 const PreviewTable = (props) => {
 
@@ -101,10 +85,9 @@ const PreviewTable = (props) => {
     setRowData(getPostData(props.posts));
   }, [props.posts])
 
-  function renderTable() {
-    
-    return (
-      <TableContainer>
+
+  return (
+    <TableContainer>
         <TableHeadContainer>
           <PreviewHead
             displayFields={props.displayFields}
@@ -115,11 +98,6 @@ const PreviewTable = (props) => {
           {renderRows((rowData !== undefined) ? rowData.length : 0)}
         </TableBodyContainer>
       </TableContainer>
-    )
-  }
-
-  return (
-    renderTable()
   );
 }
 

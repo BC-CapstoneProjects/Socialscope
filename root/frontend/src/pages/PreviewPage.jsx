@@ -1,6 +1,6 @@
 import React, {useState, useEffect}from 'react';
 import { useLocation } from 'react-router-dom';
-import PreviewTable from '../components/Table/PreviewTable';
+import PreviewTable from '../components/Table/Preview/PreviewTable';
 
 const PreviewPage = (props) => {
 
@@ -13,7 +13,7 @@ const PreviewPage = (props) => {
   return(
     <>
       <PreviewTable 
-        posts={(props.result !== undefined ? props.result.posts : undefined)}
+        posts={((props != null && props.result != undefined) ? props.result.posts : undefined)}
         displayFields={displayFieldNames}
       />
     </>

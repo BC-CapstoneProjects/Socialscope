@@ -1,8 +1,8 @@
 import React, {useRef, useState} from "react";
 import styled from "styled-components";
 
-import InputContainer from "./Input/InputContainer";
-import InputSelect from "./Input/InputSelect";
+import InputContainer from "../Input/InputContainer";
+import InputSelect from "../Input/InputSelect";
 
 const FormContainerOuter = styled.div` // repeated style from search page. temporary and will need refactor
   min-width: 200px;

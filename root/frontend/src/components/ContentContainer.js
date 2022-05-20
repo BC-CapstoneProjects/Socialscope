@@ -10,6 +10,7 @@ const ContentContainer = styled.div`
   padding: 4rem 6rem;
   margin: 25px auto;
   max-width: 75%;
+  min-height: 75vh;
 
   @media screen and (max-width: 1017px) {
     max-width: 750px;
