@@ -23,6 +23,9 @@ if %front% (
     cd "root\frontend"
     call npm install || exit /b
     call npm run build || exit /b
+	if %test% (
+		call npm test || exit /b
+	)
     cd "..\..\"
     if exist %springStaticDir% rd /s /q %springStaticDir%
     md %springStaticDir%

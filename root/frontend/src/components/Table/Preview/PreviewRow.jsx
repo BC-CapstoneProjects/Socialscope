@@ -1,25 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TableRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  &.light-shade {
-    background-color: ${props => props.theme.colors.secondary};
-  }
-  &.dark-shade {
-    background-color: ${props => props.theme.colors.primary};
-  }
-`;
-
-const TableCell = styled.div`
-  flex: 1; 
-  padding: 0.1rem;
-  text-align: center;
-  min-width: 0;
-  word-wrap: break-word;
-`;
+import {TableRow, TableCell} from '../TableStyledComponents';
 
 const ToggleButton = styled.button`
   background: ${props => (props.shadeClass==='dark-shade') ? props.theme.colors.secondary : props.theme.colors.primary};  // TODO: repeat button style

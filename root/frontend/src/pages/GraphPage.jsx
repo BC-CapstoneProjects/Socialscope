@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import GraphingMenu from '../components/GraphingMenu';
+import GraphingMenu from '../components/Menu/GraphingMenu';
 import PieChart from '../components/Graph/Pie/PieChart';
 import LineChart from '../components/Graph/Line/LineChart';
 
@@ -156,6 +156,8 @@ const GraphPage = (props) => {
   }, [width]);
 
   useEffect(() => {
+    if (props.result == null || props.result['posts'] == null)
+      return;  // guard against common invalid results due to null posts value
     if (menuSelections.graph === 'Likes' && menuSelections.over === 'All' && menuSelections.group === 'Platform') {
       setGraphData({
         type: 'pie',
