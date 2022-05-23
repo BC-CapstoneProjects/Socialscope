@@ -64,9 +64,7 @@ public class HttpUtils {
 
             // generate and return json
             if (content.toString().equals("Bad Request"))
-        		System.out.println("Bad request: " + uri + " " + method + " " + properties.toString() + " " + parameters.toString());
-            else 
-            	System.out.println("Ok request: " + uri + " " + method + " " + properties.toString() + " " + parameters.toString());
+        		System.out.println("Bad request: " + uri + " " + method);
             response = new JSONObject(content.toString());
 
         } catch (MalformedURLException e) {
