@@ -70,7 +70,7 @@ const HistoryTable = (props) => {
   }
 
   function renderBody() {
-    if(props.results == null || props.results.historyList == null || props.results.historyList.length == 0)
+    if(props.results == null || props.results.historyList == null || props.results.historyList.length === 0)
       return(<TableRow style={{margin: "20px"}}>No history available.  Please make a search first</TableRow>)
     return(props.results.historyList.map((result, index) => (
       <TableRow key={index} className={'data-row ' + ((index % 2 === 0) ? 'dark-shade' : 'light-shade')}>

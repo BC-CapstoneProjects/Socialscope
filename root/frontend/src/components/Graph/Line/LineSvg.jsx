@@ -9,8 +9,6 @@ const LineSvg = (props) => {
   const gref = useRef(null);
   const [prevData, setPrevData] = useState([]);
   const data = props.data;
-  //  const lref = props.lref;
-
 
   const getBufferedDomain = (field, buffer=0) => {
     let mi = d3.min(data[0].items, (d) => d[field]);
@@ -129,8 +127,6 @@ const LineSvg = (props) => {
       .append('path')
       .merge(gData.select('path'))
 
-    var selectedPath = null;
-
     path
       .attr('fill', 'none')
       .attr('stroke', (d) => colorGen(d))
@@ -211,9 +207,8 @@ const LineSvg = (props) => {
 //          .text(`(${d.x},${d.y})`)
       }
     }
-
     setPrevData(props.data.map(({name})=> name));
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.data])
 
   return (

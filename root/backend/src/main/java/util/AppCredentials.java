@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.LanguageServiceSettings;
-import com.google.common.collect.ImmutableSet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,7 +63,6 @@ public class AppCredentials {
         		reader = new BufferedReader(new InputStreamReader(in)); // read file from inside jar 
         	else
         		reader = new BufferedReader(new FileReader("src/main/resources/" + fp)); // read while not in jar
-//                reader = new BufferedReader(new FileReader(fp));
             StringBuilder sb = new StringBuilder();
             reader.lines().forEach((String line) -> sb.append(line));
             reader.close();

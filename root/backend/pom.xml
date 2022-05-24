@@ -42,7 +42,6 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -81,11 +80,16 @@
             		<artifactId>google-http-client</artifactId>
             		<version>1.25.0</version>
         	</dependency>
-		
 		<dependency>
     			<groupId>io.lettuce</groupId>
     			<artifactId>lettuce-core</artifactId>
     			<version>6.1.8.RELEASE</version>
+		</dependency>
+		<dependency>
+    			<groupId>org.testcontainers</groupId>
+    			<artifactId>testcontainers</artifactId>
+    			<version>1.16.3</version>
+    			<scope>test</scope>
 		</dependency>
 
 		</dependencies>
@@ -105,6 +109,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>src/test/e2e</directory>
+				<targetPath>e2e</targetPath>
+			</testResource>
+		</testResources>
 	</build>
 	<repositories>
 		<repository>

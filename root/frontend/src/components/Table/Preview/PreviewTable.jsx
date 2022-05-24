@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import PreviewHead from './PreviewHead';
 import PreviewRow from './PreviewRow';
@@ -77,9 +76,15 @@ const PreviewTable = (props) => {
     )
   }
 
-  useEffect(() => {
+  
+  const defaultSortCallback = useCallback(() => {
     sortRowsByField(props.sortDefault, true);
-  }, [props]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.sortDefault])
+
+  useEffect(() => {
+    defaultSortCallback();
+  }, [props, defaultSortCallback]);
 
   useEffect(() => {
     setRowData(getPostData(props.posts));

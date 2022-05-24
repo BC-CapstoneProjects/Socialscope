@@ -32,8 +32,7 @@ const getLikesOverTime = (posts) => {
   }
   else {
     likeMap[0].items.sort((a, b) => {
-      if (a.x > b.x) return 1;
-      else if (a.x <= b.x) return -1;
+      return (a.x > b.x) ? 1 : -1;
     });
   }
   return likeMap;
@@ -56,8 +55,7 @@ const getLikesOverTimePerPlatform = (posts) => {
     }
     else {
       likeMap[i].items.sort((a, b) => {
-        if (a.x > b.x) return 1;
-        else if (a.x <= b.x) return -1;
+        return (a.x > b.x) ? 1 : -1;
       });
     }
   }
@@ -95,8 +93,7 @@ const getCommentsOverTimePerPlatform = (posts) => {
     }
     else {
       commentMap[i].items.sort((a, b) => {
-        if (a.x > b.x) return 1;
-        else if (a.x <= b.x) return -1;
+        return (a.x > b.x) ? 1 : -1;
       });
     }
   }
@@ -119,7 +116,7 @@ const getAmountPerSentimentScore = (posts) => {
 }
 
 const renderChart = (graphData, graphWidth) => {
-  if (graphData == null || graphData.entries == null || graphData.entries.length == 0 || graphWidth == null) {
+  if (graphData == null || graphData.entries == null || graphData.entries.length === 0 || graphWidth == null) {
     return;
   }
   else if (graphData.type === 'pie')
@@ -153,7 +150,7 @@ const GraphPage = (props) => {
       setGraphWidth(300);
     else if (width > 650 && graphWidth < 500) 
       setGraphWidth(500);
-  }, [width]);
+  }, [width, graphWidth]);
 
   useEffect(() => {
     if (props.result == null || props.result['posts'] == null)
@@ -188,7 +185,7 @@ const GraphPage = (props) => {
         entries: getCommentsOverTimePerPlatform(props.result['posts'])
       });
     }
-  }, [menuSelections]);
+  }, [menuSelections, props.result]);
 
   return(
     <>

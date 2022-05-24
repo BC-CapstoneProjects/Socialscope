@@ -50,7 +50,7 @@ const InputContainer = (props) => {
   const [breakpointWidth, setBreakpointWidth] = useState(0);
   const outerRef = useRef(null);
 
-  const {height, width} = useWindowDimensions()
+  const { width } = useWindowDimensions()
 
   useLayoutEffect ( () => {   
     if (!displayVertical && outerRef.current.getBoundingClientRect().right > width){
@@ -60,7 +60,7 @@ const InputContainer = (props) => {
     else if (width > breakpointWidth) {
       setDisplayVertical(false);
     }
-}, [outerRef, width]);
+}, [outerRef, width, breakpointWidth, displayVertical]);
 
   return (
     <OuterContainer className={props.className} displayVertical={displayVertical}>

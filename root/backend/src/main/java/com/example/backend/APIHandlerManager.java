@@ -208,7 +208,6 @@ public class APIHandlerManager {
 				post.put("sentiment_confidence", 0);
 				processedPosts.put(post);
 			}
-			System.out.println("Sentiment retrieval complete");
 		}
 		return processedPosts;
 	}

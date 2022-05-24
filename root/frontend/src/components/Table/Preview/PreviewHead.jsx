@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { HeadRow, HeadCell, HeadText, SortButtonContainer, SortButton } from '../TableStyledComponents';
 

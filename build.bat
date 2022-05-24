@@ -47,13 +47,7 @@ if %back% (
         start "springApp" java -jar backend-0.0.1-SNAPSHOT.jar || exit /b
         cd "..\"
     )
-    cd "..\"
-    if %test% (
-        cd "test\cypress"
-        call npx cypress run --spec "cypress/integration/demo/demo.spec.js"
-        cd ..\..\
-    )
-    cd "..\"
+    cd "..\..\"
     set /p userIn="Press enter to exit..."
     if %run% (
         taskkill /FI "WindowTitle eq springApp*" /T /F
