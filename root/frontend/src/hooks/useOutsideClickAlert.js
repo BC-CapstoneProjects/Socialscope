@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import { useEffect } from 'react';
 
 function useOutsideClickAlert(ref, act) {
   useEffect(() => {
@@ -12,7 +12,7 @@ function useOutsideClickAlert(ref, act) {
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     }
-  }, [ref]);
+  }, [ref, act]);
 }
 
 export default useOutsideClickAlert;
