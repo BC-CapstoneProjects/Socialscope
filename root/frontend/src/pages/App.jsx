@@ -13,32 +13,6 @@ import PreviewPage from './PreviewPage';
 import GraphPage from './GraphPage';
 import DownloadPage from './DownloadPage';
 
-const sampleResults = {
-  currentResultIndex: 1,
-  historyList: [
-    {
-      meta: {
-        query: "Bellevue",
-        time: 9182173948267,
-      },
-      posts: [
-        {/* post 1 */},
-        {/* post 2 */}
-      ]
-    },
-    {
-      meta: {
-        query: "Seattle",
-        time: 9182161131564,
-      },
-      posts: [
-        {/* post 1 */},
-        {/* post 2 */}
-      ]
-    }
-  ]
-};
-
 function initializeResults() {
   try {
     let localResults = JSON.parse(window.localStorage.getItem('results'));
