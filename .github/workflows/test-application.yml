@@ -27,7 +27,7 @@ jobs:
           mv -v ./root/frontend/build/* ./root/backend/src/main/resources/static
       - name: Generate credential files
         run: |
-          mkdir ./root/backend/src/main/resources/static/private
+          mkdir ./root/backend/src/main/resources/private
           echo -n $CREDENTIALS_DATA | base64 --decode > ./root/backend/src/main/resources/private/credentials.json
           echo -n $SOCIALSENTANALYSIS_DATA | base64 --decode > ./root/backend/src/main/resources/private/socialsentanalysis.json
         env:
