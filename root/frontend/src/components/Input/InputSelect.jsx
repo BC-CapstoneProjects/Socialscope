@@ -1,4 +1,3 @@
-import { autoType } from 'd3'
 import React, {useState, useRef, useEffect} from 'react'
 import styled from 'styled-components'
 
@@ -88,7 +87,7 @@ const InputSelect = (props) => {
   useEffect(() => {
     if (!(props.number <= props.lastSelected)) 
       setSelectionIndex(0);
-  }, [props.options])
+  }, [props.options, props.number, props.lastSelected])
 
   return (
     <SelectContainer ref={sRef} width={props.width}>

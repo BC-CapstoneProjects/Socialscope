@@ -177,6 +177,7 @@ const PieSvg = (props) => {
     else {
       exitData(group, label, () => {enterData(group, label, data)} )
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.data, props.size]); 
 
   return (

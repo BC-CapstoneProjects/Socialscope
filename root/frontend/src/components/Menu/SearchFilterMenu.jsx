@@ -59,7 +59,7 @@ const SearchFilterMenu = (props) => {
 
   function setField(name, value) {
     if (!(typeof(name) ==='string') || props.filters[name] == null) {
-      throw 'invalid filters field: ' + name;
+      throw new Error('invalid filters field: ' + name);
     }
     let newFilters = {...props.filters};
     newFilters[name] = value;
