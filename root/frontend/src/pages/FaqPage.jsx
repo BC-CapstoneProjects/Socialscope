@@ -62,17 +62,33 @@ const Dropdown = styled.div`
 
 const FaqData = [
   {
-      question: 'helloooooooooooooooooooooooooo?',
-      answer: 'thereeeeeeeeeeeeeeeeeeee.'
+      question: 'What do I want to achieve with Socialscope?',
+      answer: 'Socialscope collects data and evaluates them to make business decisions or measure performance of social media accounts.'
   },
   {
       question: 'What is this project ',
       answer: 'Socialscope.'
   },
   {
-      question: 'How far from here to the moon',
-      answer: 'Not sure man.'
-  }
+      question: 'Which social media platforms does this tool use?',
+      answer: 'Our Application uses Twitter, Reddit and Youtube.'
+  },
+  {
+    question: 'Is this application free?',
+    answer: 'Yes, it is free.'
+},
+{
+    question: ' how does Socialscope work?',
+    answer: 'No need to sign up! All you need to do is to enter data for your search and Socialscope will do the rest'
+},
+{
+    question: 'Does it  help to create better content?',
+    answer: 'Yes, with Socialscope, you will be able to publish content according to your audience interests and level of understanding.'
+},
+{
+  question: 'What are the benefits of social media analysis? ',
+  answer: 'Analyze makes us work smarter, not harder. We get insight into what is working on social.'
+}
 ];
 
 const FaqPage = () => {
