@@ -33,9 +33,9 @@ const SubHeader = styled.h3`
   }
 `;
 
-const TitleSpacer = styled.div`
-  flex: 0.2;
-`
+// const TitleSpacer = styled.div`
+//   flex: 0.2;
+// `
 
 const TitleEmphasis = styled.span`
   font-weight: bold;
