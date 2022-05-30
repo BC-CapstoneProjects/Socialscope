@@ -37,10 +37,10 @@ const ImageSection = styled.div`
 
 `;
 
-const StyledGroup = styled.g`
-  fill: ${props => props.theme.colors.secondary_dark};
-  stroke: none;
-`
+// const StyledGroup = styled.g`
+//   fill: ${props => props.theme.colors.secondary_dark};
+//   stroke: none;
+// `
 
 // const LandingSvg = () => {
 //   return (
