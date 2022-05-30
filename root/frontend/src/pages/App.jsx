@@ -65,7 +65,7 @@ function getMatchingResultIndex(resultData, resultList) {
 function removeResultWithSetter(resultRemovingData, results, setResults) {
   let index = getMatchingResultIndex(resultRemovingData, results);
   if (index >= 0) {
-    let newCurrentResultIndex = null;
+    let newCurrentResultIndex = 0;
     if (index < results.currentResultIndex) newCurrentResultIndex = results.currentResultIndex - 1;
     else if (index > results.currentResultIndex) newCurrentResultIndex = results.currentResultIndex;
     let newHistoryList = results.historyList;
@@ -113,7 +113,6 @@ function App() {
           <Route path="/" element={<LandingPage />}/>
           <Route path="/search" element={
             <SearchPage
-              result={currentResult}
               setResult={addResult}
             />
           } />
@@ -127,6 +126,7 @@ function App() {
               results={results}
               changeCurrentResult={changeCurrentResult}
               removeResult={removeResult}
+              addResult={addResult}
               />
           } />
           <Route path="/faq" element={<FaqPage />}/>

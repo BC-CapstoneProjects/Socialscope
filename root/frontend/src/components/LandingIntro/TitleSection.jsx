@@ -37,7 +37,7 @@ const TitleSection = () => {
         <TitleSpacer/>
 
         <h3>
-          Social media analytics made easy
+          Social media analytics simplified
         </h3>
 
         <LaunchButton />

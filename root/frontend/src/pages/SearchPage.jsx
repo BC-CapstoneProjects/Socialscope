@@ -10,7 +10,7 @@ import InputField from '../components/Input/InputField';
 import InputContainer from '../components/Input/InputContainer';
 
 
-const SectionTitle = styled.h2`
+const SectionTitle = styled.h2`  // TODO: extract repeated style
   text-align: center;
   text-decoration: underline;
 `;
@@ -22,6 +22,7 @@ const SearchBar = styled(InputContainer)`
   width: 100%;
   max-width: 550px;
   min-width: 210px;
+
   @media screen and (max-width: 450px) {
     margin: 1rem 0.5rem 1rem auto;
   }
@@ -32,9 +33,13 @@ const SearchBar = styled(InputContainer)`
 
 const LaunchButtonContainer = styled.div`
   margin-top: 2rem;
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
   min-width: 200px;
+
+  @media screen and (max-width: 450px) {
+    margin-top: 0.5rem;
+  }
 `
 
 function invalidDates(startDate, endDate) {
@@ -135,9 +140,7 @@ const SearchPage = (props) => {
   }
 
   useEffect(() => {
-    console.log("res " + localSearchResult);
     if (localSearchResult != null) {
-      console.log("here")
       setShouldNavigate(true);
     }
     else {
@@ -146,7 +149,6 @@ const SearchPage = (props) => {
   }, [localSearchResult])
   
   useEffect(() => {
-    console.log(shouldNavigate);
     if (shouldNavigate && canNavigate) {
       setResult(localSearchResult);
       navigate('../results/preview');

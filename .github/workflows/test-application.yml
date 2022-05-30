@@ -52,7 +52,7 @@ jobs:
 #      - name: Deploy to aws if necessary
 #        if: github.ref == 'refs/heads/main'
 #        run: |
-#          aws s3 cp "./root/backend/target/$TARGET_FILE_NAME.jar"
+#          aws s3 cp "./root/backend/target/$TARGET_FILE_NAME.jar" "s3://socialscope-source-bucket/$TARGET_FILE_NAME.jar"
 #          aws elasticbeanstalk create-application-version --application-name Socialscope --version-label $APP_VERSION --source-bundle S3Bucket="socialscope-source-bucket",S3Key="$TARGET_FILE_NAME.jar"
 #          aws elasticbeanstalk update-environment --application-name Socialscope --environment-name Socialscope-env --version-label $APP_VERSION
 #        env:

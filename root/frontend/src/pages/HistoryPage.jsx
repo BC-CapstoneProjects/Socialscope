@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ContentContainer from '../components/ContentContainer'
 import HistoryTable from "../components/Table/History/HistoryTable";
+import UploadSection from "../components/UploadSection";
 
 const SectionTitle = styled.h2`
   text-align: center;
@@ -13,6 +14,7 @@ const SectionTitle = styled.h2`
 const HistoryTableContainer = styled.div`
   margin-top: 2rem;
 `
+
 
 const HistoryPage = (props) => {
 
@@ -28,6 +30,7 @@ const HistoryPage = (props) => {
       <HistoryTableContainer>
         <HistoryTable navigatePreview={navigatePreview} {...props} />
       </HistoryTableContainer>
+      <UploadSection addResult={props.addResult}/>
     </ContentContainer>
   );
 }

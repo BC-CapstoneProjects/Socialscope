@@ -21,11 +21,8 @@ const ContentContainer = styled.div`
   }
 
   @media screen and (max-width: 450px) {
-    padding: 2rem;
-  }
-
-  @media screen and (max-width: 350px) {
     padding: 1rem;
+    margin: 10px auto;
   }
 `;
 

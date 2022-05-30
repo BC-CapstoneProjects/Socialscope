@@ -209,7 +209,7 @@ const LineSvg = (props) => {
     }
     setPrevData(props.data.map(({name})=> name));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.data])
+  }, [props])
 
   return (
     <svg width={props.structure.width + 2*props.structure.margin} height={props.structure.height + 2*props.structure.margin}>

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 
 import PreviewHead from './PreviewHead';
 import PreviewRow from './PreviewRow';
-import {TableContainer, TableHeadContainer, TableBodyContainer} from '../TableStyledComponents';
+import {TableContainer, TableHeadContainer, TableBodyContainer} from '../TableCommonComponents';
 
 const PreviewTable = (props) => {
 

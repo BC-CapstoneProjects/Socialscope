@@ -12,6 +12,8 @@ import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.async.RedisAsyncCommands;
 import io.lettuce.core.api.async.RedisStringAsyncCommands;
+import io.lettuce.core.resource.ClientResources;
+import io.lettuce.core.resource.DefaultClientResources;
 
 public class RedisRateLimiter implements IRateLimiter{
 	
@@ -38,9 +40,11 @@ public class RedisRateLimiter implements IRateLimiter{
 	private static RedisClient setupClient() {
 		System.out.println("setting up new redis client");
 		RedisClient client = null;
+		
+		ClientResources sharedResources = DefaultClientResources.create();
 		StatefulRedisConnection<String, String> conn = null;
 		try {
-			client = RedisClient.create(CONNECTION_URI);
+			client = RedisClient.create(sharedResources, CONNECTION_URI);
 			conn = client.connect();
 		}
 		catch (RedisConnectionException ex) {
