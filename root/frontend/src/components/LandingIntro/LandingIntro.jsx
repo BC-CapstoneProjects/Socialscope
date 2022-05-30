@@ -1,7 +1,16 @@
 import React from 'react';
 import styled from 'styled-components'
-
+import map from '../Image/map.png'
 import TitleSection from './TitleSection';
+
+const Image = styled.img`
+  height: 900px;  
+  width: 1600px;
+  @media screen and (max-width: 450px) {
+    height: 450px;
+    width: 800px;
+  }
+`;
 
 const IntroContainer = styled.div`
   display: flex;
@@ -72,14 +81,12 @@ const LandingSvg = () => {
 
 const LandingIntro = () => {
   return (
-    <IntroContainer> 
-      
+    <IntroContainer>
       <TitleSection />
-
       <ImageSection>
-        <LandingSvg />
+        {/*<LandingSvg />*/}
+        <Image src={map} alt="this is car image"/>
       </ImageSection>
-
     </IntroContainer>
   );
 }

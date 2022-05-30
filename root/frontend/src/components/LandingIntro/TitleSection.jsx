@@ -1,4 +1,4 @@
-    import React from 'react';
+import React from 'react';
 import styled from 'styled-components'
 
 import LaunchButton from './LaunchButton';
@@ -17,6 +17,22 @@ const TitleContainer = styled.div`
   }
 `;
 
+const Header = styled.h1`
+  font-size: 3rem;
+  
+  @media screen and (max-width: 450px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const SubHeader = styled.h3`
+  font-size: 2rem;
+  
+  @media screen and (max-width: 450px) {
+    font-size: 1rem;
+  }
+`;
+
 const TitleSpacer = styled.div`
   flex: 0.2;
 `
@@ -29,16 +45,14 @@ const TitleEmphasis = styled.span`
 const TitleSection = () => {
   return (
     <TitleContainer>
-
-        <h1>
+        <Header>
           Welcome to <TitleEmphasis>Socialscope</TitleEmphasis>
-        </h1>
+        </Header>
 
-        <TitleSpacer/>
-
-        <h3>
-          Social media analytics made easy
-        </h3>
+        {/*<TitleSpacer/>*/}
+        <SubHeader>
+          User-friendly, accurate and fast information analysis tool
+        </SubHeader>
 
         <LaunchButton />
 

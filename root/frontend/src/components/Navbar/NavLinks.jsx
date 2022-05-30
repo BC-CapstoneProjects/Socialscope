@@ -3,16 +3,17 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 
 const StyledLink = styled(NavLink)`
-  font-size: 1.5rem;
-  margin: 0.5rem 1rem;
-  flex: 1;
-
-  &.active {
-    text-decoration: underline;
-  }
-
+    font-size: 2rem;
+    margin: 0.2rem 0.5rem;
+    flex: 1;
+    &.active {
+      text-decoration: underline;
+    }
+    
+    @media screen and (max-width: 450px) {
+      font-size: 1rem;
+    }
 `
-
 const NavLinks = () => {
   return (
     <React.Fragment>

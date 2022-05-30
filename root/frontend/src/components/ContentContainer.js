@@ -11,7 +11,7 @@ const ContentContainer = styled.div`
   margin: 25px auto;
   max-width: 75%;
   min-height: 75vh;
-
+  border-radius: 50px;
   @media screen and (max-width: 1017px) {
     max-width: 750px;
   }

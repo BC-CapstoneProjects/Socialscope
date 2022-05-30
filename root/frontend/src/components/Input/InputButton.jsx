@@ -11,7 +11,8 @@ const ButtonContainer = styled.div`
 const ButtonTemplate = styled.button`
   width: max-content;
   height: max-content;
-  background: ${props => props.theme.colors.tertiary_dark};
+  // background: ${props => props.theme.colors.tertiary_dark};
+  background: #1976D2;
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -19,7 +20,8 @@ const ButtonTemplate = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   &:hover {
-    background: ${props => props.theme.colors.tertiary_focus};
+    // background: ${props => props.theme.colors.tertiary_focus};
+    background:  #2196F3;
   }
 
   &:active {

@@ -13,7 +13,7 @@ flex: 1;
 `;
 
 const ButtonUpperSpacer = styled.div`
-flex: 2;
+flex: 1;
 `;
 
 const ButtonLowerSpacer = styled.div`

@@ -41,6 +41,7 @@ const HeadCell = styled.div`
 `;
 
 const HeadText = styled.div`
+  font-size: 20px;
   flex: 1;
 `;
 

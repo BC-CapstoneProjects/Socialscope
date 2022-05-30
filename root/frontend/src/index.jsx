@@ -4,7 +4,7 @@ import App from './pages/App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App style={{fontFamily: "'Roboto Slab', serif"}}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

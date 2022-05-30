@@ -14,12 +14,12 @@ const Menu = styled.div`
    
   text-align: end;
   background: ${props => props.theme.colors.secondary};
-  padding: 2rem;
+  padding: 0.5rem;
   position: absolute;
-  top: 30px;
+  top: 15px;
   right: 0;
   margin-top: 0.5rem;
-  min-width: 210px;
+  min-width: 120px;
   border-radius: 5px;
   border-style: solid;
   border-width: 2px;

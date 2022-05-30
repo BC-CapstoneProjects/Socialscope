@@ -11,23 +11,28 @@ import InputContainer from '../components/Input/InputContainer';
 
 
 const SectionTitle = styled.h2`
-  text-align: center;
-  text-decoration: underline;
+    font-size: 3rem;
+    text-align: center;
+    text-decoration: underline;
+    
+    @media screen and (max-width: 450px) {
+      font-size: 2rem;
+    }
 `;
 
 const SearchBar = styled(InputContainer)`
-  font-size: 1.2rem;
-  margin: 3rem auto 3rem auto;
-  height: 40px;
-  width: 100%;
-  max-width: 550px;
-  min-width: 210px;
-  @media screen and (max-width: 450px) {
-    margin: 1rem 0.5rem 1rem auto;
-  }
-  @media screen and (max-width: 283px) {
-    margin-bottom: 2rem;  // pad for box resize
-  }
+    font-size: 1.2rem;
+    margin: 3rem auto 3rem auto;
+    height: 40px;
+    width: 100%;
+    max-width: 550px;
+    min-width: 210px;
+    @media screen and (max-width: 450px) {
+      margin: 1rem 0.5rem 1rem auto;
+    }
+    @media screen and (max-width: 283px) {
+      margin-bottom: 2rem;  // pad for box resize
+    }
 `
 
 const LaunchButtonContainer = styled.div`

@@ -12,7 +12,7 @@ import ResultsView from '../components/ResultsView';
 import PreviewPage from './PreviewPage';
 import GraphPage from './GraphPage';
 import DownloadPage from './DownloadPage';
-
+import "../App.css"
 function initializeResults() {
   try {
     let localResults = JSON.parse(window.localStorage.getItem('results'));

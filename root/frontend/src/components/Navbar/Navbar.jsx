@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import NavLinks from './NavLinks'
 import PopoutMenu from './PopoutMenu'
 import PopoutButton from './PopoutButton'
+import {useNavigate} from "react-router-dom";
 
 const NavbarContainer = styled.div`
   background: ${props => props.theme.colors.primary};
@@ -13,7 +14,7 @@ const NavbarContainer = styled.div`
   padding: 2rem;
   margin: 25px auto;
   max-width: 75%;
-
+  border-radius: 50px;
   @media screen and (max-width: 1017px) {
     max-width: 750px;
   }
@@ -32,11 +33,12 @@ const LogoContainer = styled.div`
 
 const LogoText = styled.span`
   background: ${props => props.theme.colors.primary};
-  outline: 3px solid ${props => props.theme.colors.tertiary_focus};
-  color: ${props => props.theme.colors.tertiary_focus};
+  // outline: 3px solid ${props => props.theme.colors.tertiary_focus};
+  outline: 3px solid black;
+  // color: ${props => props.theme.colors.tertiary_focus};
   font-size: 2.5rem;
   font-weight: 150%;
-  border: none;
+  /*border: none;*/
   border-radius: 40px;
   padding: 12px 12px 12px 12px;
 `;
@@ -61,12 +63,15 @@ const LinksContainer = styled.div`
 `;
 
 const Navbar = () => {
+
+  const navigate = useNavigate();
+
   const [toggleMenu, setToggleMenu] = useState(false);
   return (
     <NavbarContainer>
       <NavbarItems>
         <LogoContainer>
-          <LogoText>
+          <LogoText onClick={() => navigate('/')}>
             Socialscope
           </LogoText>
         </LogoContainer>
