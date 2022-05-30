@@ -2,8 +2,8 @@ describe('Socialscope cypress tech demo', () => {
     // home page
     it('displays home page correctly', () => {
         cy.visit('/')
-        cy.get('Header').contains('Welcome')
-        cy.get('Image').should('be.visible')
+        cy.get('[data-cy=landingpage-header]').contains('Welcome')
+        // cy.get('data-cy=landingpage-image').should('be.visible')
     })
     // it('has working navigations', () => {
     //     cy.visit('/')
@@ -167,9 +167,9 @@ describe('Socialscope cypress tech demo', () => {
                 cy.get('.pie-legend').should('have.css' ,'opacity', '0')
             })
     })
-    xit('has working history system', () => {
-
-    })
+    // exit('has working history system', () => {
+    //
+    // })
 })
 
 // helper functions

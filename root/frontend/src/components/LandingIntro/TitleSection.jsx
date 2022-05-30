@@ -45,7 +45,7 @@ const TitleEmphasis = styled.span`
 const TitleSection = () => {
   return (
     <TitleContainer>
-        <Header>
+        <Header data-cy='landingpage-header'>
           Welcome to <TitleEmphasis>Socialscope</TitleEmphasis>
         </Header>
 

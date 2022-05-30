@@ -21,10 +21,10 @@ if "%1" == "/f" (
 )
 if %front% (
     cd "root\frontend"
-    call npm install || exit /b
-    call npm run build || exit /b
+    call npm install || pause /b
+    call npm run build || pause /b
 	if %test% (
-		call npm test || exit /b
+		call npm test || pause /b
 	)
     cd "..\..\"
     if exist %springStaticDir% rd /s /q %springStaticDir%
@@ -34,23 +34,23 @@ if %front% (
 if %back% (
     if not exist %credentialsFolderDir% (
         echo No credentials detected!
-        exit /b
+        pause /b
     )
     cd "root\backend"
     if %test% (
-        call mvn package || exit /b
+        call mvn package || pause /b
         ) else (
-        call mvn package -Dmaven.test.skip=true || exit /b
+        call mvn package -Dmaven.test.skip=true || pause /b
         )
     if %run% (
         cd "target"
-        start "springApp" java -jar backend-0.0.1-SNAPSHOT.jar || exit /b
+        start "springApp" java -jar backend-0.0.1-SNAPSHOT.jar || pause /b
         cd "..\"
     )
     cd "..\..\"
     set /p userIn="Press enter to exit..."
-    if %run% (
-        taskkill /FI "WindowTitle eq springApp*" /T /F
-    )
+@REM     if %run% (
+@REM         taskkill /FI "WindowTitle eq springApp*" /T /F
+@REM     )
 )
 echo Bye!
