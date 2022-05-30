@@ -125,7 +125,7 @@ const FaqPage = () => {
     return (
 
         <ContentContainer>
-            <SectionTitle>Frequently Asked Questions</SectionTitle>
+            <SectionTitle data-cy='faq-title'>Frequently Asked Questions</SectionTitle>
             <AccordionSection>
               {FaqData.map((item, index) => {
                 return (

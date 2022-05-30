@@ -85,7 +85,7 @@ const LandingIntro = () => {
       <TitleSection />
       <ImageSection>
         {/*<LandingSvg />*/}
-        <Image src={map} alt="this is car image"/>
+        <Image src={map} alt="this is map image"/>
       </ImageSection>
     </IntroContainer>
   );

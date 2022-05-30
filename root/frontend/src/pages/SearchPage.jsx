@@ -164,7 +164,7 @@ const SearchPage = (props) => {
   return (
       <ContentContainer>
 
-        <SectionTitle>Search</SectionTitle>
+        <SectionTitle data-cy='search-title'>Search</SectionTitle>
 
         <SearchBar label='Query'>
           <InputField
