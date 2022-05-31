@@ -44,30 +44,6 @@ const HeadText = styled.div`
   flex: 1;
 `;
 
-const SortButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const SortButton = styled.button`
-  background-color: ${props => props.theme.colors.secondary}; // TODO: repeat button style
-  border: none;
-  border-radius: 5px;
-  outline: none;
-  cursor: pointer;
-
-  margin: 1px;
-  height: 20px;
-  width: 20px;
-
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${props => props.theme.colors.secondary_dark};
-  }
-`;
-
 // row
 
 const TableRow = styled.div`
@@ -91,5 +67,5 @@ const TableCell = styled.div`
 `;
 
 export {TableContainer, TableHeadContainer, TableBodyContainer,  
-  HeadRow, HeadCell, HeadText, SortButtonContainer, SortButton, 
+  HeadRow, HeadCell, HeadText,
   TableRow, TableCell};

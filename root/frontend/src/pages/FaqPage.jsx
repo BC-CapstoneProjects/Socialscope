@@ -38,6 +38,12 @@ const Wrap = styled.div`
     min-width: 0;
     margin-right: 1.5rem;
   }
+  @media screen and (max-width: 750px) {
+    width: 85%;
+  }
+  @media screen and (max-width: 450px) {
+    width: 100%;
+  }
 `;
 
 const Dropdown = styled.div`

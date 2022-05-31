@@ -4,26 +4,7 @@ import styled from 'styled-components';
 import InputField from '../Input/InputField';
 import InputContainer from '../Input/InputContainer';
 import InputButton from '../Input/InputButton';
-
-const FilterContainerOuter = styled.div`
-  min-width: 200px;
-  max-width: 750px;
-  margin: 0 auto;
-`
-
-const FilterContainerInner = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`
-
-const FilterRowFull = styled.div`
-  flex: 1 0 100%;
-`
-
-const FilterRowHalf = styled.div`
-  flex: 1 0 50%;
-`
+import { FormContainerOuter, FormContainerInner, FormRowFull, FormRowHalf } from './FormCommonComponents';
 
 const ResetButtonContainer = styled.div`
   display:flex;
@@ -67,15 +48,15 @@ const SearchFilterMenu = (props) => {
   }
 
   return(
-    <FilterContainerOuter>
+  <FormContainerOuter>
 
     <h3>
       Filters:
     </h3>
 
-    <FilterContainerInner>
+    <FormContainerInner>
 
-      <FilterRowFull>
+      <FormRowFull>
         <InputContainer label='Platforms'>
           <InputField
               name='twitter'
@@ -99,9 +80,9 @@ const SearchFilterMenu = (props) => {
               setValue={(v) => setField("youtubeCheck", v)}
               label='youtube'/>
         </InputContainer>
-      </FilterRowFull>
+      </FormRowFull>
 
-      <FilterRowFull>
+      <FormRowFull>
       <InputContainer label='Sentiment' labelWidth='99px'>
         <InputField
           name='sentiment'
@@ -118,9 +99,9 @@ const SearchFilterMenu = (props) => {
           checked={props.filters.sentimentCheck === "false"}
           label='no'/>
       </InputContainer>
-    </FilterRowFull>
+    </FormRowFull>
 
-      <FilterRowHalf>
+      <FormRowHalf>
         <InputContainer label='Start Date' labelWidth='99px' contentWidth="163px">
           <InputField
               name='startDate'
@@ -129,9 +110,9 @@ const SearchFilterMenu = (props) => {
               setValue={(v) => setField("startDate", v)}
           />
         </InputContainer>
-      </FilterRowHalf>
+      </FormRowHalf>
 
-      <FilterRowHalf>
+      <FormRowHalf>
         <InputContainer label='End Date' labelWidth='99px' contentWidth="163px">
           <InputField
               name='endDate'
@@ -140,9 +121,9 @@ const SearchFilterMenu = (props) => {
               setValue={(v) => setField("endDate", v)}
           />
         </InputContainer>
-      </FilterRowHalf>
+      </FormRowHalf>
 
-      <FilterRowHalf>
+      <FormRowHalf>
         <InputContainer label="Max Results" labelWidth='99px' contentWidth="163px">  {/* A bit hacky double width setting for now */}
           <InputField
               name="maxResults"
@@ -153,9 +134,9 @@ const SearchFilterMenu = (props) => {
               defaultValue="20"
               width='140px'/>
         </InputContainer>
-      </FilterRowHalf>
+      </FormRowHalf>
 
-    </FilterContainerInner>
+    </FormContainerInner>
 
     <ResetButtonContainer>
       <InputButton type='secondary' onClick={resetFilters}>
@@ -163,15 +144,15 @@ const SearchFilterMenu = (props) => {
       </InputButton>
     </ResetButtonContainer>
 
-    <FilterRowFull>
+    <FormRowFull>
       <FilterMessageContainer>
         <FilterMessage data-cy='filter-error-message' visibility={props.filterError === "" ? "hidden" : "visible"}>
           {props.filterError}
         </FilterMessage>
       </FilterMessageContainer>
-    </FilterRowFull>
+    </FormRowFull>
 
-  </FilterContainerOuter>
+  </FormContainerOuter>
   );
 
 };

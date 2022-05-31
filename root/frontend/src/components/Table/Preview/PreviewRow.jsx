@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {TableRow, TableCell} from '../TableStyledComponents';
+import {TableRow, TableCell} from '../TableCommonComponents';
 
 const ToggleButton = styled.button`
   background: ${props => (props.shadeClass==='dark-shade') ? props.theme.colors.secondary : props.theme.colors.primary};  // TODO: repeat button style

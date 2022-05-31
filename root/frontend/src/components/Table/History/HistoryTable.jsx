@@ -4,7 +4,7 @@ import { FiShare, FiDelete } from 'react-icons/fi';
 
 import { TableContainer, TableHeadContainer, TableBodyContainer, 
   HeadRow, HeadCell, HeadText, 
-  TableRow, TableCell } from '../TableStyledComponents';
+  TableRow, TableCell } from '../TableCommonComponents';
 
 const ButtonContainer = styled.div`
   height: 100%;

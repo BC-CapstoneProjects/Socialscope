@@ -1,24 +1,8 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import InputContainer from "../Input/InputContainer";
 import InputSelect from "../Input/InputSelect";
-
-const FormContainerOuter = styled.div` // repeated style from search page. temporary and will need refactor
-  min-width: 200px;
-  max-width: 750px;
-  margin: 0 auto;
-`
-
-const FormContainerInner = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`
-
-const FormRowFull = styled.div`
-  flex: 1 0 100%;
-`
+import { FormContainerOuter, FormContainerInner, FormRowFull } from "./FormCommonComponents";
 
 const GraphingMenu = (props) => {
 
@@ -79,7 +63,7 @@ const GraphingMenu = (props) => {
   return (
     <FormContainerOuter>
 
-      <h3>Graph Options</h3>
+      <h3>Graph Options:</h3>
 
       <FormContainerInner>
 

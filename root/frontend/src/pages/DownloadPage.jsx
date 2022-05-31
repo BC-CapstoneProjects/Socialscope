@@ -1,8 +1,12 @@
 import React from 'react';
 
-const DownloadPage = () => {
+import DownloadMenu from '../components/Menu/DownloadMenu';
+
+const DownloadPage = (props) => {
     return(
-      <div>Download page content placeholder</div>
+      <>
+        <DownloadMenu result={props.result}/>
+      </>
     )
   }
   
