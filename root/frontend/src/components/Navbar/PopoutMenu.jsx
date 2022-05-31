@@ -11,7 +11,7 @@ const Menu = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   flex-direction: column;
-   
+  
   text-align: end;
   background: ${props => props.theme.colors.secondary};
   padding: 1rem;
@@ -24,7 +24,7 @@ const Menu = styled.div`
   border-style: solid;
   border-width: 2px;
   border-color: ${props => props.theme.colors.outline};
-  box-shadow: 3px 3px 2px grey;
+  box-shadow: 3px 3px 2px ${props => props.theme.colors.outline};
 
   @media screen and (max-width: 750px) 
   {

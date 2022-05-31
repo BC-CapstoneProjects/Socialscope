@@ -22,7 +22,7 @@ const PieContainer = styled.div`
     border-style: solid;
     border-width: 2px;
     border-color: ${props => props.theme.colors.outline};
-    box-shadow: 3px 3px 2px grey;
+    box-shadow: 3px 3px 2px ${props => props.theme.colors.outline};
     font-style: italic;
   }
 `
