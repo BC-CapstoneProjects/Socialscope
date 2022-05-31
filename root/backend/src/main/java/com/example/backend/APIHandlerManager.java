@@ -123,7 +123,7 @@ public class APIHandlerManager {
 			// add metadata to results object
 			JSONObject metaInfo = new JSONObject();
 			metaInfo.put("query", queryParams.get("queryText"));
-			metaInfo.put("time", System.currentTimeMillis());
+			metaInfo.put("time", System.currentTimeMillis() / 1000);
 			aggregateResults.put("meta", metaInfo);
 			System.out.println(String.format("EXECUTION TIME: %d", System.currentTimeMillis() - searchStartTime));
 		} catch (NumberFormatException e) {

@@ -126,7 +126,7 @@ describe('Socialscope cypress tech demo', () => {
     })
     // results page
     it('has working result displays', () => {
-        cy.intercept('GET', '/api/*', {fixture: 'large_results.json'}).as('resultsIntercept')
+        cy.intercept('POST', 'api/search', {fixture: 'large_results.json'}).as('resultsIntercept')
         cy.visit('/search')
         cy.get('input[name=query]').type('bellevue college')
         cy.get('input[name=twitter]').check()

@@ -16,6 +16,10 @@ const Button = styled(FiMenu)`
   width:25px;
   height:25px;
   background: white;
+
+  &:hover {
+    stroke: ${props => props.theme.colors.tertiary_focus};
+  }
 `;
 
 const PopoutButton = (props) => {

@@ -3,7 +3,9 @@ package com.example.backend;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,16 +21,23 @@ public class APIController {
 	private APIHandlerManager manager;
 	
     @CrossOrigin
-    @GetMapping("/api/")
-    public Map<String, Object> api(@RequestParam String keyword, @RequestParam boolean doPlatformTwitter, @RequestParam boolean doPlatformReddit, @RequestParam boolean doPlatformYoutube, @RequestParam boolean doSentimentAnalysis, @RequestParam String maxResults, @RequestParam String start, @RequestParam String end) {
+    @RequestMapping(value="/api/search", method=RequestMethod.POST)
+    public Map<String, Object> api(@RequestBody Map<String, Object> requestBody) {
     	System.out.println("Executing search...");
-        List<String> namesOfHandlersInQuery = buildHandlerNames(doPlatformTwitter, doPlatformReddit, doPlatformYoutube);
+//    	for(String s : requestBody.keySet()) {
+//    		System.out.println(s + "  " + requestBody.get(s).toString());
+//    	}
+        List<String> namesOfHandlersInQuery = buildHandlerNames(
+        		(Boolean)requestBody.get("doPlatformTwitter"), 
+        		(Boolean)requestBody.get("doPlatformReddit"), 
+        		(Boolean)requestBody.get("doPlatformYoutube")
+        	);
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("queryText", keyword);
-        queryParams.put("doSentimentAnalysis", Boolean.toString(doSentimentAnalysis));
-        queryParams.put("maxResults", maxResults);
-        queryParams.put("start", start);
-        queryParams.put("end", end);
+        queryParams.put("queryText", requestBody.get("keyword").toString());
+        queryParams.put("doSentimentAnalysis", requestBody.get("doSentimentAnalysis").toString());
+        queryParams.put("maxResults", requestBody.get("maxResults").toString());
+        queryParams.put("start", requestBody.get("startDate").toString());
+        queryParams.put("end", requestBody.get("endDate").toString());
         JSONObject results = manager.executeSearch(namesOfHandlersInQuery, queryParams);
         System.out.println(results.toString());
         return results.toMap();

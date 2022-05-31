@@ -7,6 +7,7 @@ import selectClosestLine from '../util/selectClosestLine';
 const LineSvg = (props) => {
 
   const gref = useRef(null);
+  const lref = props.lref;
   const [prevData, setPrevData] = useState([]);
   const data = props.data;
 
@@ -43,7 +44,9 @@ const LineSvg = (props) => {
     .domain(getBufferedDomain('y', 0.1))
     .range([props.structure.height - props.structure.padding, props.structure.padding]);
 
-  const xTicks = 5, yTicks = 5;
+
+  const xTicks = Math.min(Math.round(props.structure.width / 100), 5)
+  const yTicks = Math.min(Math.round(props.structure.width / 100), 5);
 
   const xAxis = d3.axisBottom(xScale)
     .ticks(xTicks)
@@ -149,8 +152,6 @@ const LineSvg = (props) => {
       }
     });
 
-//    const legend = d3.select(lref.current);
-
     const focus = group.append('g')
     focus
       .attr('class','mouse-group')
@@ -184,6 +185,9 @@ const LineSvg = (props) => {
       // reset focus and line selection state
       d3.selectAll('.line>path').attr('stroke-width',2)
       focus.style('visibility', 'hidden')
+      d3.select(lref.current)
+        .text('')
+        .style('visibility', 'hidden');
       // customize closest line
       if (line !== null && line !== undefined) {
         const xBisect = d3.bisector(d => d.x).left;
@@ -198,8 +202,11 @@ const LineSvg = (props) => {
         // move dot to that point
         focus
           .attr('transform', `translate(${xScale(d.x)},${yScale(d.y)})`)
-          .style('visibility', 'visible')
-        focus.select('text').text(`(${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
+          .style('visibility', 'visible');
+        d3.select(lref.current)
+          .text(`(${data[dind].name} | ${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
+          .style('visibility', 'visible');
+        //focus.select('text').text(`(${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
 //        legend
 //          .style('left', `${xScale(d.x) + 39}px`)
 //          .style('top', `${yScale(d.y) + 25}px`)
@@ -209,7 +216,7 @@ const LineSvg = (props) => {
     }
     setPrevData(props.data.map(({name})=> name));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props])
+  }, [props.data, props.structure])
 
   return (
     <svg width={props.structure.width + 2*props.structure.margin} height={props.structure.height + 2*props.structure.margin}>

@@ -61,21 +61,24 @@ public class RedisRateLimiter implements IRateLimiter{
 		}
 		if (client == null) {
 			System.out.println("Could not instantiate redis client");
+			if (sharedResources != null) sharedResources.shutdown();
 			return client;
 		}
 		System.out.println("testing redis connection");
 		try {
 			RedisAsyncCommands<String, String> async = conn.async();
 			RedisFuture<String> ping = async.ping();
-			ping.await(5, TimeUnit.SECONDS);
+			ping.await(3, TimeUnit.SECONDS);
 			System.out.println("Redis instantiation successful");
 			conn.close();
 		}
 		catch (InterruptedException ex) {
 			System.out.println("Redis instantiation thread interrupt");
+			client.shutdown();
 			client = null;
 		}
 		catch (Exception ex) {
+			client.shutdown();
 			client = null;
 		}
 		if (conn != null && conn.isOpen()) {

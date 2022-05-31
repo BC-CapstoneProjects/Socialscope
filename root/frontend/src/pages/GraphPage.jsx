@@ -16,8 +16,7 @@ const GraphicFlex = styled.div`
 
 const GraphicContainer = styled.div`
   width: ${props => props.size};
-  overflow-x: ${props => props.scroll ? 'scroll' : 'hidden'};
-  overflow-y: hidden;
+  overflow: hidden
 `
 
 const getLikesOverTime = (posts) => {

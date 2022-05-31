@@ -98,12 +98,23 @@ const SearchPage = (props) => {
     else {
       setLoadingBarIsVisible(true);
       setCanNavigate(true);
-      fetch(`/api/?keyword=${keyword}`+
-        `&doPlatformTwitter=${filters.twitterCheck}`+
-        `&doPlatformReddit=${filters.redditCheck}` +
-        `&doPlatformYoutube=${filters.youtubeCheck}` +
-        `&doSentimentAnalysis=${filters.sentimentCheck}` +
-        `&maxResults=${filters.max}&start=${filters.startDate}&end=${filters.endDate}`)
+      fetch('/api/search',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              keyword: keyword,
+              doPlatformTwitter: filters.twitterCheck,
+              doPlatformReddit: filters.redditCheck,
+              doPlatformYoutube: filters.youtubeCheck,
+              doSentimentAnalysis: filters.sentimentCheck,
+              maxResults: filters.max,
+              startDate: filters.startDate,
+              endDate: filters.endDate
+            })
+          })
         .then(res => res.json())
         .then(
           res => {
@@ -137,6 +148,9 @@ const SearchPage = (props) => {
             }
         )
     }
+    // scroll to page bottom in all cases, better for mobile visibility
+    const scrollingElement = (document.scrollingElement || document.body);
+    scrollingElement.scrollTop = scrollingElement.scrollHeight;
   }
 
   useEffect(() => {
@@ -147,6 +161,13 @@ const SearchPage = (props) => {
       setShouldNavigate(false);
     }
   }, [localSearchResult])
+
+  useEffect(() => {
+    if(loadingBarIsVisible) {
+      const scrollingElement = (document.scrollingElement || document.body);
+      scrollingElement.scrollTop = scrollingElement.scrollHeight;
+    }
+  }, [loadingBarIsVisible])
   
   useEffect(() => {
     if (shouldNavigate && canNavigate) {
