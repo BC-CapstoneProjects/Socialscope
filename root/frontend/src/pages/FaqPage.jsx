@@ -63,6 +63,11 @@ const Dropdown = styled.div`
   transition: ${props => props.active ? 'height, padding, opacity' : 'opacity, height, padding'};
   transition-delay: ${props => props.active ? '0s, 0s, 0.5s' : '0s, 0.2s, 0.2s'};
   transition-duration: ${props => props.active ? '0.5s, 0.5s, 0.2s' : '0.2s, 0.5s, 0.5s'};
+
+  @media screen and (max-width: 450px) {
+    width: 100%;
+  }
+
   p {
     visibility: ${props => props.active ? 'visible' : 'hidden'};
     word-wrap: break-all;

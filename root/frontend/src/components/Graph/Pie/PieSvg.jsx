@@ -91,8 +91,6 @@ const PieSvg = (props) => {
 
   function enterData(group, label, data, duration=500) {
 
-    console.log("d " + duration);
-
     const gData = group.selectAll('g.slice').data(data);
 
     // clear any old data

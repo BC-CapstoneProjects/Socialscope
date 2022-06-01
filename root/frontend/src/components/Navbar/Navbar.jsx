@@ -44,6 +44,9 @@ const LogoText = styled.span`
   font-weight: 150%;
   border: none;
   border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
   padding: 12px;
 
   @media screen and (max-width: 400px) {
