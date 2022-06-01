@@ -16,7 +16,7 @@ const GraphicFlex = styled.div`
 
 const GraphicContainer = styled.div`
   width: ${props => props.size};
-  overflow: hidden
+  overflow: hidden;
 `
 
 const getLikesOverTime = (posts) => {

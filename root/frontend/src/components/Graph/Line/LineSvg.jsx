@@ -206,12 +206,6 @@ const LineSvg = (props) => {
         d3.select(lref.current)
           .text(`(${data[dind].name} | ${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
           .style('visibility', 'visible');
-        //focus.select('text').text(`(${props.dtype === 'date' ? formatDate(new Date(parseInt(d.x) * 1000)) : d.x}, ${d.y})`)
-//        legend
-//          .style('left', `${xScale(d.x) + 39}px`)
-//          .style('top', `${yScale(d.y) + 25}px`)
-//          .style('visibility', 'visible')
-//          .text(`(${d.x},${d.y})`)
       }
     }
     setPrevData(props.data.map(({name})=> name));

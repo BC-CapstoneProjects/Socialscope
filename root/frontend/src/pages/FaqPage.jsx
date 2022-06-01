@@ -115,7 +115,7 @@ const FaqPage = () => {
     const toggle = index => {
       console.log();
       if (clicked === index) {
-          //if clicked question is already active, then close it
+          // if clicked question is already active, then close it
           return setClicked(null);
       }
 
