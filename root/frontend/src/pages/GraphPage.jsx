@@ -119,7 +119,7 @@ const renderChart = (graphData, graphWidth) => {
     return;
   }
   else if (graphData.type === 'pie')
-    return <PieChart data={graphData.entries} width={graphWidth} height={graphWidth} />
+    return <PieChart data={graphData.entries} width={graphWidth-20} height={graphWidth-20} />
   else if (graphData.type === 'line')
     return <LineChart data={graphData.entries} dtype={'date'} structure={{width: graphWidth - 100, height: graphWidth - 100, margin:40, padding: 20}} />
 

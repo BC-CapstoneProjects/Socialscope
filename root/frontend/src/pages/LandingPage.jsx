@@ -48,7 +48,7 @@ const LandingPage = () => {
       </DescriptionSection>
         <MiscSection>
         <Subhead>
-        What you'll' do:
+        What you'll do:
         </Subhead>
           <ul>
             <li>Enter a key phrase</li>
