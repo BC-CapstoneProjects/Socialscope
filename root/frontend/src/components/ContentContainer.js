@@ -2,11 +2,6 @@ import styled from 'styled-components'
 
 const ContentContainer = styled.div`
   background: ${props => props.theme.colors.primary};
-  /*
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  */
   padding: 4rem 6rem;
   margin: 25px auto;
   max-width: 75%;

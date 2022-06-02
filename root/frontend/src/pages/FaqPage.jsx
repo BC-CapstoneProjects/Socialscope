@@ -63,6 +63,11 @@ const Dropdown = styled.div`
   transition: ${props => props.active ? 'height, padding, opacity' : 'opacity, height, padding'};
   transition-delay: ${props => props.active ? '0s, 0s, 0.5s' : '0s, 0.2s, 0.2s'};
   transition-duration: ${props => props.active ? '0.5s, 0.5s, 0.2s' : '0.2s, 0.5s, 0.5s'};
+
+  @media screen and (max-width: 450px) {
+    width: 100%;
+  }
+
   p {
     visibility: ${props => props.active ? 'visible' : 'hidden'};
     word-wrap: break-all;
@@ -73,15 +78,15 @@ const Dropdown = styled.div`
 const FaqData = [
   {
       question: 'What is Socialscope?',
-      answer: 'Socialscope is a simple social media impressions analyser, developed as an academic project by Andrew, Gihane and Thien.  It interfaces with third party social media apis to search for posts that relate to a key word or phrase of your choice.'
+      answer: 'Socialscope is a social media impressions analyser, developed as an academic project by Andrew, Gihane and Thien.  It interfaces with third party social media apis to search for posts that relate to a key word or phrase of your choice.'
   },
   {
     question: 'Who can benefit from Socialscope the most?',
-    answer: 'This application is very simple, small scale, and free, which makes it ideal for individuals or small buisnesses who want to quickly gather a basic understanding of what the internet thinks about a topic, without wasting time searching multiple sites manually or spending money on an enterprise grade tool with needing most of it\'s features.'
+    answer: 'This application is simple, small scale, and free, which makes it ideal for individuals or small buisnesses who want to quickly gather a basic understanding of what the internet thinks about a topic, without wasting time searching multiple sites manually or spending money on an enterprise grade tool with needing most of it\'s features.'
   },
   {
     question: 'Are there limits to how many searches I can make?',
-    answer: 'Unfortunately yes.  Since this application relies on free tier api access to the social media platforms it searches, users cannot collectively exceed the rate limits of those apis.  This equates to approximately no more than 60 searches per minute, 900 searches per minute, 100k searches per month, across all users.  This is an extremely rough estimation however, and depends on sentiment analysis settings, how many results a search returns, what platforms are searched, etc.'
+    answer: 'Unfortunately yes.  Since this application relies on free tier api access to the social media platforms it searches, users cannot collectively exceed the rate limits of those apis.  This equates to approximately no more than 60 searches per minute and 100k searches per month, across all users.  This is an extremely rough estimation however, and depends on sentiment analysis settings, how many results a search returns, what platforms are searched, etc.  Once these limits are exceeded, results from one or more platforms will stop being returned until the next period.'
   },
   {
       question: 'What kind of data does a search retrieve?',
@@ -89,20 +94,20 @@ const FaqData = [
   },
   {
       question: 'How is sentiment score calculated?',
-      answer: 'Sentiment analysis is a complex field in natural language processing.  In this project, the textual content of a post is sent to Google\'s natural language processing api, which utilizes advanced lexical algorithms to calculate a score and a confidence value for the sentiment of each post.'
+      answer: 'Sentiment analysis is a complex field in natural language processing.  In this project, the textual content of a post is sent to Google\'s natural language sentiment processing api, which utilizes advanced lexical algorithms to calculate a score and a confidence value for the sentiment of each post.  These scores are then categorized by our system as positive, negative, or neutral, and sent to you with the rest of the post\'s data.'
   },
   {
-    question: 'How can I access a search that I previously made',
+    question: 'How can I access a search that I previously made?',
     answer: 'After making a search, the results are saved in your browser.  You can go back to the results of that search via the history page, accessed from the navigation bar.  This history is not saved across browsers or devices however, and the best way to save history data long term is by downloading your results.'
   },
   {
     question: 'How do I download the results of a search?',
-    answer: 'After making a search or viewing a previous search from the history menu, you can navigate to the download menu, optionally change a few formatting details, and download the raw data retrieved by a search in a JSON file.'
+    answer: 'After making a search or viewing a previous search from the history menu, you can navigate to the download menu, optionally change a few formatting details, and download all data that was retrieved by a search in a JSON file.'
   },
 ];
 
 const FaqPage = () => {
-    const [clicked, setClicked] = useState(false);
+    const [clicked, setClicked] = useState(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);  // state used to force rerender on window resize so dropdown height is recalculated and animated
 
     const accordionRef = useRef();
@@ -110,7 +115,7 @@ const FaqPage = () => {
     const toggle = index => {
       console.log();
       if (clicked === index) {
-          //if clicked question is already active, then close it
+          // if clicked question is already active, then close it
           return setClicked(null);
       }
 
@@ -119,7 +124,7 @@ const FaqPage = () => {
 
     useEffect(() => {  // scroll to clicked element after deploy animation finished
       if (clicked != null) {
-        setTimeout(() => accordionRef.current.children.item(2*clicked + 1).scrollIntoView(), 500)
+        setTimeout(() => accordionRef.current.children.item(2*clicked + 1).scrollIntoView({block: 'center'}), 500)
       }
     }, [clicked])
 

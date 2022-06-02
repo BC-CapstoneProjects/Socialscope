@@ -34,7 +34,6 @@ const PieSvg = (props) => {
       .on('mouseover', (d, i) => {
 
         // update arc
-//         const p = Math.round((d.srcElement.__data__.endAngle - d.srcElement.__data__.startAngle) / (2 * Math.PI) * 10000) / 100;
         const p = Math.round(d.srcElement.__data__.value / total * 10000) / 100
         const l = labels[(d.srcElement.__data__.index)];
         d3.selectAll('path.arc')
@@ -90,8 +89,6 @@ const PieSvg = (props) => {
   }
 
   function enterData(group, label, data, duration=500) {
-
-    console.log("d " + duration);
 
     const gData = group.selectAll('g.slice').data(data);
 

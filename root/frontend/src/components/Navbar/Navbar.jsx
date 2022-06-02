@@ -36,14 +36,17 @@ const LogoContainer = styled.div`
   margin-right: 2rem;
 `;
 
-const LogoText = styled.span`
+const LogoText = styled.div`
+  display: inline;
   background: ${props => props.theme.colors.primary};
-  outline: 3px solid ${props => props.theme.colors.tertiary_focus};
   color: ${props => props.theme.colors.tertiary_focus};
   font-size: 2.5rem;
   font-weight: 150%;
-  border: none;
+  border: 3px solid ${props => props.theme.colors.tertiary_focus};
   border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
   padding: 12px;
 
   @media screen and (max-width: 400px) {
@@ -105,7 +108,9 @@ const Navbar = () => {
       <NavbarItems>
         <LogoContainer>
           <LogoText>
-            Socialscope
+            <span>
+              Socialscope
+            </span>
           </LogoText>
         </LogoContainer>
         <NavSpacer />

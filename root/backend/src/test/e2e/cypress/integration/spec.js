@@ -35,6 +35,9 @@ describe('Socialscope cypress tech demo', () => {
         cy.get('div[data-cy=popout-menu-container]').should('be.visible')
         cy.get('[data-cy=popout-menu-button]').click()
         cy.get('div[data-cy=popout-menu-container]').should('not.exist')
+	cy.get('[data-cy=popout-menu-button]').click()
+	cy.get('h1').contains('Welcome').click()
+	cy.get('div[data-cy=popout-menu-container]').should('not.exist')
     })
     // search page
     it('contains correct search fields', () => {
@@ -167,7 +170,12 @@ describe('Socialscope cypress tech demo', () => {
                 cy.get('.pie-legend').should('have.css' ,'opacity', '0')
             })
     })
+    // history page
     xit('has working history system', () => {
+
+    })
+    // faq page
+    xit('has working faq', () => {
 
     })
 })
